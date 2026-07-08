@@ -1,5 +1,3 @@
-// Founding-clients page copy, verbatim.
-
 export const foundingWhatThisIs =
   "We're a new studio with a clear point of view and the craft to back it — and we're deliberately choosing our first few clients rather than taking whatever comes. If your product is a good fit, you get senior-level design at a founder rate. In return, we get to show the work.";
 
@@ -36,7 +34,7 @@ export const foundingFormNote =
   'We read every submission and reply personally — usually within a few days. No auto-responses, no sales sequence.';
 
 export const foundingFallback =
-  "Not a founding-client fit but still want to work together? That's fine — see our standard ways to work, or just book a call.";
+  "Not a founding-client fit but still want to work together? That's fine — see our standard ways to work, or just contact us.";
 
 export const workNoCases = {
   title: 'Case studies are on the way.',
@@ -50,3 +48,28 @@ export const workClose = {
 
 export const contactInstructions =
   'Share where your product is today, what challenges you\'re facing, and what\'s coming up (raise, launch, or growth push). A link to the live product is often the most valuable starting point.';
+
+export const contactStages = [
+  'Idea / prototype',
+  'Just shipped',
+  'Live with users',
+  'Preparing to raise',
+  'Preparing to launch',
+  'Scaling',
+];
+
+export const contactLookingFor = [
+  'UX Rescue Sprint',
+  'Product Finishing',
+  'AI UX & Product Design',
+  'AI Integration UX',
+  'Design System & Maintenance',
+  'UX Audit (pre-raise / pre-launch)',
+  'Embedded Designer',
+  'Fractional Product Partner',
+  'Subscription (Lite / Standard / Embedded)',
+  'Not sure yet',
+];
+
+export const aboutStudioExtended =
+  "What we don't do is just as important: we don't take work where there's no real judgment required — if a generation tool can do it, we'll tell you that. We don't outsource the design itself. And we don't disappear after hand-off — we stay close enough that the product keeps getting better.";

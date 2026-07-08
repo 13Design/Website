@@ -12,8 +12,8 @@ export default function Work({ onNavigate }: { onNavigate: (r: Route) => void })
       <PageHeader
         marker="01"
         markerLabel="Work"
-        title={<>Selected work.</>}
-        body="A close look at how we take AI-native and AI-generated products from rough to trusted — the decisions behind the screens, not just the screens."
+        title={<>Work, on the way.</>}
+        body="We're taking on our first founding clients now — full case studies will land here as that work ships. The decisions behind the screens, not just the screens."
         actions="none"
       />
 

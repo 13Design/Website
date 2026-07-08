@@ -1,86 +1,113 @@
-// Verbatim copy for 13 Design Studio, mapped to typed data structures.
-// Source: src/content/13-design-studio-website-copy_(2).md
-
-export type Audience = 'ai-native' | 'ai-generated';
+export type Audience = 'ai-native' | 'existing' | 'either';
 
 export type Service = {
   id: string;
   name: string;
-  audience: Audience | 'also';
+  audience: Audience;
   tag?: string;
   body: string;
 };
 
 export const services: Service[] = [
+  // AI-native
   {
     id: 'ai-ux-product-design',
     name: 'AI UX & Product Design',
     audience: 'ai-native',
-    body:
-      'Interaction design for AI-native features — confidence and uncertainty states, human-in-the-loop controls, agent handoff, the moments a user decides whether to trust the output.',
+    tag: 'sprint · subscription · embedded',
+    body: 'Interaction design for AI-native features — confidence and uncertainty states, human-in-the-loop controls, agent handoff, the moments a user decides whether to trust the output.',
   },
   {
     id: 'product-point-of-view',
     name: 'Product Point of View',
     audience: 'ai-native',
-    body:
-      "A visual language distinct from the default AI-SaaS look. Product identity as a competitive moat.",
+    tag: 'project-based',
+    body: "A visual language distinct from the default AI-SaaS look. Product identity as a competitive moat, built for a product that's supposed to look like nobody else's.",
   },
   {
-    id: 'fractional-product-partner',
-    name: 'Fractional Product Partner',
+    id: 'strategy-product-direction',
+    name: 'Strategy & Product Direction',
     audience: 'ai-native',
-    tag: 'available as subscription',
-    body:
-      'Embedded, part-time design + product lead, on subscription. We help decide what to build, in what order, and keep it coherent as the team grows.',
+    tag: 'sprint · embedded',
+    body: 'Working through what to build and in what order, before design starts — the decisions that determine whether the rest of the work matters.',
+  },
+  // Existing product
+  {
+    id: 'ai-integration-ux',
+    name: 'AI Integration UX',
+    audience: 'existing',
+    tag: 'sprint · subscription · embedded',
+    body: "Designing how a new AI feature sits inside a product that already has users, habits, and expectations — so it feels native to the product, not bolted on.",
   },
   {
     id: 'ux-rescue-sprint',
     name: 'UX Rescue Sprint',
-    audience: 'ai-generated',
-    tag: 'fixed scope',
-    body:
-      "Audit against real user behavior. Prioritized list of what's costing you users. We fix the top offenders live. Roadmap for what's next.",
+    audience: 'existing',
+    tag: 'fixed price · 1–2 weeks',
+    body: "Audit against real user behavior. A prioritized list of what's actually costing you users. We fix the top offenders live, inside the sprint, and leave you a roadmap for what's next.",
   },
   {
     id: 'product-finishing',
     name: 'Product Finishing',
-    audience: 'ai-generated',
-    tag: 'fixed scope',
-    body:
-      "Whole-flow coherence: onboarding, checkout, settings, permissions. The states generation tools skip — empty, loading, error, edge case. Ready to demo or onboard real customers.",
+    audience: 'existing',
+    tag: '2–4 weeks',
+    body: "Whole-flow coherence: onboarding, checkout, settings, permissions. The states AI-assisted builds tend to skip — empty, loading, error, edge case. Ready to demo or onboard real customers without breaking.",
   },
   {
     id: 'design-system-maintenance',
     name: 'Design System & Ongoing Maintenance',
-    audience: 'ai-generated',
-    tag: 'available as subscription',
-    body:
-      'Components, spacing, tokens, hand-off specs. Keeps every new feature looking like the same product as you keep shipping.',
+    audience: 'existing',
+    tag: 'project-based · subscription',
+    body: 'Components, spacing, tokens, and hand-off specs — so every new feature still looks like the same product as you keep shipping.',
+  },
+  // Either
+  {
+    id: 'embedded-designer',
+    name: 'Embedded Designer',
+    audience: 'either',
+    body: "No hire, no recruiting cycle. Our design expertise, working inside your team's process — your tools, your standups, your sprint cycles — for a specific project or a defined stretch of time.",
   },
   {
     id: 'ux-audit-pre-raise',
     name: 'UX Audit Before a Raise or Launch',
-    audience: 'also',
-    body:
-      'Diagnostic. Find where users fall out before investors or the market see it. Prioritized, evidence-based fix plan.',
+    audience: 'either',
+    body: 'A diagnostic tied directly to money on the line. Find where users fall out before investors or the market see it, with a prioritized, evidence-based fix plan.',
+  },
+  {
+    id: 'fractional-product-partner',
+    name: 'Fractional Product Partner',
+    audience: 'either',
+    tag: 'subscription',
+    body: 'An embedded, part-time design and product lead, on a monthly subscription. We help decide what to build, in what order, and keep it coherent as your team and product grow.',
   },
 ];
 
-export const audienceGroups: { id: Audience; label: string; blurb: string; audienceServices: string[] }[] = [
+export const audienceGroups: {
+  id: Audience;
+  label: string;
+  blurb: string;
+  audienceServices: string[];
+}[] = [
   {
     id: 'ai-native',
-    label: 'Teams building AI into their product',
+    label: "Teams building AI-native products",
     blurb:
-      'Designing agent behavior, model-driven features, and AI-native interaction patterns — trust, uncertainty, handoff, human override.',
-    audienceServices: ['ai-ux-product-design', 'product-point-of-view', 'fractional-product-partner'],
+      "A startup or new venture with AI at the center — an agent, a model, a workflow that acts on someone's behalf. You need the interaction design that generic UI patterns don't have answers for: trust, uncertainty, handoff, control.",
+    audienceServices: ['ai-ux-product-design', 'product-point-of-view', 'strategy-product-direction'],
   },
   {
-    id: 'ai-generated',
-    label: 'Teams with an AI-generated product',
+    id: 'existing',
+    label: "Businesses adding AI to an existing product",
     blurb:
-      'An MVP built by an AI tool or fast build sprint, now needing whole-flow coherence, a visual identity of its own, and an ongoing system to keep it consistent.',
-    audienceServices: ['ux-rescue-sprint', 'product-finishing', 'design-system-maintenance'],
+      "A mature business bringing AI into the core of an existing product — new features, new workflows, a genuine shift in what the product does. You need it designed with the same care as the rest of the product, not bolted on.",
+    audienceServices: ['ai-integration-ux', 'ux-rescue-sprint', 'product-finishing', 'design-system-maintenance'],
+  },
+  {
+    id: 'either',
+    label: "For either",
+    blurb:
+      "Some of what we do applies regardless of where you're starting from — and these are the engagements that move between both worlds.",
+    audienceServices: ['embedded-designer', 'ux-audit-pre-raise', 'fractional-product-partner'],
   },
 ];
 
@@ -89,23 +116,23 @@ export type ProcessStep = { n: string; title: string; body: string };
 export const processSteps: ProcessStep[] = [
   {
     n: '1',
-    title: 'Frame the problem',
-    body: "Get clear on why the product exists and where it's losing people.",
+    title: 'Frame the problem before touching a screen',
+    body: "Most design problems are decision problems wearing a costume. We get clear on what's actually happening before we design anything.",
   },
   {
     n: '2',
-    title: 'Decide, then design',
-    body: 'Explore directions fast, apply judgment, commit to one.',
+    title: 'Explore widely, decide deliberately',
+    body: 'We draw on our own expertise to move fast through real options — not a single first idea. The value we add is choosing: keeping what\'s right for your users and your stage, and having a real reason for the rest.',
   },
   {
     n: '3',
-    title: 'Build coherence',
-    body: 'Make the product feel like one product, end to end.',
+    title: 'Design for coherence, not just for the next screen',
+    body: 'A product should feel like one decision, made consistently, not a series of separate features stitched together. We design flows and systems, not isolated screens.',
   },
   {
     n: '4',
-    title: 'Embed and iterate',
-    body: "Learn your taste over repeated rounds; the relationship compounds.",
+    title: "Stay in the work long enough to learn your taste",
+    body: "The longer we work with a team, the better the decisions get — because we understand what \"right\" means for that specific product and that specific audience. That's why most relationships move toward ongoing work.",
   },
 ];
 
@@ -113,42 +140,17 @@ export type PricingRow = {
   engagement: string;
   whatItIs: string;
   investment: string;
-  subscriptionTier?: 'lite' | 'standard' | 'embedded';
 };
 
 export const pricingRows: PricingRow[] = [
-  {
-    engagement: 'UX Rescue Sprint',
-    whatItIs: 'Fixed-scope audit + top fixes, 1–2 weeks',
-    investment: 'Project-based',
-  },
-  {
-    engagement: 'Product Finishing',
-    whatItIs: 'Whole-flow coherence, 2–4 weeks',
-    investment: 'Project-based',
-  },
-  {
-    engagement: 'AI UX & Product Design',
-    whatItIs: 'Interaction design for AI-native features, project-based',
-    investment: 'Project-based',
-  },
-  {
-    engagement: 'Design System & Maintenance',
-    whatItIs: 'System + hand-off specs, ongoing upkeep',
-    investment: 'Subscription',
-    subscriptionTier: 'standard',
-  },
-  {
-    engagement: 'UX Audit (pre-raise)',
-    whatItIs: 'Diagnostic + prioritized fix plan',
-    investment: 'Project-based',
-  },
-  {
-    engagement: 'Fractional Product Partner',
-    whatItIs: 'Embedded, monthly subscription',
-    investment: 'Subscription',
-    subscriptionTier: 'embedded',
-  },
+  { engagement: 'UX Rescue Sprint', whatItIs: 'Fixed-scope audit + top fixes, 1–2 weeks', investment: 'Sprint' },
+  { engagement: 'Product Finishing', whatItIs: 'Whole-flow coherence, 2–4 weeks', investment: 'Sprint' },
+  { engagement: 'AI UX & Product Design', whatItIs: 'Interaction design for AI-native features', investment: 'Sprint / Subscription / Embedded' },
+  { engagement: 'AI Integration UX', whatItIs: 'Designing AI into an existing product', investment: 'Sprint / Subscription / Embedded' },
+  { engagement: 'Design System & Maintenance', whatItIs: 'System + hand-off specs, ongoing upkeep', investment: 'Sprint / Subscription' },
+  { engagement: 'UX Audit (pre-raise / pre-launch)', whatItIs: 'Diagnostic + prioritized fix plan', investment: 'Sprint' },
+  { engagement: 'Embedded Designer', whatItIs: 'Our expertise inside your team, no hire', investment: 'Embedded' },
+  { engagement: 'Fractional Product Partner', whatItIs: 'Part-time design + product lead', investment: 'Subscription' },
 ];
 
 export type SubTier = {
@@ -157,6 +159,7 @@ export type SubTier = {
   price: string;
   cadence: string;
   description: string;
+  daysPerMonth: string;
   includes: string[];
   featured?: boolean;
 };
@@ -165,76 +168,110 @@ export const subscriptionTiers: SubTier[] = [
   {
     id: 'lite',
     name: 'Lite',
-    price: 'from €1,800',
+    price: 'from €1,500',
     cadence: '/mo',
-    description: 'A few days a month: coherence upkeep, small fixes, always-on support.',
+    daysPerMonth: 'Up to 3 days / month',
+    description: 'Best for a product that\'s mostly stable but still needs someone watching it.',
     includes: [
-      'Up to ~2 working days / week of design time',
-      'Coherence upkeep across new and existing features',
-      'Small fixes, polish, and visual consistency passes',
-      'Always-on async support channel (Slack or email)',
-      'Bi-weekly review of anything the team ships',
-      'Component kit kept in sync with the product',
+      'Coherence audits and small UI fixes',
+      'Async support through your existing tools',
+      'One review call per month',
     ],
   },
   {
     id: 'standard',
     name: 'Standard',
-    price: 'from €4,500',
+    price: 'from €3,500',
     cadence: '/mo',
-    description: 'Regular feature work plus design-system maintenance.',
+    daysPerMonth: 'Up to 8 days / month',
+    description: 'Best for teams shipping new features on a regular cadence.',
     includes: [
-      'Up to ~3 working days / week of design time',
-      'Regular feature design work end to end',
-      'Design-system maintenance + new components as needed',
-      'Full component kit with hand-off specs for engineering',
-      'Async + one weekly sync review',
-      'UX QA on shipped features',
-      'Onboarding, empty, loading, error, and edge-case states covered',
+      'Everything in Lite',
+      'New feature design',
+      'Ongoing design-system maintenance',
+      'Biweekly working session',
     ],
     featured: true,
   },
   {
     id: 'embedded',
     name: 'Embedded',
-    price: 'from €8,500',
+    price: 'from €6,000',
     cadence: '/mo',
-    description: 'Part-time design + product lead, in the room for product decisions.',
+    daysPerMonth: 'Up to 15 days / month',
+    description: "Our closest equivalent to a fractional hire — structured around your team's cadence.",
     includes: [
-      'Up to ~4 working days / week of design + product time',
-      'Embedded design and product lead in your squad',
-      'In the room for product decisions — what to build, in what order',
-      'Roadmap input and prioritization alongside the founder',
-      'Full design-system ownership and governance',
-      'Async + two weekly sync reviews',
-      'Mentorship and design review for in-house designers',
-      'Keeps the product coherent as the team grows',
+      'Everything in Standard',
+      'A seat in product planning and roadmap discussions',
+      'Direct input on what gets built and in what order',
+      'Weekly syncs',
     ],
   },
 ];
 
+export const subscriptionIncludedAtEveryTier = [
+  'Direct access to the person doing the work — no account layer',
+  'Async communication through your existing tools (Slack, Linear, Figma, etc.)',
+  'Design system consistency across everything we touch',
+  'Monthly check-in on priorities and scope',
+  'Month-to-month terms — pause, adjust, or cancel at the end of any month',
+];
+
 export const pricingPhilosophy =
-  'Subscriptions are month-to-month. Figures are indicative starting points for the EU market; we confirm a fixed number before any work begins. No open-ended hourly billing.';
+  'Figures are indicative starting points for the EU market and scale with team size and product complexity. We confirm a fixed number before any work begins. No open-ended hourly billing.';
 
 export const beliefs = [
-  'When good output becomes abundant, exceptional experiences win.',
-  'Human judgment, taste, and coherence remain the premium layer.',
-  'Design is about decisive thinking, not just generation.',
+  'The question has moved from "who can build it fast" to "who can make it exceptional."',
+  'Good output is abundant now. Judgment, taste, and coherence are the layer that isn\'t.',
+  "Design is decisive thinking, not just generation — deciding what a product should and shouldn't do.",
+  'A product built only for what AI can do today is already out of date. We design with where this is going.',
 ];
 
 export const honestPart = [
-  "We use AI tools every day to work faster and smarter. What we deliver is the irreplaceable layer above the tools — the judgment and taste that transform generated output into exceptional experiences.",
-  "We stay focused on our lane. When the work becomes pure screen production, AI is often the more efficient choice. We concentrate on the decisions that genuinely elevate products and businesses.",
+  "Everything we design, we design ourselves. No part of the actual work — the flows, the screens, the decisions — is generated. That's not a marketing line; it's the reason to hire us instead of a tool. If a project really is just \"make me five screens\" with no judgment required, a generation tool can do that faster and cheaper than we can, and we'll tell you that instead of taking the work anyway.",
+  "The person assigned to your project is whoever's the right fit for the problem, not whoever's next in line. Your point of contact stays constant either way — one person, through the whole relationship, who knows your product and answers you directly.",
+  "We'll disagree with you sometimes, out loud. If we think a direction is wrong for your users, we'll say so before we build it, not after — even when it's not what you wanted to hear.",
+  "The first few weeks are slower than they look. We're learning your product, your users, and your taste before we're making fast, confident calls — and we'd rather be upfront about that ramp-up than pretend it doesn't exist.",
 ];
 
 export const aboutStudio =
-  "We are led by a product designer and founder who actively builds AI products. This hands-on experience allows us to work with founders as peers — discussing real priorities, trade-offs, and what it truly takes to ship successful AI products.\n\nWe combine high craft in UX and UI with strong product thinking and practical shipping expertise.";
+  "13 Design Studio has spent years working closely with innovative companies on user experience. We're relaunching around a new reality: AI didn't remove the need for that work — it changed which parts of it matter most.\n\nWe work with startups building something new, and with mature companies bringing AI into products that already exist. Different stage, same conviction: the products that win are the ones a human actually thought through.";
 
-export const aboutPositioning =
-  'A focused product design studio for the AI era.';
+export const aboutPositioning = "We're passionate about what's next.";
 
 export const beliefIntro =
-  'The question in our industry has changed from "who can build it fast" to "who can make it exceptional." We built our studio around the second question.';
+  "The question in our industry has changed. We built this studio around the answer.";
 
 export const directAccessLine =
-  "Small by design. The team that scopes the work is the team that ships it — no relay of notes, no dilution between the first conversation and the final handoff. We stay close, answer directly, and keep every decision in one place. The work stays coherent because the thinking never gets handed off.";
+  "We offer three ways to engage, depending on what you need: sprints and fixed-scope projects for a specific, time-boxed problem — subscription for ongoing design support as you continue to ship — and embedded designers, our expertise inside your team, without a hire.";
+
+export const homeFaq = [
+  {
+    q: "We're pre-launch with no real users yet — is it too early to work with you?",
+    a: "No. Interaction patterns for AI features are easier to get right before they're live and load-bearing. Earlier is easier than after you've shipped the wrong one three times.",
+  },
+  {
+    q: "Do you build, or only design?",
+    a: "We design — flows, systems, interaction patterns, specs your developers won't fight. We work alongside your engineering team, human or AI-assisted; we're not a dev shop.",
+  },
+  {
+    q: "What's the difference between a sprint and a subscription?",
+    a: "A sprint has a fixed scope, timeline, and price — good for a specific problem. A subscription is ongoing, month-to-month design support — good for teams shipping continuously who want a design partner who stays.",
+  },
+  {
+    q: "What does \"embedded designer\" actually mean?",
+    a: "You get our design expertise working inside your team's process — your tools, your standups, your sprint cycles — for a defined project or period. No recruiting, no onboarding overhead, no long-term hire.",
+  },
+  {
+    q: "Do you only work with AI-native startups?",
+    a: "No — we work with two kinds of teams: startups building AI-native from day one, and established businesses adding AI to the core of an existing product. Different starting points, same underlying work.",
+  },
+  {
+    q: "Am I working with one person or a team?",
+    a: "Both. You have one point of contact for the relationship — someone who knows your product and stays with you throughout. The designer actually doing the work is matched to what your project needs, so you get the right expertise for the problem rather than one generalist stretched across everything.",
+  },
+  {
+    q: "How fast can we start?",
+    a: "A sprint or audit can usually start within a week or two of a first conversation. Subscriptions and embedded engagements start with a short scoping call to confirm fit.",
+  },
+];

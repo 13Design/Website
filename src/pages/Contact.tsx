@@ -4,10 +4,8 @@ import Reveal from '../components/Reveal';
 import PageHeader from '../components/PageHeader';
 import SectionMarker from '../components/SectionMarker';
 import { supabase } from '../lib/supabase';
-import { contactInstructions } from '../data/pages';
+import { contactInstructions, contactStages, contactLookingFor } from '../data/pages';
 import type { Route } from '../lib/router';
-
-const STAGES = ['Idea / prototype', 'Just shipped', 'Live with users', 'Preparing to raise', 'Preparing to launch', 'Scaling'];
 
 type Status = 'idle' | 'submitting' | 'success' | 'error';
 
@@ -26,8 +24,10 @@ export default function Contact({ onNavigate }: { onNavigate: (r: Route) => void
     const payload = {
       name: String(data.get('name') || '').trim(),
       email: String(data.get('email') || '').trim(),
+      company: String(data.get('company') || '').trim(),
       product_url: String(data.get('product_url') || '').trim(),
       stage: String(data.get('stage') || '').trim(),
+      looking_for: String(data.get('looking_for') || '').trim(),
       challenges: String(data.get('challenges') || '').trim(),
       whats_next: String(data.get('whats_next') || '').trim(),
       message: String(data.get('message') || '').trim(),
@@ -79,7 +79,9 @@ export default function Contact({ onNavigate }: { onNavigate: (r: Route) => void
               <Reveal delay={2} className="mt-8">
                 <ul className="space-y-4">
                   {[
+                    'Your company or product name',
                     'Where your product is today',
+                    'What kind of help you\'re looking for',
                     'What challenges you are facing',
                     "What's coming up — a raise, launch, or growth push",
                     'A link to the live product, if you have one',
@@ -171,14 +173,22 @@ export default function Contact({ onNavigate }: { onNavigate: (r: Route) => void
                     </div>
                     <div className="mt-5">
                       <Field
+                        label="Company / product"
+                        name="company"
+                        placeholder="What you're building"
+                      />
+                    </div>
+                    <div className="mt-5">
+                      <Field
                         label="Product link"
                         name="product_url"
                         placeholder="https://yourproduct.com"
                         hint="A link to the live product, if you have one."
                       />
                     </div>
-                    <div className="mt-5">
-                      <SelectField label="Where is the product today?" name="stage" options={STAGES} placeholder="Choose one" />
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mt-5">
+                      <SelectField label="Where is the product today?" name="stage" options={contactStages} placeholder="Choose one" />
+                      <SelectField label="What are you looking for?" name="looking_for" options={contactLookingFor} placeholder="Choose one" />
                     </div>
                     <div className="mt-5">
                       <TextareaField

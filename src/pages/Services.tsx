@@ -6,8 +6,6 @@ import { services, audienceGroups } from '../data/studio';
 import type { Route } from '../lib/router';
 
 export default function Services({ onNavigate }: { onNavigate: (r: Route) => void }) {
-  const alsoAvailable = services.filter((s) => s.audience === 'also');
-
   return (
     <main>
       <PageHeader
@@ -19,22 +17,23 @@ export default function Services({ onNavigate }: { onNavigate: (r: Route) => voi
         onNavigate={onNavigate}
       />
 
-      {/* Two audiences */}
-      {audienceGroups.map((g, gi) => (
-        <section key={g.id} className="relative py-16 lg:py-20 border-b border-ink-700/40">
-          <div className="mx-auto max-w-edge px-5 lg:px-8">
-            <Reveal>
-              <SectionMarker n={`0${gi + 2}`} label={g.label} />
-            </Reveal>
-            <Reveal delay={1} className="mt-7">
-              <p className="text-lg text-bone-300 max-w-2xl leading-relaxed text-pretty">{g.blurb}</p>
-            </Reveal>
+      {audienceGroups.map((g, gi) => {
+        const groupServices = g.audienceServices
+          .map((sid) => services.find((s) => s.id === sid))
+          .filter(Boolean) as typeof services;
 
-            <div className="mt-12 space-y-px bg-ink-700/40 border-y border-ink-700/40">
-              {g.audienceServices.map((sid, i) => {
-                const svc = services.find((s) => s.id === sid);
-                if (!svc) return null;
-                return (
+        return (
+          <section key={g.id} className="relative py-16 lg:py-20 border-b border-ink-700/40">
+            <div className="mx-auto max-w-edge px-5 lg:px-8">
+              <Reveal>
+                <SectionMarker n={`0${gi + 2}`} label={g.label} />
+              </Reveal>
+              <Reveal delay={1} className="mt-7">
+                <p className="text-lg text-bone-300 max-w-2xl leading-relaxed text-pretty">{g.blurb}</p>
+              </Reveal>
+
+              <div className="mt-12 space-y-px bg-ink-700/40 border-y border-ink-700/40">
+                {groupServices.map((svc, i) => (
                   <Reveal key={svc.id} delay={((i % 3) + 1) as 1 | 2 | 3}>
                     <div className="group grid grid-cols-12 gap-4 lg:gap-8 py-8 lg:py-9 bg-ink-950 transition-colors hover:bg-ink-900/60 -mx-3 px-3 lg:-mx-5 lg:px-5 rounded-lg">
                       <div className="col-span-12 lg:col-span-4">
@@ -55,35 +54,12 @@ export default function Services({ onNavigate }: { onNavigate: (r: Route) => voi
                       </div>
                     </div>
                   </Reveal>
-                );
-              })}
+                ))}
+              </div>
             </div>
-          </div>
-        </section>
-      ))}
-
-      {/* Also available */}
-      <section className="relative py-16 lg:py-20 border-b border-ink-700/40">
-        <div className="mx-auto max-w-edge px-5 lg:px-8">
-          <Reveal>
-            <SectionMarker n="04" label="Also available" />
-          </Reveal>
-          <div className="mt-10 grid grid-cols-1 md:grid-cols-2 gap-6">
-            {alsoAvailable.map((svc, i) => (
-              <Reveal key={svc.id} delay={((i % 2) + 1) as 1 | 2}>
-                <div className="group h-full rounded-2xl border border-ink-700/60 bg-ink-900 p-8 transition-all duration-500 hover:border-ember-500/40 hover:bg-ink-850">
-                  <div className="flex items-start justify-between gap-4">
-                    <h3 className="font-display text-xl lg:text-2xl font-medium text-bone-50 tracking-tighter2 leading-tight">
-                      {svc.name}
-                    </h3>
-                  </div>
-                  <p className="mt-4 text-bone-400 leading-relaxed text-pretty">{svc.body}</p>
-                </div>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
+          </section>
+        );
+      })}
 
       <ClosingCTA
         title="Not sure which fits?"

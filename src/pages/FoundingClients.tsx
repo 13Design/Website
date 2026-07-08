@@ -142,7 +142,8 @@ export default function FoundingClients({ onNavigate }: { onNavigate: (r: Route)
           </Reveal>
           <Reveal delay={1} className="mt-8 max-w-2xl">
             <p className="text-bone-300 leading-relaxed text-pretty">
-              {foundingWhatThisIs}
+              This is where it starts. Tell us about your product, and be one of
+              the first names on our Work page — the ones we'll be proud of.
             </p>
           </Reveal>
 

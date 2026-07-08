@@ -164,6 +164,8 @@ export type SubTier = {
   featured?: boolean;
 };
 
+export type IncludedItem = { n: string; title: string; body: string };
+
 export const subscriptionTiers: SubTier[] = [
   {
     id: 'lite',
@@ -173,9 +175,11 @@ export const subscriptionTiers: SubTier[] = [
     daysPerMonth: 'Up to 3 days / month',
     description: 'Best for a product that\'s mostly stable but still needs someone watching it.',
     includes: [
-      'Coherence audits and small UI fixes',
-      'Async support through your existing tools',
-      'One review call per month',
+      'Coherence audits — a regular pass across the product to catch drift before it compounds',
+      'Small UI fixes — spacing, states, inconsistencies that pile up between bigger releases',
+      'Async support through your existing tools (Slack, Linear, Figma, etc.)',
+      'One review call per month to walk through priorities',
+      'Response within 2 business days on async requests',
     ],
   },
   {
@@ -187,9 +191,10 @@ export const subscriptionTiers: SubTier[] = [
     description: 'Best for teams shipping new features on a regular cadence.',
     includes: [
       'Everything in Lite',
-      'New feature design',
-      'Ongoing design-system maintenance',
-      'Biweekly working session',
+      'New feature design — full flows, not just individual screens',
+      'Ongoing design-system maintenance — components, tokens, and specs kept current as the product evolves',
+      'Biweekly working session with your team',
+      'Priority turnaround on time-sensitive requests',
     ],
     featured: true,
   },
@@ -203,22 +208,52 @@ export const subscriptionTiers: SubTier[] = [
     includes: [
       'Everything in Standard',
       'A seat in product planning and roadmap discussions',
-      'Direct input on what gets built and in what order',
-      'Weekly syncs',
+      'Direct input on what gets built and in what order, not just how it looks',
+      'Weekly syncs, embedded in your existing rituals (standups, sprint planning, etc.)',
+      'Ownership of design quality across the whole product, not just what\'s assigned',
     ],
   },
 ];
 
-export const subscriptionIncludedAtEveryTier = [
-  'Direct access to the person doing the work — no account layer',
-  'Async communication through your existing tools (Slack, Linear, Figma, etc.)',
-  'Design system consistency across everything we touch',
-  'Monthly check-in on priorities and scope',
-  'Month-to-month terms — pause, adjust, or cancel at the end of any month',
+export const subscriptionIncludedAtEveryTier: IncludedItem[] = [
+  {
+    n: '01',
+    title: 'Direct access to the person doing the work',
+    body: 'No account layer, no relayed updates — you talk directly to the designer on your project.',
+  },
+  {
+    n: '02',
+    title: 'Async communication through your existing tools',
+    body: 'Slack, Linear, Figma, or whatever your team already uses — we work inside your workflow, not a separate portal.',
+  },
+  {
+    n: '03',
+    title: 'Design system consistency across everything we touch',
+    body: "Every fix, feature, or flow stays aligned to your existing components and tokens, so nothing we ship looks bolted on.",
+  },
+  {
+    n: '04',
+    title: 'Monthly check-in on priorities and scope',
+    body: 'A recurring moment to re-align on what matters most that month, so the work stays pointed at what actually moves the product forward.',
+  },
+  {
+    n: '05',
+    title: 'Month-to-month terms',
+    body: 'Pause, adjust, or cancel at the end of any month — no annual contract, no early-termination fee.',
+  },
 ];
 
-export const pricingPhilosophy =
-  'Figures are indicative starting points for the EU market and scale with team size and product complexity. We confirm a fixed number before any work begins. No open-ended hourly billing.';
+export const subscriptionHowItWorks =
+  "You choose a tier based on how much ongoing design support your team needs. Each month, we work inside that scope — feature design, coherence upkeep, design system maintenance, or embedded product partnership, depending on the tier.";
+
+export const subscriptionHowItWorksBody =
+  'No open-ended hourly billing. No surprise invoices. A fixed monthly rate, confirmed before you start, that you can pause or adjust as your needs change.';
+
+export const subscriptionWhyInstead =
+  "A single sprint can fix what's broken today. A subscription means the same judgment that fixed it stays in place as you keep shipping — so the product doesn't quietly drift back into inconsistency six months later.";
+
+export const subscriptionWhyInsteadBody =
+  "Most of our subscription clients started with a sprint or audit first, then moved to a subscription once we'd shown the value on something concrete. That's a sensible way to start if you're not sure yet.";
 
 export const beliefs = [
   'The question has moved from "who can build it fast" to "who can make it exceptional."',

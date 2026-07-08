@@ -2,39 +2,35 @@ export const foundingWhatThisIs =
   "We're a new studio with a clear point of view and the craft to back it — and we're deliberately choosing our first few clients rather than taking whatever comes. If your product is a good fit, you get senior-level design at a founder rate. In return, we get to show the work.";
 
 export const foundingYouGet = [
-  'A full engagement (usually a UX Rescue Sprint or Product Finishing) at a reduced founder rate',
-  'The same judgment and craft every client gets — nothing junior, nothing rushed',
-  'Direct work with the person making the calls, start to finish',
+  'A reduced rate on your first engagement, in exchange for a case study and testimonial on completion',
+  'Direct, hands-on access — no account layer, no junior hand-off',
+  'First access to new service offerings as we build them out',
+  'A say in how the case study is framed — nothing published without your review',
 ];
 
-export const foundingWeGet = [
-  'Permission to publish a case study (before/after, the decisions, the result)',
-  'A short written testimonial at handoff',
-  'Your logo and product named on the site',
-];
+export const foundingWeGet: string[] = [];
 
 export const foundingWhoFor = [
-  'An AI-native or AI-generated product past the idea stage — something real, shipped or close',
-  'A founder who can move quickly and give honest feedback',
-  'A problem where the work will show — a clear before-and-after, ideally tied to a raise, launch, or growth push',
-  'Comfortable with the work being shared publicly',
+  'Startups building AI-native features who need the interaction design layer solved',
+  'Established businesses adding AI to an existing product who want it designed with real care',
+  'Teams with an AI-generated MVP ready for whole-flow finishing',
+  'Founders and product leads who can move at sprint pace and give direct, honest feedback',
 ];
 
-export const foundingWhoNote =
-  'A limited number of spots. We\'d rather do a few of these well than many at once.';
+export const foundingWhoNote = '';
 
 export const foundingHowItWorks = [
-  { n: '1', title: 'You submit the form below', body: 'tell us where the product is and what feels off.' },
-  { n: '2', title: 'We reply within a few days', body: "an honest read on whether we're the right fit. If we're not, we'll say so." },
-  { n: '3', title: 'Short call', body: 'scope, timeline, founder rate, what the case study will cover.' },
-  { n: '4', title: 'We do the work', body: 'and document it together as we go.' },
+  { n: '1', title: 'Short intro call', body: 'tell us where the product stands today.' },
+  { n: '2', title: 'We confirm fit', body: 'and scope a fixed-price first engagement.' },
+  { n: '3', title: 'We work the engagement', body: 'at founding-client rate.' },
+  { n: '4', title: 'On completion', body: 'case study, testimonial, and — if it\'s a fit — a path to an ongoing subscription.' },
 ];
 
 export const foundingFormNote =
-  'We read every submission and reply personally — usually within a few days. No auto-responses, no sales sequence.';
+  '';
 
 export const foundingFallback =
-  "Not a founding-client fit but still want to work together? That's fine — see our standard ways to work, or just contact us.";
+  "";
 
 export const workNoCases = {
   title: 'Case studies are on the way.',
@@ -48,6 +44,19 @@ export const workClose = {
 
 export const contactInstructions =
   'Share where your product is today, what challenges you\'re facing, and what\'s coming up (raise, launch, or growth push). A link to the live product is often the most valuable starting point.';
+
+export const foundingStages = [
+  'AI-native build',
+  'AI-generated MVP',
+  'Adding AI to an existing product',
+  'Other',
+];
+
+export const foundingTimelines = [
+  'ASAP',
+  'This quarter',
+  'Just exploring',
+];
 
 export const contactStages = [
   'Idea / prototype',

@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from 'react';
-import { ArrowUpRight, ArrowLeft, Check, Loader2, AlertCircle, Mail } from 'lucide-react';
+import { ArrowUpRight, ArrowLeft, Check, Loader2, AlertCircle } from 'lucide-react';
 import Reveal from '../components/Reveal';
 import PageHeader from '../components/PageHeader';
 import SectionMarker from '../components/SectionMarker';
@@ -7,12 +7,10 @@ import { supabase } from '../lib/supabase';
 import {
   foundingWhatThisIs,
   foundingYouGet,
-  foundingWeGet,
   foundingWhoFor,
-  foundingWhoNote,
   foundingHowItWorks,
-  foundingFormNote,
-  foundingFallback,
+  foundingStages,
+  foundingTimelines,
 } from '../data/pages';
 import type { Route } from '../lib/router';
 
@@ -21,7 +19,6 @@ type Status = 'idle' | 'submitting' | 'success' | 'error';
 export default function FoundingClients({ onNavigate }: { onNavigate: (r: Route) => void }) {
   const [status, setStatus] = useState<Status>('idle');
   const [errorMsg, setErrorMsg] = useState('');
-  const [consent, setConsent] = useState(false);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -35,12 +32,10 @@ export default function FoundingClients({ onNavigate }: { onNavigate: (r: Route)
       name: String(data.get('name') || '').trim(),
       email: String(data.get('email') || '').trim(),
       product_name: String(data.get('product_name') || '').trim(),
-      product_kind: String(data.get('product_kind') || '').trim(),
-      stage: String(data.get('stage') || '').trim(),
+      product_url: String(data.get('product_url') || '').trim(),
+      product_kind: String(data.get('stage') || '').trim(),
       what_feels_off: String(data.get('what_feels_off') || '').trim(),
-      whats_next: String(data.get('whats_next') || '').trim(),
-      anything_else: String(data.get('anything_else') || '').trim(),
-      ok_to_share: consent,
+      timeline: String(data.get('timeline') || '').trim(),
     };
 
     if (!payload.name || !payload.email || !payload.product_name) {
@@ -59,7 +54,6 @@ export default function FoundingClients({ onNavigate }: { onNavigate: (r: Route)
 
     setStatus('success');
     form.reset();
-    setConsent(false);
   };
 
   return (
@@ -67,74 +61,43 @@ export default function FoundingClients({ onNavigate }: { onNavigate: (r: Route)
       <PageHeader
         marker="01"
         markerLabel="Founding clients"
-        title={<>Founding client spots — open now.</>}
-        body="We're taking on a small number of first projects at a founder rate, in exchange for a documented case study and a testimonial. Real work, real result, shared openly. It's a trade, not a discount."
+        title={<>We're taking on a small number of founding clients.</>}
+        body="13 Design Studio is relaunching. Rather than pad this site with borrowed credibility, we're being direct about it — and looking for a handful of teams to build the first case studies with, on terms that reflect that."
         actions="none"
       />
 
-      {/* What this is */}
+      {/* What founding client status means */}
       <section className="relative py-16 lg:py-20 border-b border-ink-700/40">
         <div className="mx-auto max-w-edge px-5 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16">
             <div className="lg:col-span-5">
               <Reveal>
-                <SectionMarker n="02" label="What this is" />
+                <SectionMarker n="02" label="What it means" />
               </Reveal>
             </div>
             <div className="lg:col-span-7">
               <Reveal delay={1}>
-                <p className="text-lg lg:text-xl text-bone-200 leading-relaxed text-pretty">
-                  {foundingWhatThisIs}
-                </p>
-              </Reveal>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* You get / we get */}
-      <section className="relative py-16 lg:py-20 border-b border-ink-700/40">
-        <div className="mx-auto max-w-edge px-5 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <Reveal>
-              <div className="h-full rounded-2xl border border-ink-700/60 bg-ink-900 p-8 lg:p-9">
-                <p className="text-[11px] uppercase tracking-[0.28em] text-ember-400 mb-6">You get</p>
                 <ul className="space-y-5">
                   {foundingYouGet.map((item, i) => (
                     <li key={i} className="flex items-start gap-4">
                       <span className="mt-0.5 shrink-0 h-6 w-6 rounded-full border border-ember-500/40 flex items-center justify-center">
                         <Check size={13} className="text-ember-400" />
                       </span>
-                      <span className="text-bone-200 text-pretty">{item}</span>
+                      <span className="text-bone-200 text-pretty leading-relaxed">{item}</span>
                     </li>
                   ))}
                 </ul>
-              </div>
-            </Reveal>
-            <Reveal delay={1}>
-              <div className="h-full rounded-2xl border border-ink-700/60 bg-ink-900 p-8 lg:p-9">
-                <p className="text-[11px] uppercase tracking-[0.28em] text-bone-400 mb-6">We get</p>
-                <ul className="space-y-5">
-                  {foundingWeGet.map((item, i) => (
-                    <li key={i} className="flex items-start gap-4">
-                      <span className="mt-0.5 shrink-0 h-6 w-6 rounded-full border border-ink-600 flex items-center justify-center">
-                        <ArrowUpRight size={13} className="text-bone-300" />
-                      </span>
-                      <span className="text-bone-200 text-pretty">{item}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </Reveal>
+              </Reveal>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Who it's for */}
+      {/* Who we're looking for */}
       <section className="relative py-16 lg:py-20 border-b border-ink-700/40">
         <div className="mx-auto max-w-edge px-5 lg:px-8">
           <Reveal>
-            <SectionMarker n="03" label="Who it's for" />
+            <SectionMarker n="03" label="Who we're looking for" />
           </Reveal>
           <Reveal delay={1} className="mt-10">
             <ul className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-5">
@@ -147,9 +110,6 @@ export default function FoundingClients({ onNavigate }: { onNavigate: (r: Route)
                 </li>
               ))}
             </ul>
-          </Reveal>
-          <Reveal delay={2} className="mt-8">
-            <p className="text-sm text-bone-400 italic">{foundingWhoNote}</p>
           </Reveal>
         </div>
       </section>
@@ -174,14 +134,16 @@ export default function FoundingClients({ onNavigate }: { onNavigate: (r: Route)
         </div>
       </section>
 
-      {/* Form */}
+      {/* Intake form */}
       <section className="relative py-16 lg:py-20 border-b border-ink-700/40">
         <div className="mx-auto max-w-edge px-5 lg:px-8">
           <Reveal>
-            <SectionMarker n="05" label="Submit" />
+            <SectionMarker n="05" label="Apply" />
           </Reveal>
           <Reveal delay={1} className="mt-8 max-w-2xl">
-            <p className="text-bone-300 leading-relaxed text-pretty">{foundingFormNote}</p>
+            <p className="text-bone-300 leading-relaxed text-pretty">
+              {foundingWhatThisIs}
+            </p>
           </Reveal>
 
           <Reveal delay={2} className="mt-10 max-w-2xl">
@@ -191,7 +153,7 @@ export default function FoundingClients({ onNavigate }: { onNavigate: (r: Route)
                   <Check size={26} className="text-ember-400" />
                 </div>
                 <h2 className="mt-6 font-display text-2xl lg:text-3xl font-medium text-bone-50 tracking-tighter2">
-                  Request received.
+                  Application received.
                 </h2>
                 <p className="mt-4 text-bone-300 leading-relaxed max-w-md mx-auto text-pretty">
                   Thank you. We read every submission personally and reply within a
@@ -218,71 +180,47 @@ export default function FoundingClients({ onNavigate }: { onNavigate: (r: Route)
                 )}
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                  <Field label="Your name" name="name" required placeholder="Jordan Lee" />
+                  <Field label="Name" name="name" required placeholder="Jordan Lee" />
                   <Field label="Email" name="email" type="email" required placeholder="jordan@company.com" />
                 </div>
                 <div className="mt-5">
                   <Field
-                    label="Product name and link"
+                    label="Company / product name"
                     name="product_name"
                     required
-                    placeholder="Vellum — vellum.ai"
-                    hint="Live link or demo is great."
+                    placeholder="What you're building"
+                  />
+                </div>
+                <div className="mt-5">
+                  <Field
+                    label="Link to live product"
+                    name="product_url"
+                    placeholder="https://yourproduct.com"
+                    hint="A link to the live product, if you have one."
                   />
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mt-5">
                   <SelectField
-                    label="What are you building?"
-                    name="product_kind"
-                    options={['AI-native feature', 'AI-generated MVP', 'Both', 'Other']}
+                    label="What stage are you at?"
+                    name="stage"
+                    options={foundingStages}
                     placeholder="Choose one"
                   />
                   <SelectField
-                    label="Where are you?"
-                    name="stage"
-                    options={['Just shipped', 'Live with users', 'Preparing to raise', 'Preparing to launch', 'Scaling']}
+                    label="Timeline"
+                    name="timeline"
+                    options={foundingTimelines}
                     placeholder="Choose one"
                   />
                 </div>
                 <div className="mt-5">
                   <TextareaField
-                    label="What feels off?"
+                    label="What's the most pressing problem right now?"
                     name="what_feels_off"
-                    placeholder="The one or two things bothering you most about the product right now."
+                    placeholder="The one or two things that matter most right now."
                     rows={3}
                   />
                 </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mt-5">
-                  <Field
-                    label="What's next?"
-                    name="whats_next"
-                    placeholder="A raise, a launch, a growth push — and rough timing."
-                  />
-                  <Field
-                    label="Anything else?"
-                    name="anything_else"
-                    placeholder="Timeline, budget range, constraints."
-                  />
-                </div>
-
-                <label className="mt-7 flex items-start gap-3 cursor-pointer group">
-                  <input
-                    type="checkbox"
-                    checked={consent}
-                    onChange={(e) => setConsent(e.target.checked)}
-                    className="sr-only peer"
-                  />
-                  <span
-                    className={`mt-0.5 shrink-0 h-5 w-5 rounded-md border flex items-center justify-center transition-all ${
-                      consent ? 'border-ember-500 bg-ember-500' : 'border-ink-600 group-hover:border-bone-400'
-                    }`}
-                  >
-                    {consent && <Check size={13} className="text-ink-950" />}
-                  </span>
-                  <span className="text-sm text-bone-400 leading-relaxed">
-                    I'm comfortable with the work being shared publicly as a case study.
-                  </span>
-                </label>
 
                 <button
                   type="submit"
@@ -292,32 +230,17 @@ export default function FoundingClients({ onNavigate }: { onNavigate: (r: Route)
                   {status === 'submitting' ? (
                     <>
                       <Loader2 size={18} className="animate-spin" />
-                      Sending request…
+                      Sending application…
                     </>
                   ) : (
                     <>
-                      Submit founding request
+                      Apply as a founding client
                       <ArrowUpRight size={18} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                     </>
                   )}
                 </button>
               </form>
             )}
-          </Reveal>
-
-          <Reveal delay={3} className="mt-10 max-w-2xl">
-            <div className="flex flex-col sm:flex-row sm:items-center gap-4 rounded-2xl border border-ink-700/60 bg-ink-900/40 p-6">
-              <p className="text-sm text-bone-400 leading-relaxed flex-1 text-pretty">
-                {foundingFallback}
-              </p>
-              <button
-                onClick={() => onNavigate('/contact')}
-                className="group inline-flex items-center gap-2 text-sm text-bone-200 hover:text-ember-400 transition-colors shrink-0"
-              >
-                <Mail size={16} />
-                <span className="link-underline">Contact us</span>
-              </button>
-            </div>
           </Reveal>
         </div>
       </section>

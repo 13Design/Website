@@ -129,10 +129,10 @@ export default function Home({ onNavigate }: { onNavigate: (r: Route) => void })
 
           <div className="mt-14 grid grid-cols-1 lg:grid-cols-3 gap-6">
             {audienceGroups.map((g, i) => (
-              <Reveal key={g.id} delay={((i % 3) + 1) as 1 | 2 | 3} className="flex flex-col">
+              <Reveal key={g.id} delay={((i % 3) + 1) as 1 | 2 | 3}>
                 <button
                   onClick={() => onNavigate('/services')}
-                  className="group relative flex-1 w-full text-left rounded-2xl border border-ink-700/60 bg-ink-900 p-8 lg:p-9 transition-all duration-500 hover:border-ember-500/40 hover:bg-ink-850 overflow-hidden"
+                  className="group relative h-full w-full text-left rounded-2xl border border-ink-700/60 bg-ink-900 p-8 lg:p-9 transition-all duration-500 hover:border-ember-500/40 hover:bg-ink-850 overflow-hidden"
                 >
                   <div className="absolute inset-0 rounded-2xl bg-[radial-gradient(ellipse_at_top_right,rgba(232,116,76,0.08),transparent_55%)] opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
                   <div className="relative flex flex-col h-full">
@@ -192,8 +192,8 @@ export default function Home({ onNavigate }: { onNavigate: (r: Route) => void })
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {previewServices.map((s, i) => (
-              <Reveal key={s.id} delay={((i % 2) + 1) as 1 | 2} className="flex flex-col">
-                <div className="group flex-1 rounded-2xl border border-ink-700/60 bg-ink-900 p-8 lg:p-9 transition-all duration-500 hover:border-ember-500/40 hover:bg-ink-850">
+              <Reveal key={s.id} delay={((i % 2) + 1) as 1 | 2}>
+                <div className="group h-full rounded-2xl border border-ink-700/60 bg-ink-900 p-8 lg:p-9 transition-all duration-500 hover:border-ember-500/40 hover:bg-ink-850">
                   <div className="flex items-start justify-between gap-4">
                     <h3 className="font-display text-xl lg:text-2xl font-medium text-bone-50 tracking-tighter2 leading-tight">
                       {s.name}

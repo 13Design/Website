@@ -93,13 +93,13 @@ export default function Pricing({ onNavigate }: { onNavigate: (r: Route) => void
 
                   <button
                     onClick={() => onNavigate('/contact')}
-                    className={`mt-8 group/btn inline-flex items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-medium transition-all duration-300 hover:gap-3 ${
+                    className={`mt-auto pt-8 w-full group/btn inline-flex items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-medium transition-all duration-300 hover:gap-3 ${
                       tier.featured
                         ? 'bg-ember-500 hover:bg-ember-400 text-ink-950'
                         : 'border border-ink-600 hover:border-bone-300 text-bone-100'
                     }`}
                   >
-                    <span className="link-underline">Subscribe</span>
+                    Subscribe
                     <ArrowUpRight size={15} className="transition-transform group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5" />
                   </button>
                 </div>

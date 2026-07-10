@@ -135,7 +135,7 @@ export default function Home({ onNavigate }: { onNavigate: (r: Route) => void })
                   className="group relative h-full w-full text-left rounded-2xl border border-ink-700/60 bg-ink-900 p-8 lg:p-9 transition-all duration-500 hover:border-ember-500/40 hover:bg-ink-850 overflow-hidden"
                 >
                   <div className="absolute inset-0 rounded-2xl bg-[radial-gradient(ellipse_at_top_right,rgba(232,116,76,0.08),transparent_55%)] opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
-                  <div className="relative">
+                  <div className="relative flex flex-col h-full">
                     <div className="flex items-center justify-between">
                       <span className="font-mono text-xs text-ember-500">0{i + 1}</span>
                       <ArrowUpRight size={20} className="text-bone-500 group-hover:text-ember-400 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
@@ -144,7 +144,7 @@ export default function Home({ onNavigate }: { onNavigate: (r: Route) => void })
                       {g.label}
                     </h3>
                     <p className="mt-4 text-sm text-bone-400 leading-relaxed text-pretty">{g.blurb}</p>
-                    <div className="mt-6 flex flex-wrap gap-2">
+                    <div className="mt-auto pt-6 flex flex-wrap gap-2">
                       {g.audienceServices.map((sid) => {
                         const svc = services.find((s) => s.id === sid);
                         return svc ? (

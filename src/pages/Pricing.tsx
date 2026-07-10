@@ -59,9 +59,9 @@ export default function Pricing({ onNavigate }: { onNavigate: (r: Route) => void
 
           <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6">
             {subscriptionTiers.map((tier, i) => (
-              <Reveal key={tier.id} delay={((i % 3) + 1) as 1 | 2 | 3}>
+              <Reveal key={tier.id} delay={((i % 3) + 1) as 1 | 2 | 3} className="flex flex-col">
                 <div
-                  className={`group relative h-full flex flex-col rounded-2xl border p-8 lg:p-9 transition-all duration-500 ${
+                  className={`group relative flex-1 flex flex-col rounded-2xl border p-8 lg:p-9 transition-all duration-500 ${
                     tier.featured
                       ? 'border-ember-500/50 bg-ink-850'
                       : 'border-ink-700/60 bg-ink-900 hover:border-ember-500/30 hover:bg-ink-850'
@@ -93,7 +93,7 @@ export default function Pricing({ onNavigate }: { onNavigate: (r: Route) => void
 
                   <button
                     onClick={() => onNavigate('/contact')}
-                    className={`mt-auto pt-8 w-full group/btn inline-flex items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-medium transition-all duration-300 hover:gap-3 ${
+                    className={`mt-auto pt-8 w-full group/btn inline-flex items-center justify-center gap-2 rounded-full px-6 py-3.5 text-sm font-medium transition-all duration-300 hover:gap-3 ${
                       tier.featured
                         ? 'bg-ember-500 hover:bg-ember-400 text-ink-950'
                         : 'border border-ink-600 hover:border-bone-300 text-bone-100'

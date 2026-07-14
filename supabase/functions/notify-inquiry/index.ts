@@ -125,7 +125,10 @@ Deno.serve(async (req) => {
   if (!res.ok) {
     const detail = await res.text();
     console.error("Resend error:", res.status, detail);
-    return new Response("Email send failed", { status: 502 });
+    return new Response(JSON.stringify({ error: "email_send_failed", resend_status: res.status, detail }), {
+      status: 502,
+      headers: { "Content-Type": "application/json" },
+    });
   }
 
   return new Response(JSON.stringify({ ok: true }), {

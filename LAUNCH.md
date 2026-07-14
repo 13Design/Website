@@ -76,38 +76,42 @@ git push origin main
 Without this, submissions silently pile up in the Supabase tables. This makes
 every new inquiry email you.
 
-1. Create a **Resend** account at <https://resend.com>.
-2. **Verify a sender.** Add and verify the domain `13design.studio` (Resend →
-   Domains → add DNS records). For a quick test before DNS is ready you can send
-   from Resend's shared `onboarding@resend.dev`, but use your own domain for
-   production so mail doesn't land in spam.
-3. Create an **API key** (Resend → API Keys).
-4. Set the function's secrets and deploy it (from the repo root):
+**Status: built and verified (2026-07-14).** The function is deployed, the
+secrets are set, and the database triggers are wired. A live insert produced a
+real email (Resend HTTP 200). Currently running in Resend **test mode**.
+
+How it's wired (for reference — already done):
+- Secrets set on the function: `RESEND_API_KEY`, `NOTIFY_FROM`, `NOTIFY_TO`,
+  `WEBHOOK_SECRET`.
+- Deployed with `supabase functions deploy notify-inquiry --no-verify-jwt`.
+- Instead of the dashboard "Database Webhooks" UI (which was hard to find and
+  needs the secret pasted by hand), the insert→function call is done with a SQL
+  trigger using `pg_net`:
+  - `public.notify_inquiry_webhook()` — SECURITY DEFINER trigger function that
+    calls `net.http_post(...)` to the function URL with the `x-webhook-secret`
+    header.
+  - Triggers `notify_contact_insert` and `notify_founder_insert` (AFTER INSERT)
+    on the two tables.
+
+### Going from test mode to production email
+
+Right now `NOTIFY_FROM=onboarding@resend.dev` and `NOTIFY_TO` is the Resend
+account owner address — in test mode Resend **only** delivers there. To send
+from your own domain to any address (e.g. `hello@13design.studio`):
+
+1. In Resend → **Domains**, add `13design.studio` and add the DNS records it
+   shows at your DNS provider. Wait for it to verify.
+2. Update the two secrets and redeploy:
 
    ```bash
    supabase secrets set \
-     RESEND_API_KEY="re_xxxxxxxx" \
-     NOTIFY_TO="hello@13design.studio" \
      NOTIFY_FROM="13 Design <notify@13design.studio>" \
-     WEBHOOK_SECRET="$(openssl rand -hex 24)"
-
+     NOTIFY_TO="hello@13design.studio"
    supabase functions deploy notify-inquiry --no-verify-jwt
    ```
 
-   Note the `WEBHOOK_SECRET` value you generated — you'll paste it in the next
-   step. (View it later with `supabase secrets list` shows only names, so keep a
-   copy now.)
-5. Wire up **Database Webhooks** so an insert triggers the function. In the
-   Supabase dashboard → **Database → Webhooks → Create a new hook**, do this
-   **twice**, once per table:
-   - **Table:** `contact_inquiries` (then repeat for `founder_inquiries`)
-   - **Events:** Insert
-   - **Type:** Supabase Edge Functions → `notify-inquiry`
-   - **HTTP Headers:** add `x-webhook-secret` = the `WEBHOOK_SECRET` value
-   - Save.
-
-Now every submission POSTs the row to the function, which emails `NOTIFY_TO`
-with a formatted summary and a "Reply to sender" button.
+Every submission then emails `NOTIFY_TO` a formatted summary with a "Reply to
+sender" button.
 
 ---
 

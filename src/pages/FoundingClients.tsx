@@ -5,7 +5,6 @@ import PageHeader from '../components/PageHeader';
 import SectionMarker from '../components/SectionMarker';
 import { supabase } from '../lib/supabase';
 import {
-  foundingWhatThisIs,
   foundingYouGet,
   foundingWhoFor,
   foundingHowItWorks,
@@ -28,6 +27,15 @@ export default function FoundingClients({ onNavigate }: { onNavigate: (r: Route)
 
     const form = e.currentTarget;
     const data = new FormData(form);
+
+    // Honeypot — real users never fill this hidden field; bots do.
+    // Silently pretend success without touching the database.
+    if (String(data.get('company_website') || '').trim() !== '') {
+      setStatus('success');
+      form.reset();
+      return;
+    }
+
     const payload = {
       name: String(data.get('name') || '').trim(),
       email: String(data.get('email') || '').trim(),
@@ -179,6 +187,12 @@ export default function FoundingClients({ onNavigate }: { onNavigate: (r: Route)
                     <span>{errorMsg}</span>
                   </div>
                 )}
+
+                {/* Honeypot — hidden from humans, catches naive bots */}
+                <div aria-hidden="true" style={{ position: 'absolute', left: '-9999px', width: '1px', height: '1px', overflow: 'hidden' }}>
+                  <label htmlFor="fc-company-website">Company website</label>
+                  <input type="text" id="fc-company-website" name="company_website" tabIndex={-1} autoComplete="off" />
+                </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                   <Field label="Name" name="name" required placeholder="Jordan Lee" />

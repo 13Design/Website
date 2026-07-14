@@ -1,0 +1,11 @@
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+# SPA fallback: serve index.html for every route so deep links
+# (e.g. /contact, /pricing) and refreshes don't 404. The React
+# router takes over on the client.
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

@@ -21,6 +21,15 @@ export default function Contact({ onNavigate }: { onNavigate: (r: Route) => void
 
     const form = e.currentTarget;
     const data = new FormData(form);
+
+    // Honeypot — real users never fill this hidden field; bots do.
+    // Silently pretend success without touching the database.
+    if (String(data.get('company_website') || '').trim() !== '') {
+      setStatus('success');
+      form.reset();
+      return;
+    }
+
     const payload = {
       name: String(data.get('name') || '').trim(),
       email: String(data.get('email') || '').trim(),
@@ -166,6 +175,12 @@ export default function Contact({ onNavigate }: { onNavigate: (r: Route) => void
                         <span>{errorMsg}</span>
                       </div>
                     )}
+
+                    {/* Honeypot — hidden from humans, catches naive bots */}
+                    <div aria-hidden="true" style={{ position: 'absolute', left: '-9999px', width: '1px', height: '1px', overflow: 'hidden' }}>
+                      <label htmlFor="ct-company-website">Company website</label>
+                      <input type="text" id="ct-company-website" name="company_website" tabIndex={-1} autoComplete="off" />
+                    </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                       <Field label="Your name" name="name" required placeholder="Jordan Lee" />

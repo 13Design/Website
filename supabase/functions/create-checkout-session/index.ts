@@ -74,13 +74,12 @@ Deno.serve(async (req) => {
     const session = await stripe.checkout.sessions.create({
       mode: "subscription",
       line_items: [{ price: priceId, quantity: 1 }],
-      // Checkout collects the customer's email; Stripe emails them the
-      // subscription receipt and every future invoice.
-      customer_creation: "always",
-      // Required for Stripe Tax to determine the correct rate.
+      // In subscription mode Stripe always creates the Customer itself and
+      // collects the email, so it can send the receipt and future invoices —
+      // `customer_creation`/`customer_update` are payment-mode-only.
+      // Billing address is required so Stripe Tax can pick the right rate.
       billing_address_collection: "required",
       automatic_tax: { enabled: true },
-      customer_update: { address: "auto", name: "auto" },
       // Let business customers supply a VAT / tax ID.
       tax_id_collection: { enabled: true },
       allow_promotion_codes: true,

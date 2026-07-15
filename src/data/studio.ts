@@ -162,6 +162,8 @@ export type SubTier = {
   daysPerMonth: string;
   includes: string[];
   featured?: boolean;
+  /** Purchasable directly via Stripe Checkout. Embedded is call-first. */
+  selfServe?: boolean;
 };
 
 export type IncludedItem = { n: string; title: string; body: string };
@@ -174,6 +176,7 @@ export const subscriptionTiers: SubTier[] = [
     cadence: '/mo',
     daysPerMonth: 'Up to 5 days / month',
     description: 'Best for a product that\'s mostly stable but still needs someone watching it.',
+    selfServe: true,
     includes: [
       'Coherence audits — a regular pass across the product to catch drift before it compounds',
       'Small UI fixes — spacing, states, inconsistencies that pile up between bigger releases',
@@ -189,6 +192,7 @@ export const subscriptionTiers: SubTier[] = [
     cadence: '/mo',
     daysPerMonth: 'Up to 12 days / month',
     description: 'Best for teams shipping new features on a regular cadence.',
+    selfServe: true,
     includes: [
       'Everything in Lite',
       'New feature design — full flows, not just individual screens',

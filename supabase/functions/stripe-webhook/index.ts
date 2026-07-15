@@ -1,0 +1,197 @@
+// Supabase Edge Function: stripe-webhook
+//
+// Receives Stripe events, verifies the signature, records the subscription in
+// the `subscriptions` table (service role), and emails the studio via Resend.
+//
+// Handled events:
+//   checkout.session.completed          — a new subscription was paid for
+//   customer.subscription.updated       — status / renewal / cancellation change
+//   customer.subscription.deleted       — subscription ended
+//
+// Required secrets:
+//   STRIPE_SECRET_KEY          — sk_test_… / sk_live_…
+//   STRIPE_WEBHOOK_SECRET      — whsec_… from the Stripe webhook endpoint
+//   SUPABASE_URL               — provided automatically by the platform
+//   SUPABASE_SERVICE_ROLE_KEY  — provided automatically by the platform
+//   RESEND_API_KEY / NOTIFY_TO / NOTIFY_FROM — reused from notify-inquiry
+//
+// Deploy: supabase functions deploy stripe-webhook --no-verify-jwt
+// (Stripe signs the request; it does not send a Supabase JWT.)
+
+import Stripe from "npm:stripe@17.5.0";
+import { createClient } from "npm:@supabase/supabase-js@2";
+
+const TIER_LABELS: Record<string, string> = {
+  lite: "Lite — $800/mo",
+  standard: "Standard — $2,500/mo",
+};
+
+function money(amount: number | null | undefined, currency: string | null | undefined) {
+  if (amount == null) return "—";
+  return `${(amount / 100).toLocaleString("en-US", {
+    style: "currency",
+    currency: (currency ?? "usd").toUpperCase(),
+  })}`;
+}
+
+async function emailStudio(subject: string, rows: [string, string][]) {
+  const apiKey = Deno.env.get("RESEND_API_KEY");
+  const to = Deno.env.get("NOTIFY_TO");
+  const from = Deno.env.get("NOTIFY_FROM");
+  if (!apiKey || !to || !from) {
+    console.error("Resend env missing; skipping studio email");
+    return;
+  }
+
+  const body = rows
+    .map(
+      ([k, v]) =>
+        `<tr><td style="padding:6px 14px 6px 0;color:#6b7280;font-size:13px;white-space:nowrap;vertical-align:top;">${k}</td><td style="padding:6px 0;color:#111827;font-size:14px;">${v}</td></tr>`,
+    )
+    .join("");
+
+  const html = `<!doctype html><html><body style="margin:0;background:#f6f6f7;padding:24px;font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;">
+    <div style="max-width:560px;margin:0 auto;background:#fff;border:1px solid #e5e7eb;border-radius:14px;overflow:hidden;">
+      <div style="padding:20px 24px;border-bottom:1px solid #eee;">
+        <div style="font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#9ca3af;">13 Design Studio</div>
+        <div style="font-size:18px;font-weight:600;color:#111827;margin-top:4px;">${subject}</div>
+      </div>
+      <div style="padding:20px 24px;"><table style="border-collapse:collapse;width:100%;">${body}</table></div>
+    </div></body></html>`;
+
+  const res = await fetch("https://api.resend.com/emails", {
+    method: "POST",
+    headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
+    body: JSON.stringify({ from, to: [to], subject, html }),
+  });
+  if (!res.ok) console.error("Resend error:", res.status, await res.text());
+}
+
+Deno.serve(async (req) => {
+  if (req.method !== "POST") return new Response("Method not allowed", { status: 405 });
+
+  const secretKey = Deno.env.get("STRIPE_SECRET_KEY");
+  const webhookSecret = Deno.env.get("STRIPE_WEBHOOK_SECRET");
+  if (!secretKey || !webhookSecret) {
+    console.error("Missing STRIPE_SECRET_KEY or STRIPE_WEBHOOK_SECRET");
+    return new Response("Server not configured", { status: 500 });
+  }
+
+  const signature = req.headers.get("stripe-signature");
+  if (!signature) return new Response("Missing signature", { status: 400 });
+
+  const stripe = new Stripe(secretKey, { apiVersion: "2024-12-18.acacia" });
+  const raw = await req.text();
+
+  let event: Stripe.Event;
+  try {
+    // Async variant is required on Deno (Web Crypto).
+    event = await stripe.webhooks.constructEventAsync(raw, signature, webhookSecret);
+  } catch (err) {
+    console.error("Signature verification failed:", err);
+    return new Response("Invalid signature", { status: 400 });
+  }
+
+  const supabase = createClient(
+    Deno.env.get("SUPABASE_URL")!,
+    Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
+  );
+
+  try {
+    switch (event.type) {
+      case "checkout.session.completed": {
+        const s = event.data.object as Stripe.Checkout.Session;
+        if (!s.subscription) break;
+
+        const sub = await stripe.subscriptions.retrieve(String(s.subscription));
+        const tier = s.metadata?.tier ?? sub.metadata?.tier ?? "";
+        const email = s.customer_details?.email ?? s.customer_email ?? "";
+        const name = s.customer_details?.name ?? "";
+
+        await supabase.from("subscriptions").upsert(
+          {
+            stripe_customer_id: String(s.customer ?? ""),
+            stripe_subscription_id: sub.id,
+            stripe_checkout_session_id: s.id,
+            email,
+            name,
+            tier,
+            status: sub.status,
+            amount_total: s.amount_total,
+            currency: s.currency,
+            current_period_end: new Date(sub.current_period_end * 1000).toISOString(),
+            cancel_at_period_end: sub.cancel_at_period_end,
+            updated_at: new Date().toISOString(),
+          },
+          { onConflict: "stripe_subscription_id" },
+        );
+
+        await emailStudio("New subscription", [
+          ["Plan", TIER_LABELS[tier] ?? (tier || "—")],
+          ["Name", name || "—"],
+          ["Email", email || "—"],
+          ["Amount", money(s.amount_total, s.currency)],
+          ["Status", sub.status],
+          ["Subscription", sub.id],
+        ]);
+        break;
+      }
+
+      case "customer.subscription.updated":
+      case "customer.subscription.deleted": {
+        const sub = event.data.object as Stripe.Subscription;
+
+        await supabase
+          .from("subscriptions")
+          .update({
+            status: sub.status,
+            current_period_end: new Date(sub.current_period_end * 1000).toISOString(),
+            cancel_at_period_end: sub.cancel_at_period_end,
+            updated_at: new Date().toISOString(),
+          })
+          .eq("stripe_subscription_id", sub.id);
+
+        // Only tell the studio about things worth knowing about.
+        const notable =
+          event.type === "customer.subscription.deleted" ||
+          sub.cancel_at_period_end ||
+          ["past_due", "unpaid", "canceled"].includes(sub.status);
+
+        if (notable) {
+          const { data } = await supabase
+            .from("subscriptions")
+            .select("email, tier")
+            .eq("stripe_subscription_id", sub.id)
+            .maybeSingle();
+
+          await emailStudio(
+            event.type === "customer.subscription.deleted"
+              ? "Subscription ended"
+              : `Subscription ${sub.cancel_at_period_end ? "set to cancel" : sub.status}`,
+            [
+              ["Plan", TIER_LABELS[data?.tier ?? ""] ?? data?.tier ?? "—"],
+              ["Email", data?.email ?? "—"],
+              ["Status", sub.status],
+              ["Cancels at period end", sub.cancel_at_period_end ? "Yes" : "No"],
+              ["Period ends", new Date(sub.current_period_end * 1000).toUTCString()],
+              ["Subscription", sub.id],
+            ],
+          );
+        }
+        break;
+      }
+
+      default:
+        // Unhandled event types are acknowledged so Stripe stops retrying.
+        break;
+    }
+  } catch (err) {
+    console.error("Handler error:", event.type, err);
+    // 500 tells Stripe to retry.
+    return new Response("Handler error", { status: 500 });
+  }
+
+  return new Response(JSON.stringify({ received: true }), {
+    headers: { "Content-Type": "application/json" },
+  });
+});

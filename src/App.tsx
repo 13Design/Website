@@ -8,6 +8,8 @@ import About from './pages/About';
 import Contact from './pages/Contact';
 import Work from './pages/Work';
 import FoundingClients from './pages/FoundingClients';
+import SubscribeSuccess from './pages/SubscribeSuccess';
+import SubscribeCancel from './pages/SubscribeCancel';
 import { useRoute } from './lib/router';
 
 const TITLES: Record<string, string> = {
@@ -18,6 +20,8 @@ const TITLES: Record<string, string> = {
   '/contact': 'Contact — 13 Design Studio',
   '/work': 'Work — 13 Design Studio',
   '/founding-clients': 'Founding Clients — 13 Design Studio',
+  '/subscribe/success': "You're subscribed — 13 Design Studio",
+  '/subscribe/cancel': 'Checkout cancelled — 13 Design Studio',
 };
 
 export default function App() {
@@ -48,6 +52,12 @@ export default function App() {
         {route === '/contact' && <Contact onNavigate={navigate} tier={params.get('tier')} />}
         {route === '/work' && <Work onNavigate={navigate} />}
         {route === '/founding-clients' && <FoundingClients onNavigate={navigate} />}
+        {route === '/subscribe/success' && (
+          <SubscribeSuccess onNavigate={navigate} tier={params.get('tier')} />
+        )}
+        {route === '/subscribe/cancel' && (
+          <SubscribeCancel onNavigate={navigate} tier={params.get('tier')} />
+        )}
       </div>
       <Footer onNavigate={navigate} />
     </div>

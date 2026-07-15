@@ -26,6 +26,22 @@ const TIER_LABELS: Record<string, string> = {
   standard: "Standard — $2,500/mo",
 };
 
+/**
+ * Current period end, as an ISO string, or null.
+ *
+ * Stripe moved `current_period_end` off the subscription and onto its items in
+ * newer API versions. Webhook payloads arrive in the account's default version,
+ * which may differ from the version this function pins — so read both shapes
+ * rather than assuming either. Getting this wrong throws on `new Date(NaN)`.
+ */
+function periodEndIso(sub: Stripe.Subscription): string | null {
+  const top = (sub as unknown as { current_period_end?: number }).current_period_end;
+  const item = (sub.items?.data?.[0] as unknown as { current_period_end?: number } | undefined)
+    ?.current_period_end;
+  const secs = typeof top === "number" ? top : typeof item === "number" ? item : null;
+  return secs === null ? null : new Date(secs * 1000).toISOString();
+}
+
 function money(amount: number | null | undefined, currency: string | null | undefined) {
   if (amount == null) return "—";
   return `${(amount / 100).toLocaleString("en-US", {
@@ -119,7 +135,7 @@ Deno.serve(async (req) => {
             status: sub.status,
             amount_total: s.amount_total,
             currency: s.currency,
-            current_period_end: new Date(sub.current_period_end * 1000).toISOString(),
+            current_period_end: periodEndIso(sub),
             cancel_at_period_end: sub.cancel_at_period_end,
             updated_at: new Date().toISOString(),
           },
@@ -145,7 +161,7 @@ Deno.serve(async (req) => {
           .from("subscriptions")
           .update({
             status: sub.status,
-            current_period_end: new Date(sub.current_period_end * 1000).toISOString(),
+            current_period_end: periodEndIso(sub),
             cancel_at_period_end: sub.cancel_at_period_end,
             updated_at: new Date().toISOString(),
           })
@@ -173,11 +189,41 @@ Deno.serve(async (req) => {
               ["Email", data?.email ?? "—"],
               ["Status", sub.status],
               ["Cancels at period end", sub.cancel_at_period_end ? "Yes" : "No"],
-              ["Period ends", new Date(sub.current_period_end * 1000).toUTCString()],
+              ["Period ends", periodEndIso(sub) ? new Date(periodEndIso(sub)!).toUTCString() : "—"],
               ["Subscription", sub.id],
             ],
           );
         }
+        break;
+      }
+
+      case "invoice.payment_failed": {
+        const inv = event.data.object as Stripe.Invoice;
+        const subId = typeof inv.subscription === "string" ? inv.subscription : inv.subscription?.id;
+        if (!subId) break;
+
+        // Stripe's Smart Retries handle dunning and email the customer; this
+        // just makes sure the studio finds out too, rather than noticing the
+        // money never arrived.
+        await supabase
+          .from("subscriptions")
+          .update({ status: "past_due", updated_at: new Date().toISOString() })
+          .eq("stripe_subscription_id", subId);
+
+        const { data } = await supabase
+          .from("subscriptions")
+          .select("email, tier")
+          .eq("stripe_subscription_id", subId)
+          .maybeSingle();
+
+        await emailStudio("Subscription payment failed", [
+          ["Plan", TIER_LABELS[data?.tier ?? ""] ?? (data?.tier || "—")],
+          ["Email", data?.email ?? inv.customer_email ?? "—"],
+          ["Amount due", money(inv.amount_due, inv.currency)],
+          ["Attempt", String(inv.attempt_count ?? 1)],
+          ["Next retry", inv.next_payment_attempt ? new Date(inv.next_payment_attempt * 1000).toUTCString() : "no further retries"],
+          ["Invoice", inv.hosted_invoice_url ? `<a href="${inv.hosted_invoice_url}">View invoice</a>` : inv.id],
+        ]);
         break;
       }
 

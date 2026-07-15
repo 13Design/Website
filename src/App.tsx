@@ -53,7 +53,11 @@ export default function App() {
         {route === '/work' && <Work onNavigate={navigate} />}
         {route === '/founding-clients' && <FoundingClients onNavigate={navigate} />}
         {route === '/subscribe/success' && (
-          <SubscribeSuccess onNavigate={navigate} tier={params.get('tier')} />
+          <SubscribeSuccess
+            onNavigate={navigate}
+            tier={params.get('tier')}
+            sessionId={params.get('session_id')}
+          />
         )}
         {route === '/subscribe/cancel' && (
           <SubscribeCancel onNavigate={navigate} tier={params.get('tier')} />

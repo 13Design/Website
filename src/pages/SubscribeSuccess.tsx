@@ -1,16 +1,31 @@
-import { Check, ArrowLeft, Mail, ArrowUpRight } from 'lucide-react';
+import { useState } from 'react';
+import { Check, ArrowLeft, Mail, ArrowUpRight, Loader2, AlertCircle, Settings } from 'lucide-react';
 import Reveal from '../components/Reveal';
 import { subscriptionTiers } from '../data/studio';
+import { openBillingPortal } from '../lib/checkout';
 import type { Navigate } from '../lib/router';
 
 export default function SubscribeSuccess({
   onNavigate,
   tier,
+  sessionId,
 }: {
   onNavigate: Navigate;
   tier?: string | null;
+  sessionId?: string | null;
 }) {
   const plan = tier ? subscriptionTiers.find((t) => t.id === tier) : undefined;
+  const [busy, setBusy] = useState(false);
+  const [errorMsg, setErrorMsg] = useState('');
+
+  const manage = async () => {
+    if (!sessionId || busy) return;
+    setBusy(true);
+    setErrorMsg('');
+    const { error } = await openBillingPortal(sessionId);
+    setErrorMsg(error);
+    setBusy(false);
+  };
 
   return (
     <main>
@@ -57,6 +72,39 @@ export default function SubscribeSuccess({
                   ))}
                 </ol>
               </div>
+
+              {errorMsg && (
+                <div className="mt-6 flex items-start gap-3 rounded-xl border border-red-500/30 bg-red-500/10 p-4 text-sm text-red-300 text-left">
+                  <AlertCircle size={18} className="shrink-0 mt-0.5" />
+                  <span>{errorMsg}</span>
+                </div>
+              )}
+
+              {sessionId && (
+                <div className="mt-8">
+                  <button
+                    onClick={manage}
+                    disabled={busy}
+                    className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-full border border-ink-600 hover:border-bone-300 text-bone-100 px-7 py-3.5 text-sm font-medium transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
+                  >
+                    {busy ? (
+                      <>
+                        <Loader2 size={16} className="animate-spin" />
+                        Opening billing portal…
+                      </>
+                    ) : (
+                      <>
+                        <Settings size={16} />
+                        Manage subscription
+                      </>
+                    )}
+                  </button>
+                  <p className="mt-3 text-xs text-bone-500 leading-relaxed">
+                    Update your card, download invoices, or cancel — anytime. Bookmark this
+                    page, or we'll send you the link.
+                  </p>
+                </div>
+              )}
 
               <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
                 <button

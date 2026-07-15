@@ -42,6 +42,32 @@ function periodEndIso(sub: Stripe.Subscription): string | null {
   return secs === null ? null : new Date(secs * 1000).toISOString();
 }
 
+/**
+ * The subscription id an invoice belongs to, or null for one-off invoices.
+ *
+ * Same trap as periodEndIso: newer API versions moved `subscription` off the
+ * invoice and onto `parent.subscription_details.subscription`. Reading only the
+ * legacy field makes this handler silently no-op on a real failed renewal —
+ * no error, no retry, no alert. Read both shapes.
+ */
+function subscriptionIdOfInvoice(inv: Stripe.Invoice): string | null {
+  const idOf = (v: unknown): string | null => {
+    if (typeof v === "string") return v;
+    if (v && typeof v === "object" && typeof (v as { id?: string }).id === "string") {
+      return (v as { id: string }).id;
+    }
+    return null;
+  };
+
+  const legacy = idOf((inv as unknown as { subscription?: unknown }).subscription);
+  if (legacy) return legacy;
+
+  const nested = (inv as unknown as {
+    parent?: { subscription_details?: { subscription?: unknown } };
+  }).parent?.subscription_details?.subscription;
+  return idOf(nested);
+}
+
 function money(amount: number | null | undefined, currency: string | null | undefined) {
   if (amount == null) return "—";
   return `${(amount / 100).toLocaleString("en-US", {
@@ -199,7 +225,7 @@ Deno.serve(async (req) => {
 
       case "invoice.payment_failed": {
         const inv = event.data.object as Stripe.Invoice;
-        const subId = typeof inv.subscription === "string" ? inv.subscription : inv.subscription?.id;
+        const subId = subscriptionIdOfInvoice(inv);
         if (!subId) break;
 
         // Stripe's Smart Retries handle dunning and email the customer; this

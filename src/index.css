@@ -38,6 +38,27 @@ body {
   }
   .text-balance { text-wrap: balance; }
   .text-pretty { text-wrap: pretty; }
+
+  /* SVG parts animate around their own centre, not the viewBox origin. */
+  .svg-part {
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+
+  /* Respect the OS setting — a motion-heavy diagram shouldn't be forced on
+     anyone who has asked for less of it. It settles on the resolved state. */
+  @media (prefers-reduced-motion: reduce) {
+    .animate-snap,
+    .animate-marquee,
+    .animate-fade-up,
+    .animate-fade-in,
+    .animate-page-in {
+      animation: none !important;
+      transform: none !important;
+      opacity: 1 !important;
+    }
+  }
+
   .grain { position: relative; }
   .grain::after {
     content: '';

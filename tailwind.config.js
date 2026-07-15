@@ -59,12 +59,30 @@ export default {
           '0%': { opacity: '0', transform: 'translateY(8px)' },
           '100%': { opacity: '1', transform: 'translateY(0)' },
         },
+        /* Each part starts scattered (its own --dx/--dy/--dr), snaps into
+           place, holds, then drifts back. Offsets live on the element so one
+           keyframe drives every block. */
+        snap: {
+          '0%, 10%': {
+            transform: 'translate(var(--dx), var(--dy)) rotate(var(--dr))',
+            opacity: '0.45',
+          },
+          '38%, 76%': {
+            transform: 'translate(0, 0) rotate(0deg)',
+            opacity: '1',
+          },
+          '100%': {
+            transform: 'translate(var(--dx), var(--dy)) rotate(var(--dr))',
+            opacity: '0.45',
+          },
+        },
       },
       animation: {
         marquee: 'marquee 40s linear infinite',
         'fade-up': 'fade-up 0.8s cubic-bezier(0.22, 1, 0.36, 1) both',
         'fade-in': 'fade-in 0.9s ease both',
         'page-in': 'page-in 0.5s cubic-bezier(0.22, 1, 0.36, 1) both',
+        snap: 'snap 7s cubic-bezier(0.65, 0, 0.35, 1) infinite',
       },
     },
   },

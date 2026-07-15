@@ -1,11 +1,12 @@
 import { useState } from 'react';
-import { ArrowUpRight, Loader2, AlertCircle, CalendarDays } from 'lucide-react';
+import { ArrowUpRight, Loader2, AlertCircle, CalendarDays, Plus, Minus } from 'lucide-react';
 import Reveal from '../components/Reveal';
 import PageHeader from '../components/PageHeader';
 import SectionMarker from '../components/SectionMarker';
 import ClosingCTA from '../components/ClosingCTA';
 import { startCheckout } from '../lib/checkout';
 import {
+  subscriptionFaq,
   subscriptionTiers,
   subscriptionIncludedAtEveryTier,
   subscriptionHowItWorks,
@@ -17,6 +18,7 @@ import type { Navigate } from '../lib/router';
 
 export default function Pricing({ onNavigate }: { onNavigate: Navigate }) {
   const [busyTier, setBusyTier] = useState<string | null>(null);
+  const [openFaq, setOpenFaq] = useState<number | null>(0);
   const [failedTier, setFailedTier] = useState<string | null>(null);
   const [errorMsg, setErrorMsg] = useState('');
 
@@ -211,6 +213,61 @@ export default function Pricing({ onNavigate }: { onNavigate: Navigate }) {
                   {subscriptionWhyInsteadBody}
                 </p>
               </Reveal>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Subscription FAQ */}
+      <section className="relative py-16 lg:py-20 border-b border-ink-700/40">
+        <div className="mx-auto max-w-edge px-5 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16">
+            <div className="lg:col-span-4">
+              <Reveal>
+                <SectionMarker n="06" label="Subscription FAQ" />
+              </Reveal>
+              <Reveal delay={1} className="mt-7">
+                <h2 className="font-display font-medium text-bone-50 text-[clamp(1.7rem,4vw,2.8rem)] leading-[1.05] tracking-tightest text-balance">
+                  The terms, in plain words.
+                </h2>
+              </Reveal>
+              <Reveal delay={2} className="mt-6">
+                <p className="text-sm text-bone-400 leading-relaxed text-pretty max-w-xs">
+                  Anything not covered here, ask us before you subscribe — not after.
+                </p>
+              </Reveal>
+            </div>
+
+            <div className="lg:col-span-8">
+              <div className="border-y border-ink-700/40">
+                {subscriptionFaq.map((item, i) => (
+                  <Reveal key={i} delay={((i % 3) + 1) as 1 | 2 | 3}>
+                    <div className="border-b border-ink-700/40 last:border-b-0">
+                      <button
+                        onClick={() => setOpenFaq(openFaq === i ? null : i)}
+                        className="group flex w-full items-center justify-between gap-4 py-5 text-left"
+                        aria-expanded={openFaq === i}
+                      >
+                        <span className="font-display text-base lg:text-lg font-medium text-bone-100 tracking-tighter2 text-pretty">
+                          {item.q}
+                        </span>
+                        <span className="shrink-0 text-bone-400 group-hover:text-ember-400 transition-colors">
+                          {openFaq === i ? <Minus size={18} /> : <Plus size={18} />}
+                        </span>
+                      </button>
+                      <div
+                        className={`grid transition-all duration-400 ease-out ${
+                          openFaq === i ? 'grid-rows-[1fr] opacity-100 pb-5' : 'grid-rows-[0fr] opacity-0'
+                        }`}
+                      >
+                        <p className="overflow-hidden text-sm text-bone-400 leading-relaxed text-pretty pr-8">
+                          {item.a}
+                        </p>
+                      </div>
+                    </div>
+                  </Reveal>
+                ))}
+              </div>
             </div>
           </div>
         </div>

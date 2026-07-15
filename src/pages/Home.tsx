@@ -4,6 +4,7 @@ import Reveal from '../components/Reveal';
 import Marquee from '../components/Marquee';
 import SectionMarker from '../components/SectionMarker';
 import ClosingCTA from '../components/ClosingCTA';
+import CoherenceDiagram from '../components/CoherenceDiagram';
 import { audienceGroups, services, processSteps, beliefs, homeFaq } from '../data/studio';
 import type { Route } from '../lib/router';
 
@@ -243,29 +244,39 @@ export default function Home({ onNavigate }: { onNavigate: (r: Route) => void })
         </div>
       </section>
 
-      {/* ── Made by humans ───────────────────────────────────
-          Inverted on purpose. The page runs on one dark note from top to
-          bottom; this is the sharpest claim we make, so it changes volume
-          instead of scrolling past at the same level as everything else. */}
-      <section className="relative py-28 lg:py-36 bg-bone-50 overflow-hidden grain">
-        <div className="pointer-events-none absolute top-1/2 -right-32 -translate-y-1/2 w-[45vw] h-[45vw] rounded-full bg-[radial-gradient(ellipse_at_center,rgba(232,116,76,0.14),transparent_60%)] blur-3xl" />
+      {/* ── Made by humans ───────────────────────────────── */}
+      <section className="relative py-24 lg:py-32 border-b border-ink-700/40 overflow-hidden">
+        <div className="pointer-events-none absolute top-1/2 -right-32 -translate-y-1/2 w-[45vw] h-[45vw] rounded-full bg-[radial-gradient(ellipse_at_center,rgba(232,116,76,0.06),transparent_60%)] blur-3xl" />
         <div className="mx-auto max-w-edge px-5 lg:px-8 relative">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16">
-            <div className="lg:col-span-5">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
+            <div className="lg:col-span-6">
               <Reveal>
-                <SectionMarker n="05" label="Made by humans" tone="light" />
+                <SectionMarker n="05" label="Made by humans" />
               </Reveal>
               <Reveal delay={1} className="mt-8">
-                <h2 className="font-display font-medium text-ink-950 text-[clamp(1.9rem,5vw,3.6rem)] leading-[1.02] tracking-tightest text-balance">
+                <h2 className="font-display font-medium text-bone-50 text-[clamp(1.9rem,5vw,3.6rem)] leading-[1.02] tracking-tightest text-balance">
                   Everything we design, we design ourselves.
                 </h2>
               </Reveal>
-            </div>
-            <div className="lg:col-span-7">
-              <Reveal delay={2}>
-                <p className="text-lg lg:text-xl text-ink-500 leading-relaxed text-pretty max-w-xl">
+              <Reveal delay={2} className="mt-7">
+                <p className="text-base lg:text-lg text-bone-300 leading-relaxed text-pretty max-w-xl">
                   No part of the actual work — the flows, the screens, the decisions — is generated. That's not a marketing line; it's the reason to hire us instead of a tool. If a project really is just "make me five screens" with no judgment required, a generation tool can do that faster and cheaper, and we'll tell you that instead of taking the work anyway.
                 </p>
+              </Reveal>
+            </div>
+
+            <div className="lg:col-span-6">
+              <Reveal delay={3}>
+                <figure className="rounded-2xl border border-ink-700/60 bg-ink-900 p-6 lg:p-8">
+                  <CoherenceDiagram />
+                  <figcaption className="mt-6 flex items-center gap-3 border-t border-ink-700/50 pt-5">
+                    <span className="h-1.5 w-1.5 rounded-full bg-ember-500 shrink-0" />
+                    <span className="text-sm text-bone-400 leading-relaxed text-pretty">
+                      Generated output lands close, but never quite settles.
+                      Deciding where everything belongs — and why — is the work.
+                    </span>
+                  </figcaption>
+                </figure>
               </Reveal>
             </div>
           </div>

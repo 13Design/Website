@@ -243,7 +243,7 @@ export const subscriptionIncludedAtEveryTier: IncludedItem[] = [
   {
     n: '05',
     title: 'Month-to-month terms',
-    body: 'Pause, adjust, or cancel at the end of any month — no annual contract, no early-termination fee.',
+    body: 'Adjust or cancel at the end of any month — no annual contract, no early-termination fee.',
   },
 ];
 
@@ -251,7 +251,7 @@ export const subscriptionHowItWorks =
   "You choose a tier based on how much ongoing design support your team needs. Each month, we work inside that scope — feature design, coherence upkeep, design system maintenance, or embedded product partnership, depending on the tier.";
 
 export const subscriptionHowItWorksBody =
-  'No open-ended hourly billing. No surprise invoices. A fixed monthly rate, confirmed before you start, that you can pause or adjust as your needs change.';
+  'No open-ended hourly billing. No surprise invoices. A fixed monthly rate, confirmed before you start, that you can adjust or cancel as your needs change.';
 
 export const subscriptionWhyInstead =
   "A single sprint can fix what's broken today. A subscription means the same judgment that fixed it stays in place as you keep shipping — so the product doesn't quietly drift back into inconsistency six months later.";
@@ -283,6 +283,37 @@ export const beliefIntro =
 
 export const directAccessLine =
   "We offer three ways to engage, depending on what you need: sprints and fixed-scope projects for a specific, time-boxed problem — subscription for ongoing design support as you continue to ship — and embedded designers, our expertise inside your team, without a hire.";
+
+export const subscriptionFaq = [
+  {
+    q: 'Is there a minimum commitment?',
+    a: "No. One month is the minimum. There's no annual contract and no early-termination fee — if it isn't working, you cancel at the end of the month and that's the end of it.",
+  },
+  {
+    q: 'How do I cancel?',
+    a: "Yourself, from the billing portal — the link is on your confirmation page and every invoice. You can cancel, update your card, or download past invoices there without emailing us. You keep access until the end of the month you've already paid for.",
+  },
+  {
+    q: 'Can I switch tiers later?',
+    a: "Yes — at the end of any month, in either direction. Tell us before your renewal date and we'll move you onto the new tier for the next cycle. Most teams start on Standard and adjust once they see how much they actually use.",
+  },
+  {
+    q: 'How and when am I billed?',
+    a: "By card, through Stripe. You're charged when you subscribe and on the same date each month after that. Stripe emails you a receipt and a proper invoice every time, so your accountant gets what they need without asking us.",
+  },
+  {
+    q: "Why can't I subscribe to Embedded directly?",
+    a: "Because it's the closest thing we offer to a fractional hire — a seat in your planning and roadmap decisions. That only works if the fit is genuinely right, so we scope it on a call first. Nothing is charged before that conversation.",
+  },
+  {
+    q: 'What happens right after I subscribe?',
+    a: "We email you within one business day to introduce ourselves and book a kickoff call. Then we get access to your product, your Figma, and wherever your team works — Slack, Linear, whatever you already use. Work starts with the priorities you send us.",
+  },
+  {
+    q: "Which tier should I pick?",
+    a: "Lite if the product is broadly stable and just needs someone watching it. Standard if you're shipping new features on a regular cadence. Embedded if you want design in the room for planning, not just execution. If you're unsure, ask us — we'd rather put you in the right tier than the bigger one.",
+  },
+];
 
 export const homeFaq = [
   {

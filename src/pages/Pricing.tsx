@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ArrowUpRight, Loader2, AlertCircle, CalendarDays, Plus, Minus } from 'lucide-react';
+import { ArrowUpRight, Loader2, AlertCircle, CalendarDays, Plus, Minus, FileText } from 'lucide-react';
 import Reveal from '../components/Reveal';
 import PageHeader from '../components/PageHeader';
 import SectionMarker from '../components/SectionMarker';
@@ -146,6 +146,16 @@ export default function Pricing({ onNavigate }: { onNavigate: Navigate }) {
                       ? 'Card payment · month-to-month · cancel anytime'
                       : 'We scope this one on a call before anything is charged'}
                   </p>
+
+                  {/* What "up to N days" means, one click from the commit point. */}
+                  <button
+                    type="button"
+                    onClick={() => onNavigate('/subscription-terms')}
+                    className="mt-2.5 mx-auto inline-flex items-center gap-1.5 text-xs text-bone-400 hover:text-bone-100 transition-colors"
+                  >
+                    <FileText size={13} />
+                    <span className="link-underline">What {tier.daysPerMonth.toLowerCase()} means</span>
+                  </button>
 
                   {failedTier === tier.id && errorMsg && (
                     <div className="mt-3 flex items-start gap-2.5 rounded-xl border border-red-500/30 bg-red-500/10 p-3 text-xs text-red-300 text-left">

@@ -11,6 +11,10 @@ const NAV_LINKS: { label: string; route: Route }[] = [
   { label: 'Founding clients', route: '/founding-clients' },
 ];
 
+const DOC_LINKS: { label: string; route: Route }[] = [
+  { label: 'Subscription terms', route: '/subscription-terms' },
+];
+
 const SOCIALS = [
   { label: 'X', href: 'https://x.com' },
   { label: 'LinkedIn', href: 'https://linkedin.com' },
@@ -75,7 +79,25 @@ export default function Footer({ onNavigate }: { onNavigate: (r: Route) => void 
                 <span className="link-underline">hello@13design.studio</span>
               </a>
             </div>
-            <div className="mt-6 flex gap-5">
+            <div className="mt-7">
+              <p className="text-[11px] uppercase tracking-[0.28em] text-bone-500 mb-4">
+                Documentation
+              </p>
+              <ul className="flex flex-col gap-3">
+                {DOC_LINKS.map((l) => (
+                  <li key={l.route}>
+                    <button
+                      onClick={() => onNavigate(l.route)}
+                      className="link-underline text-bone-300 hover:text-bone-50 transition-colors text-sm"
+                    >
+                      {l.label}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="mt-7 flex gap-5">
               {SOCIALS.map((s) => (
                 <a
                   key={s.label}

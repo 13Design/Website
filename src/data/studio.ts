@@ -284,6 +284,94 @@ export const beliefIntro =
 export const directAccessLine =
   "We offer three ways to engage, depending on what you need: sprints and fixed-scope projects for a specific, time-boxed problem — subscription for ongoing design support as you continue to ship — and embedded designers, our expertise inside your team, without a hire.";
 
+export type TermsSection = { n: string; title: string; body: string[] };
+
+/**
+ * Operational terms for the subscription tiers. Deliberately limited to how the
+ * engagement runs — not a legal contract. No IP, liability, or confidentiality
+ * clauses here; those need a lawyer, not a website.
+ */
+export const subscriptionTerms: TermsSection[] = [
+  {
+    n: '01',
+    title: 'What you are actually buying',
+    body: [
+      "A subscription reserves a share of the studio's capacity for your product each month. You are buying reserved attention from a small team that knows your product — not a block of hours from whoever is free.",
+      'That distinction is the whole point. It is why the same people are still there in month six, and why we can say no to work that will not help you.',
+    ],
+  },
+  {
+    n: '02',
+    title: 'What "up to 5 / 12 / 20 days" means',
+    body: [
+      'A day means a working day of our attention on your product — not a timesheet entry. We do not bill by the hour, we do not track hours, and we will not send you a spreadsheet of six-minute increments.',
+      'The number is a cap on how much of the month we hold for you: up to 5 days on Lite, up to 12 on Standard, up to 20 on Embedded. Some days are a long focused stretch; some are a review, a call, and two decisions that unblock your team. Both count as a day.',
+      'We hold that capacity whether or not you use it. That is what reserves it.',
+    ],
+  },
+  {
+    n: '03',
+    title: 'Unused days do not roll over',
+    body: [
+      'Each month starts fresh. If you use three of your five days, the other two do not carry into next month.',
+      'This follows from the point above: you are reserving capacity, not filling a bank of hours. The capacity was held for you and staffed for you — a quiet month is not credit.',
+      'If quiet months keep happening, tell us. Moving you down a tier is a better outcome for both of us than you paying for capacity you do not want.',
+    ],
+  },
+  {
+    n: '04',
+    title: 'If a month needs more than the cap',
+    body: [
+      'We tell you before we do the work — never after. You will not receive an invoice for work you did not agree to.',
+      'From there it is your call: we agree extra days for that month, quoted and confirmed in writing before we start them; or, if the cap is being hit regularly, we recommend moving up a tier, which is usually the cheaper answer.',
+      'If neither suits, we stop at the cap and the overflow becomes the first thing we pick up next month.',
+    ],
+  },
+  {
+    n: '05',
+    title: 'How fast we respond',
+    body: [
+      'On Lite, we reply to async requests within two business days, with one review call a month to walk through priorities.',
+      'On Standard, time-sensitive requests get priority turnaround, plus a biweekly working session with your team.',
+      'On Embedded, we are in your weekly rituals — standups, sprint planning — so most things are answered in the room rather than in a queue.',
+    ],
+  },
+  {
+    n: '06',
+    title: 'Billing',
+    body: [
+      'Subscriptions are paid by card through Stripe. You are charged when you subscribe and on the same date each month after that.',
+      'Stripe emails you a receipt and an invoice for every payment, so your finance team gets what it needs without asking us for it.',
+    ],
+  },
+  {
+    n: '07',
+    title: 'Changing or cancelling',
+    body: [
+      'Everything is month-to-month. There is no annual contract and no early-termination fee.',
+      'You can cancel yourself from the billing portal — the link is on your confirmation page and on every invoice. You keep access until the end of the month you have already paid for, and you are not charged again.',
+      'To move between tiers, tell us before your renewal date and we will switch you for the next cycle.',
+    ],
+  },
+  {
+    n: '08',
+    title: 'What is in scope',
+    body: [
+      'We design: flows, screens, interaction patterns, design systems, and specs your developers will not fight.',
+      'We are not a development shop. We work alongside your engineers, human or AI-assisted, but we do not ship your production code.',
+      'If what you need is genuinely outside that, we will say so rather than take the work anyway.',
+    ],
+  },
+  {
+    n: '09',
+    title: 'Embedded is scoped on a call',
+    body: [
+      'Embedded is the closest thing we offer to a fractional hire — a seat in your planning and roadmap decisions. It only works when the fit is right, so it is not available to subscribe to directly.',
+      'We scope it on a call first. Nothing is charged before that conversation.',
+    ],
+  },
+];
+
 export const subscriptionFaq = [
   {
     q: 'Is there a minimum commitment?',

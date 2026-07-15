@@ -170,7 +170,7 @@ export const subscriptionTiers: SubTier[] = [
   {
     id: 'lite',
     name: 'Lite',
-    price: 'from €1,500',
+    price: '$800',
     cadence: '/mo',
     daysPerMonth: 'Up to 3 days / month',
     description: 'Best for a product that\'s mostly stable but still needs someone watching it.',
@@ -185,7 +185,7 @@ export const subscriptionTiers: SubTier[] = [
   {
     id: 'standard',
     name: 'Standard',
-    price: 'from €3,500',
+    price: '$2,500',
     cadence: '/mo',
     daysPerMonth: 'Up to 8 days / month',
     description: 'Best for teams shipping new features on a regular cadence.',
@@ -201,7 +201,7 @@ export const subscriptionTiers: SubTier[] = [
   {
     id: 'embedded',
     name: 'Embedded',
-    price: 'from €6,000',
+    price: '$4,500',
     cadence: '/mo',
     daysPerMonth: 'Up to 15 days / month',
     description: "Our closest equivalent to a fractional hire — structured around your team's cadence.",

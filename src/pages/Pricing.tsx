@@ -93,10 +93,10 @@ export default function Pricing({ onNavigate }: { onNavigate: (r: Route) => void
 
                   <button
                     onClick={() => onNavigate('/contact')}
-                    className={`mt-auto pt-8 w-full group/btn inline-flex items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-medium transition-all duration-300 hover:gap-3 ${
+                    className={`mt-8 w-full group/btn inline-flex items-center justify-center gap-2 rounded-full border px-5 py-3.5 text-sm font-medium transition-all duration-300 hover:gap-3 ${
                       tier.featured
-                        ? 'bg-ember-500 hover:bg-ember-400 text-ink-950'
-                        : 'border border-ink-600 hover:border-bone-300 text-bone-100'
+                        ? 'border-transparent bg-ember-500 hover:bg-ember-400 text-ink-950'
+                        : 'border-ink-600 hover:border-bone-300 text-bone-100'
                     }`}
                   >
                     Subscribe

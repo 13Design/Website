@@ -72,7 +72,7 @@ export default function Navbar({ route, onNavigate }: { route: Route; onNavigate
           <div className="flex items-center gap-3">
             <button
               onClick={() => go('/contact')}
-              className="hidden sm:inline-flex items-center gap-2 text-sm font-medium text-ink-950 bg-ember-500 hover:bg-ember-400 transition-colors px-4.5 py-2.5 rounded-full"
+              className="hidden sm:inline-flex items-center gap-2 text-sm font-medium text-ink-950 bg-ember-500 hover:bg-ember-400 transition-colors px-5 py-2.5 rounded-full"
             >
               <Mail size={15} />
               Contact us

@@ -5,13 +5,16 @@ import PageHeader from '../components/PageHeader';
 import SectionMarker from '../components/SectionMarker';
 import { supabase } from '../lib/supabase';
 import { contactInstructions, contactStages, contactLookingFor } from '../data/pages';
-import type { Route } from '../lib/router';
+import { subscriptionTiers } from '../data/studio';
+import type { Navigate } from '../lib/router';
 
 type Status = 'idle' | 'submitting' | 'success' | 'error';
 
-export default function Contact({ onNavigate }: { onNavigate: (r: Route) => void }) {
+export default function Contact({ onNavigate, tier }: { onNavigate: Navigate; tier?: string | null }) {
   const [status, setStatus] = useState<Status>('idle');
   const [errorMsg, setErrorMsg] = useState('');
+
+  const selectedTier = tier ? subscriptionTiers.find((t) => t.id === tier) : undefined;
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -40,6 +43,7 @@ export default function Contact({ onNavigate }: { onNavigate: (r: Route) => void
       challenges: String(data.get('challenges') || '').trim(),
       whats_next: String(data.get('whats_next') || '').trim(),
       message: String(data.get('message') || '').trim(),
+      tier: selectedTier ? `${selectedTier.name} — ${selectedTier.price}${selectedTier.cadence}` : '',
     };
 
     if (!payload.name || !payload.email) {
@@ -169,6 +173,29 @@ export default function Contact({ onNavigate }: { onNavigate: (r: Route) => void
                     onSubmit={handleSubmit}
                     className="rounded-2xl border border-ink-700/60 bg-ink-900/70 p-7 lg:p-9"
                   >
+                    {selectedTier && (
+                      <div className="mb-7 flex items-start gap-3 rounded-xl border border-ember-500/30 bg-ember-500/[0.06] p-4">
+                        <Check size={18} className="shrink-0 mt-0.5 text-ember-400" />
+                        <div className="min-w-0 flex-1">
+                          <p className="text-sm font-medium text-bone-100">
+                            Subscribing to {selectedTier.name} — {selectedTier.price}
+                            <span className="text-bone-400">{selectedTier.cadence}</span>
+                          </p>
+                          <p className="mt-1 text-xs text-bone-400 leading-relaxed">
+                            {selectedTier.daysPerMonth}. Tell us about your product below and we'll
+                            confirm the fit before anything starts.
+                          </p>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => onNavigate('/pricing')}
+                          className="shrink-0 text-xs text-bone-400 hover:text-bone-100 underline underline-offset-4 transition-colors"
+                        >
+                          Change
+                        </button>
+                      </div>
+                    )}
+
                     {status === 'error' && (
                       <div className="mb-6 flex items-start gap-3 rounded-xl border border-red-500/30 bg-red-500/10 p-4 text-sm text-red-300">
                         <AlertCircle size={18} className="shrink-0 mt-0.5" />

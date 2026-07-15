@@ -172,7 +172,7 @@ export const subscriptionTiers: SubTier[] = [
     name: 'Lite',
     price: '$800',
     cadence: '/mo',
-    daysPerMonth: 'Up to 3 days / month',
+    daysPerMonth: 'Up to 5 days / month',
     description: 'Best for a product that\'s mostly stable but still needs someone watching it.',
     includes: [
       'Coherence audits — a regular pass across the product to catch drift before it compounds',
@@ -187,7 +187,7 @@ export const subscriptionTiers: SubTier[] = [
     name: 'Standard',
     price: '$2,500',
     cadence: '/mo',
-    daysPerMonth: 'Up to 8 days / month',
+    daysPerMonth: 'Up to 12 days / month',
     description: 'Best for teams shipping new features on a regular cadence.',
     includes: [
       'Everything in Lite',
@@ -203,7 +203,7 @@ export const subscriptionTiers: SubTier[] = [
     name: 'Embedded',
     price: '$4,500',
     cadence: '/mo',
-    daysPerMonth: 'Up to 15 days / month',
+    daysPerMonth: 'Up to 20 days / month',
     description: "Our closest equivalent to a fractional hire — structured around your team's cadence.",
     includes: [
       'Everything in Standard',

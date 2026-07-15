@@ -21,6 +21,7 @@ interface WebhookPayload {
 }
 
 const LABELS: Record<string, string> = {
+  tier: "Subscribing to",
   name: "Name",
   email: "Email",
   company: "Company / product",

@@ -21,7 +21,7 @@ const TITLES: Record<string, string> = {
 };
 
 export default function App() {
-  const [route, navigate] = useRoute();
+  const [route, navigate, params] = useRoute();
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -40,12 +40,12 @@ export default function App() {
       }`}
     >
       <Navbar route={route} onNavigate={navigate} />
-      <div key={route} className="animate-page-in">
+      <div key={`${route}${params.toString()}`} className="animate-page-in">
         {route === '/' && <Home onNavigate={navigate} />}
         {route === '/services' && <Services onNavigate={navigate} />}
         {route === '/pricing' && <Pricing onNavigate={navigate} />}
         {route === '/about' && <About onNavigate={navigate} />}
-        {route === '/contact' && <Contact onNavigate={navigate} />}
+        {route === '/contact' && <Contact onNavigate={navigate} tier={params.get('tier')} />}
         {route === '/work' && <Work onNavigate={navigate} />}
         {route === '/founding-clients' && <FoundingClients onNavigate={navigate} />}
       </div>

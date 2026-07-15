@@ -11,9 +11,9 @@ import {
   subscriptionWhyInstead,
   subscriptionWhyInsteadBody,
 } from '../data/studio';
-import type { Route } from '../lib/router';
+import type { Navigate } from '../lib/router';
 
-export default function Pricing({ onNavigate }: { onNavigate: (r: Route) => void }) {
+export default function Pricing({ onNavigate }: { onNavigate: Navigate }) {
   return (
     <main>
       <PageHeader
@@ -92,7 +92,7 @@ export default function Pricing({ onNavigate }: { onNavigate: (r: Route) => void
                   </ul>
 
                   <button
-                    onClick={() => onNavigate('/contact')}
+                    onClick={() => onNavigate('/contact', { tier: tier.id })}
                     className={`mt-8 w-full group/btn inline-flex items-center justify-center gap-2 rounded-full border px-5 py-3.5 text-sm font-medium transition-all duration-300 hover:gap-3 ${
                       tier.featured
                         ? 'border-transparent bg-ember-500 hover:bg-ember-400 text-ink-950'

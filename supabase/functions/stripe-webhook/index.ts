@@ -242,9 +242,18 @@ Deno.serve(async (req) => {
           .eq("stripe_subscription_id", subId)
           .maybeSingle();
 
+        // If the very first payment failed there is no checkout.session.completed
+        // and therefore no row yet — fall back to the invoice's own data so the
+        // alert is still actionable.
+        const invoiceTier = (inv as unknown as {
+          parent?: { subscription_details?: { metadata?: { tier?: string } } };
+        }).parent?.subscription_details?.metadata?.tier;
+        const tier = data?.tier || invoiceTier || "";
+
         await emailStudio("Subscription payment failed", [
-          ["Plan", TIER_LABELS[data?.tier ?? ""] ?? (data?.tier || "—")],
-          ["Email", data?.email ?? inv.customer_email ?? "—"],
+          ["Plan", TIER_LABELS[tier] ?? (tier || "—")],
+          ["Email", data?.email || inv.customer_email || "—"],
+          ["Customer", inv.customer_name || "—"],
           ["Amount due", money(inv.amount_due, inv.currency)],
           ["Attempt", String(inv.attempt_count ?? 1)],
           ["Next retry", inv.next_payment_attempt ? new Date(inv.next_payment_attempt * 1000).toUTCString() : "no further retries"],

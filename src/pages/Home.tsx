@@ -9,13 +9,18 @@ import type { Route } from '../lib/router';
 
 const ROTATING = ['trust.', 'understand.', 'come back.', 'tell others.'];
 
+/**
+ * Positioning band, not a service list — the services section sits directly
+ * below, so repeating them here bought nothing. Every claim is one the site
+ * already makes elsewhere; nothing here is aspirational.
+ */
 const MARQUEE_ITEMS = [
-  'AI UX & Product Design',
-  'Product Finishing',
-  'UX Rescue Sprint',
-  'Fractional Product Partner',
-  'Design System & Maintenance',
-  'Product Point of View',
+  'Designed by humans, never generated',
+  'Founding client spots open',
+  'Month-to-month — no lock-in',
+  'AI-native & AI-built products',
+  'Reply within one business day',
+  'Kraków — working with founders everywhere',
 ];
 
 export default function Home({ onNavigate }: { onNavigate: (r: Route) => void }) {
@@ -123,7 +128,7 @@ export default function Home({ onNavigate }: { onNavigate: (r: Route) => void })
           </Reveal>
           <Reveal delay={1} className="mt-8">
             <h2 className="font-display font-medium text-bone-50 text-[clamp(1.9rem,5vw,3.6rem)] leading-[1.02] tracking-tightest max-w-3xl text-balance">
-              Two kinds of teams come to us.
+              Two starting points. One outcome.
             </h2>
           </Reveal>
 
@@ -175,7 +180,7 @@ export default function Home({ onNavigate }: { onNavigate: (r: Route) => void })
               </Reveal>
               <Reveal delay={1} className="mt-8">
                 <h2 className="font-display font-medium text-bone-50 text-[clamp(1.9rem,5vw,3.6rem)] leading-[1.02] tracking-tightest max-w-2xl text-balance">
-                  Services, briefly.
+                  What we change, briefly.
                 </h2>
               </Reveal>
             </div>
@@ -220,7 +225,7 @@ export default function Home({ onNavigate }: { onNavigate: (r: Route) => void })
           </Reveal>
           <Reveal delay={1} className="mt-8">
             <h2 className="font-display font-medium text-bone-50 text-[clamp(1.9rem,5vw,3.6rem)] leading-[1.02] tracking-tightest max-w-3xl text-balance">
-              Four steps, repeated.
+              Four steps, until it feels inevitable.
             </h2>
           </Reveal>
 
@@ -238,24 +243,27 @@ export default function Home({ onNavigate }: { onNavigate: (r: Route) => void })
         </div>
       </section>
 
-      {/* ── Made by humans ───────────────────────────────── */}
-      <section className="relative py-24 lg:py-32 border-b border-ink-700/40 overflow-hidden">
-        <div className="pointer-events-none absolute top-1/2 -right-32 -translate-y-1/2 w-[45vw] h-[45vw] rounded-full bg-[radial-gradient(ellipse_at_center,rgba(232,116,76,0.06),transparent_60%)] blur-3xl" />
+      {/* ── Made by humans ───────────────────────────────────
+          Inverted on purpose. The page runs on one dark note from top to
+          bottom; this is the sharpest claim we make, so it changes volume
+          instead of scrolling past at the same level as everything else. */}
+      <section className="relative py-28 lg:py-36 bg-bone-50 overflow-hidden grain">
+        <div className="pointer-events-none absolute top-1/2 -right-32 -translate-y-1/2 w-[45vw] h-[45vw] rounded-full bg-[radial-gradient(ellipse_at_center,rgba(232,116,76,0.14),transparent_60%)] blur-3xl" />
         <div className="mx-auto max-w-edge px-5 lg:px-8 relative">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16">
             <div className="lg:col-span-5">
               <Reveal>
-                <SectionMarker n="05" label="Made by humans" />
+                <SectionMarker n="05" label="Made by humans" tone="light" />
               </Reveal>
               <Reveal delay={1} className="mt-8">
-                <h2 className="font-display font-medium text-bone-50 text-[clamp(1.9rem,5vw,3.6rem)] leading-[1.02] tracking-tightest text-balance">
+                <h2 className="font-display font-medium text-ink-950 text-[clamp(1.9rem,5vw,3.6rem)] leading-[1.02] tracking-tightest text-balance">
                   Everything we design, we design ourselves.
                 </h2>
               </Reveal>
             </div>
             <div className="lg:col-span-7">
               <Reveal delay={2}>
-                <p className="text-lg lg:text-xl text-bone-200 leading-relaxed text-pretty max-w-xl">
+                <p className="text-lg lg:text-xl text-ink-500 leading-relaxed text-pretty max-w-xl">
                   No part of the actual work — the flows, the screens, the decisions — is generated. That's not a marketing line; it's the reason to hire us instead of a tool. If a project really is just "make me five screens" with no judgment required, a generation tool can do that faster and cheaper, and we'll tell you that instead of taking the work anyway.
                 </p>
               </Reveal>

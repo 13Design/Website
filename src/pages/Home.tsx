@@ -257,12 +257,15 @@ export default function Home({ onNavigate }: { onNavigate: (r: Route) => void })
               </Reveal>
               <Reveal delay={1} className="mt-8">
                 <h2 className="font-display font-medium text-bone-50 text-[clamp(1.9rem,5vw,3.6rem)] leading-[1.02] tracking-tightest text-balance">
-                  Everything we design, we design ourselves.
+                  Human judgment, on every screen.
                 </h2>
               </Reveal>
               <Reveal delay={2} className="mt-7">
                 <p className="text-base lg:text-lg text-bone-300 leading-relaxed text-pretty max-w-xl">
-                  No part of the actual work — the flows, the screens, the decisions — is generated. That's not a marketing line; it's the reason to hire us instead of a tool. If a project really is just "make me five screens" with no judgment required, a generation tool can do that faster and cheaper, and we'll tell you that instead of taking the work anyway.
+                  No part of the work — the flows, the screens, the decisions — is generated.
+                  Every choice is made by a person who knows your product and can tell you why:
+                  why this flow, why this order, why this screen earns its place. That judgment
+                  is the thing you're hiring — and it's exactly what generation tools don't have.
                 </p>
               </Reveal>
 

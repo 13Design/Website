@@ -72,11 +72,11 @@ export default function Footer({ onNavigate }: { onNavigate: (r: Route) => void 
                 <span className="link-underline">Contact us</span>
               </button>
               <a
-                href="mailto:hello@13design.studio"
+                href="mailto:hello@13design.org"
                 className="group inline-flex items-center gap-2 text-sm text-bone-200 hover:text-ember-400 transition-colors w-fit"
               >
                 <Mail size={16} />
-                <span className="link-underline">hello@13design.studio</span>
+                <span className="link-underline">hello@13design.org</span>
               </a>
             </div>
             <div className="mt-7">

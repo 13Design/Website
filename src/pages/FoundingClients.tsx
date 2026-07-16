@@ -56,7 +56,7 @@ export default function FoundingClients({ onNavigate }: { onNavigate: (r: Route)
 
     if (error) {
       setStatus('error');
-      setErrorMsg('Something went wrong sending your request. Please try again, or email hello@13design.studio.');
+      setErrorMsg('Something went wrong sending your request. Please try again, or email hello@13design.org.');
       return;
     }
 

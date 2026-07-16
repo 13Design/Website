@@ -1,0 +1,35 @@
+# 13 Design Studio — https://13design.org
+# AI crawlers are welcome: we want to be discoverable and citable.
+
+User-agent: *
+Allow: /
+
+# Don't index transactional return pages.
+Disallow: /subscribe/
+
+# Named AI assistants — explicitly allowed.
+User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+Sitemap: https://13design.org/sitemap.xml

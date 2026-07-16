@@ -5,6 +5,7 @@ import PageHeader from '../components/PageHeader';
 import SectionMarker from '../components/SectionMarker';
 import ClosingCTA from '../components/ClosingCTA';
 import { startCheckout } from '../lib/checkout';
+import JsonLd, { faqPageSchema } from '../components/JsonLd';
 import {
   subscriptionFaq,
   subscriptionTiers,
@@ -35,6 +36,7 @@ export default function Pricing({ onNavigate }: { onNavigate: Navigate }) {
 
   return (
     <main>
+      <JsonLd data={faqPageSchema(subscriptionFaq)} />
       <PageHeader
         marker="01"
         markerLabel="Subscription"

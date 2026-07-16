@@ -5,6 +5,7 @@ import Marquee from '../components/Marquee';
 import SectionMarker from '../components/SectionMarker';
 import ClosingCTA from '../components/ClosingCTA';
 import CoherenceDiagram from '../components/CoherenceDiagram';
+import JsonLd, { faqPageSchema } from '../components/JsonLd';
 import { audienceGroups, services, processSteps, beliefs, homeFaq } from '../data/studio';
 import type { Route } from '../lib/router';
 
@@ -39,6 +40,7 @@ export default function Home({ onNavigate }: { onNavigate: (r: Route) => void })
 
   return (
     <main>
+      <JsonLd data={faqPageSchema(homeFaq)} />
       {/* ── Hero ─────────────────────────────────────────── */}
       <section className="relative min-h-[100svh] flex flex-col justify-center overflow-hidden grain pt-28 pb-12">
         <div className="pointer-events-none absolute inset-0 -z-10">
@@ -87,7 +89,7 @@ export default function Home({ onNavigate }: { onNavigate: (r: Route) => void })
               <ArrowUpRight size={17} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
             </button>
             <a
-              href="mailto:hello@13design.studio"
+              href="mailto:hello@13design.org"
               className="group inline-flex items-center justify-center gap-2.5 border border-ink-600 hover:border-bone-300 text-bone-100 px-7 py-4 rounded-full transition-all duration-300 hover:gap-3.5"
             >
               <Mail size={18} />

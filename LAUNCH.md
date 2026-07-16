@@ -97,16 +97,16 @@ How it's wired (for reference — already done):
 
 Right now `NOTIFY_FROM=onboarding@resend.dev` and `NOTIFY_TO` is the Resend
 account owner address — in test mode Resend **only** delivers there. To send
-from your own domain to any address (e.g. `hello@13design.studio`):
+from your own domain to any address (e.g. `hello@13design.org`):
 
-1. In Resend → **Domains**, add `13design.studio` and add the DNS records it
+1. In Resend → **Domains**, add `13design.org` and add the DNS records it
    shows at your DNS provider. Wait for it to verify.
 2. Update the two secrets and redeploy:
 
    ```bash
    supabase secrets set \
-     NOTIFY_FROM="13 Design <notify@13design.studio>" \
-     NOTIFY_TO="hello@13design.studio"
+     NOTIFY_FROM="13 Design <notify@13design.org>" \
+     NOTIFY_TO="hello@13design.org"
    supabase functions deploy notify-inquiry --no-verify-jwt
    ```
 
@@ -141,7 +141,7 @@ edge function. That's a follow-up, not a launch blocker — ask and I'll wire it
 
 ## Step 7 — Attach your domain
 
-1. Netlify → **Domain management → Add a domain** → enter `13design.studio`.
+1. Netlify → **Domain management → Add a domain** → enter `13design.org`.
 2. Follow Netlify's DNS instructions — either point your registrar's
    nameservers at Netlify, or add the CNAME/A records they show.
 3. Netlify auto-provisions the HTTPS certificate once DNS resolves (minutes to

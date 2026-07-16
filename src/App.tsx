@@ -12,19 +12,7 @@ import SubscribeSuccess from './pages/SubscribeSuccess';
 import SubscribeCancel from './pages/SubscribeCancel';
 import Terms from './pages/Terms';
 import { useRoute } from './lib/router';
-
-const TITLES: Record<string, string> = {
-  '/': '13 Design Studio — Product design for the AI era',
-  '/services': 'Services — 13 Design Studio',
-  '/pricing': 'Subscription — 13 Design Studio',
-  '/about': 'About — 13 Design Studio',
-  '/contact': 'Contact — 13 Design Studio',
-  '/work': 'Work — 13 Design Studio',
-  '/founding-clients': 'Founding Clients — 13 Design Studio',
-  '/subscribe/success': "You're subscribed — 13 Design Studio",
-  '/subscribe/cancel': 'Checkout cancelled — 13 Design Studio',
-  '/terms': 'Terms & agreement — 13 Design Studio',
-};
+import { applyRouteMeta } from './lib/seo';
 
 export default function App() {
   const [route, navigate, params] = useRoute();
@@ -35,9 +23,10 @@ export default function App() {
     return () => clearTimeout(t);
   }, []);
 
+  const search = params.toString();
   useEffect(() => {
-    document.title = TITLES[route] ?? TITLES['/'];
-  }, [route]);
+    applyRouteMeta(route, search);
+  }, [route, search]);
 
   return (
     <div

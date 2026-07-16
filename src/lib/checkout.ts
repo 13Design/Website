@@ -19,7 +19,7 @@ export async function openBillingPortal(sessionId: string): Promise<{ error: str
 
     const url = (data as { url?: string } | null)?.url;
     if (error || !url) {
-      return { error: "We couldn't open the billing portal. Email hello@13design.studio and we'll sort it out." };
+      return { error: "We couldn't open the billing portal. Email hello@13design.org and we'll sort it out." };
     }
 
     window.location.href = url;
@@ -36,12 +36,12 @@ export async function startCheckout(tier: string): Promise<{ error: string }> {
     });
 
     if (error) {
-      return { error: "We couldn't open checkout. Please try again, or email hello@13design.studio." };
+      return { error: "We couldn't open checkout. Please try again, or email hello@13design.org." };
     }
 
     const url = (data as { url?: string } | null)?.url;
     if (!url) {
-      return { error: "We couldn't open checkout. Please try again, or email hello@13design.studio." };
+      return { error: "We couldn't open checkout. Please try again, or email hello@13design.org." };
     }
 
     window.location.href = url;

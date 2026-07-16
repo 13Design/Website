@@ -6,8 +6,8 @@
 //
 // Required secrets (set with `supabase secrets set ...`):
 //   RESEND_API_KEY   — from resend.com → API Keys
-//   NOTIFY_TO        — where alerts land, e.g. hello@13design.studio
-//   NOTIFY_FROM      — verified Resend sender, e.g. "13 Design <notify@13design.studio>"
+//   NOTIFY_TO        — where alerts land, e.g. hello@13design.org
+//   NOTIFY_FROM      — verified Resend sender, e.g. "13 Design <notify@13design.org>"
 //   WEBHOOK_SECRET   — any long random string; must match the header the
 //                      Database Webhook sends (see LAUNCH.md). Optional but
 //                      recommended so only your webhook can trigger emails.

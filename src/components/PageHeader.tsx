@@ -43,7 +43,7 @@ export default function PageHeader({ marker, markerLabel, title, body, actions =
                   <ArrowUpRight size={16} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                 </button>
                 <a
-                  href="mailto:hello@13design.studio"
+                  href="mailto:hello@13design.org"
                   className="group inline-flex items-center justify-center gap-2 border border-ink-600 hover:border-bone-300 text-bone-100 px-6 py-3.5 rounded-full transition-all duration-300 hover:gap-3"
                 >
                   <Mail size={17} />

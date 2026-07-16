@@ -116,11 +116,11 @@ export default function SubscribeSuccess({
                 </button>
                 <span className="hidden sm:block text-ink-600">·</span>
                 <a
-                  href="mailto:hello@13design.studio"
+                  href="mailto:hello@13design.org"
                   className="inline-flex items-center gap-2 text-bone-300 hover:text-bone-50 transition-colors text-sm"
                 >
                   <Mail size={15} />
-                  hello@13design.studio
+                  hello@13design.org
                   <ArrowUpRight size={14} />
                 </a>
               </div>

@@ -56,7 +56,7 @@ export default function Contact({ onNavigate, tier }: { onNavigate: Navigate; ti
 
     if (error) {
       setStatus('error');
-      setErrorMsg('Something went wrong sending your message. Please try again, or email hello@13design.studio.');
+      setErrorMsg('Something went wrong sending your message. Please try again, or email hello@13design.org.');
       return;
     }
 
@@ -124,7 +124,7 @@ export default function Contact({ onNavigate, tier }: { onNavigate: Navigate; ti
               </Reveal>
               <Reveal delay={1} className="mt-7">
                 <a
-                  href="mailto:hello@13design.studio"
+                  href="mailto:hello@13design.org"
                   className="group block rounded-2xl border border-ink-700/60 bg-ink-900 p-7 transition-all duration-500 hover:border-bone-300/50 hover:bg-ink-850"
                 >
                   <div className="h-11 w-11 rounded-full bg-ink-700/60 border border-ink-600 flex items-center justify-center">
@@ -138,7 +138,7 @@ export default function Contact({ onNavigate, tier }: { onNavigate: Navigate; ti
                     one business day.
                   </p>
                   <span className="mt-4 inline-flex items-center gap-2 text-sm text-bone-200 group-hover:gap-3 transition-all">
-                    hello@13design.studio
+                    hello@13design.org
                     <ArrowUpRight size={15} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                   </span>
                 </a>

@@ -143,7 +143,9 @@ export default function Pricing({ onNavigate }: { onNavigate: Navigate }) {
                     )}
                   </button>
 
-                  <p className="mt-3 text-center text-xs text-bone-500 leading-relaxed">
+                  {/* min-h reserves two lines so a wrapping note on one card
+                      doesn't push its button out of line with the others. */}
+                  <p className="mt-3 min-h-10 text-center text-xs text-bone-500 leading-relaxed">
                     {tier.selfServe
                       ? 'Card payment · month-to-month · cancel anytime'
                       : 'We scope this one on a call before anything is charged'}

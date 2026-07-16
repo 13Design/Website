@@ -65,7 +65,7 @@ export const services: Service[] = [
     id: 'embedded-designer',
     name: 'Embedded Designer',
     audience: 'either',
-    body: "No hire, no recruiting cycle. Our design expertise, working inside your team's process — your tools, your standups, your sprint cycles — for a specific project or a defined stretch of time.",
+    body: "Extra design hands inside your team's process — your tools, your standups, your sprint cycles — for a specific project or a defined stretch of time. You set the direction; we execute. No hire, no recruiting cycle.",
   },
   {
     id: 'ux-audit-pre-raise',
@@ -78,7 +78,7 @@ export const services: Service[] = [
     name: 'Fractional Product Partner',
     audience: 'either',
     tag: 'subscription',
-    body: 'An embedded, part-time design and product lead, on a monthly subscription. We help decide what to build, in what order, and keep it coherent as your team and product grow.',
+    body: "A part-time design and product lead, ongoing — we help decide what to build and in what order, and keep it coherent as your team and product grow. On the pricing page this is the Embedded tier: same thing, month-to-month.",
   },
 ];
 

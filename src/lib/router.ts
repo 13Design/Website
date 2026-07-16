@@ -10,7 +10,7 @@ export type Route =
   | '/founding-clients'
   | '/subscribe/success'
   | '/subscribe/cancel'
-  | '/subscription-terms';
+  | '/terms';
 
 /** Navigate to a route, optionally carrying query params (e.g. the chosen tier). */
 export type Navigate = (r: Route, query?: Record<string, string>) => void;
@@ -25,7 +25,7 @@ const ROUTES: Route[] = [
   '/founding-clients',
   '/subscribe/success',
   '/subscribe/cancel',
-  '/subscription-terms',
+  '/terms',
 ];
 
 function parseRoute(): Route {

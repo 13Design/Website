@@ -284,6 +284,56 @@ export const beliefIntro =
 export const directAccessLine =
   "We offer three ways to engage, depending on what you need: sprints and fixed-scope projects for a specific, time-boxed problem — subscription for ongoing design support as you continue to ship — and embedded designers, our expertise inside your team, without a hire.";
 
+/**
+ * The working agreement — how 13 Design Studio engages a client. Plain-language
+ * versions of the positions Anna confirmed: client owns work once paid in full;
+ * mutual confidentiality by default and we'll sign a client NDA; founding
+ * clients consent to case studies upfront, everyone else by written permission;
+ * governed by Polish law. NOT a substitute for a signed contract.
+ */
+export const workingAgreement: TermsSection[] = [
+  {
+    n: '01',
+    title: 'Working with 13 Design Studio',
+    body: [
+      "This sets out how we work with clients — what you own, how we handle confidentiality, when we show work publicly, and the law that governs it. It applies to every engagement unless we've signed something that says otherwise.",
+      'It is the plain-language version of what a contract would say. Where a client needs the full document, we sign theirs or provide ours.',
+    ],
+  },
+  {
+    n: '02',
+    title: 'You own the work once it is paid for',
+    body: [
+      'Everything we design for you — the flows, the screens, the source files, the final deliverables — becomes yours once the work it belongs to is paid for in full. Until then, we retain ownership of it.',
+      "That is not a trap; it is the one piece of leverage a studio has, and it only ever matters if an invoice goes unpaid. Fonts, stock, and third-party tools keep whatever licence they came with — we will always flag anything that is not ours to hand over.",
+    ],
+  },
+  {
+    n: '03',
+    title: 'Confidentiality runs both ways',
+    body: [
+      "By default, each of us keeps the other's non-public information private — your product, your roadmap, your metrics, and anything we see while working. That default is in place from the first conversation, so you can talk to us about a pre-launch or stealth product without paperwork first.",
+      "If your company has its own NDA, we will sign it.",
+    ],
+  },
+  {
+    n: '04',
+    title: 'Showing our work',
+    body: [
+      'We build our reputation on the work we do, so being able to show it matters — but never at your expense.',
+      'Founding clients agree upfront that we can publish their work as a case study; that consent is part of the founding-client terms, and part of why those spots are priced the way they are. For everyone else, we ask in writing before anything goes public, and we hold work back for as long as you need us to.',
+    ],
+  },
+  {
+    n: '05',
+    title: 'The law that governs this',
+    body: [
+      'This agreement is governed by the law of Poland, where the studio is based. If a dispute ever comes up that we cannot resolve directly, that is the jurisdiction it is settled in.',
+      'We would always rather sort it out over a call first.',
+    ],
+  },
+];
+
 export type TermsSection = { n: string; title: string; body: string[] };
 
 /**

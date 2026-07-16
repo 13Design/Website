@@ -10,7 +10,7 @@ import Work from './pages/Work';
 import FoundingClients from './pages/FoundingClients';
 import SubscribeSuccess from './pages/SubscribeSuccess';
 import SubscribeCancel from './pages/SubscribeCancel';
-import SubscriptionTerms from './pages/SubscriptionTerms';
+import Terms from './pages/Terms';
 import { useRoute } from './lib/router';
 
 const TITLES: Record<string, string> = {
@@ -23,7 +23,7 @@ const TITLES: Record<string, string> = {
   '/founding-clients': 'Founding Clients — 13 Design Studio',
   '/subscribe/success': "You're subscribed — 13 Design Studio",
   '/subscribe/cancel': 'Checkout cancelled — 13 Design Studio',
-  '/subscription-terms': 'Subscription terms — 13 Design Studio',
+  '/terms': 'Terms & agreement — 13 Design Studio',
 };
 
 export default function App() {
@@ -64,7 +64,7 @@ export default function App() {
         {route === '/subscribe/cancel' && (
           <SubscribeCancel onNavigate={navigate} tier={params.get('tier')} />
         )}
-        {route === '/subscription-terms' && <SubscriptionTerms onNavigate={navigate} />}
+        {route === '/terms' && <Terms onNavigate={navigate} />}
       </div>
       <Footer onNavigate={navigate} />
     </div>

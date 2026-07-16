@@ -150,7 +150,7 @@ export default function Pricing({ onNavigate }: { onNavigate: Navigate }) {
                   {/* What "up to N days" means, one click from the commit point. */}
                   <button
                     type="button"
-                    onClick={() => onNavigate('/subscription-terms')}
+                    onClick={() => onNavigate('/terms')}
                     className="mt-2.5 mx-auto inline-flex items-center gap-1.5 text-xs text-bone-400 hover:text-bone-100 transition-colors"
                   >
                     <FileText size={13} />

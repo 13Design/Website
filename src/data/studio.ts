@@ -260,7 +260,7 @@ export const beliefs = [
 ];
 
 export const honestPart = [
-  "Everything we design, we design ourselves. No part of the actual work — the flows, the screens, the decisions — is generated. That's not a marketing line; it's the reason to hire us instead of a tool. If a project really is just \"make me five screens\" with no judgment required, a generation tool can do that faster and cheaper than we can, and we'll tell you that instead of taking the work anyway.",
+  "Every flow, every screen, every decision is made by a person who knows your product and can tell you why it's there. That judgment is the thing you're hiring — it's exactly what generation tools don't have. And we design for humans and agents alike: interfaces people understand at first glance, structured so machines can navigate them without guessing.",
   "The person assigned to your project is whoever's the right fit for the problem, not whoever's next in line. Your point of contact stays constant either way — one person, through the whole relationship, who knows your product and answers you directly.",
   "We'll disagree with you sometimes, out loud. If we think a direction is wrong for your users, we'll say so before we build it, not after — even when it's not what you wanted to hear.",
   "The first few weeks are slower than they look. We're learning your product, your users, and your taste before we're making fast, confident calls — and we'd rather be upfront about that ramp-up than pretend it doesn't exist.",

@@ -80,4 +80,4 @@ export const contactLookingFor = [
 ];
 
 export const aboutStudioExtended =
-  "What we don't do is just as important: we don't take work where there's no real judgment required — if a generation tool can do it, we'll tell you that. We don't outsource the design itself. And we don't disappear after hand-off — we stay close enough that the product keeps getting better.";
+  "What we don't do is just as important: we don't outsource the design itself, and we don't disappear after hand-off — we stay close enough that the product keeps getting better.";

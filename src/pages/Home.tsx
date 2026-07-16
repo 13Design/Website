@@ -262,10 +262,10 @@ export default function Home({ onNavigate }: { onNavigate: (r: Route) => void })
               </Reveal>
               <Reveal delay={2} className="mt-7">
                 <p className="text-base lg:text-lg text-bone-300 leading-relaxed text-pretty max-w-xl">
-                  No part of the work — the flows, the screens, the decisions — is generated.
-                  Every choice is made by a person who knows your product and can tell you why:
-                  why this flow, why this order, why this screen earns its place. That judgment
-                  is the thing you're hiring — and it's exactly what generation tools don't have.
+                  Every choice — every flow, every screen, every decision — is made by a person
+                  who knows your product and can tell you why: why this flow, why this order, why
+                  this screen earns its place. That judgment is the thing you're hiring — and it's
+                  exactly what generation tools don't have.
                 </p>
               </Reveal>
 

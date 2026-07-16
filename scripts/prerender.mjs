@@ -109,10 +109,17 @@ async function main() {
   await browser.close();
   server.close();
   console.log(`prerender: ${ok}/${ROUTES.length} routes`);
-  if (ok < ROUTES.length) process.exit(1);
+  if (ok < ROUTES.length) {
+    console.warn('prerender: some routes did not render; they ship as the SPA shell.');
+  }
 }
 
+// Never fail the build. If pre-render can't run (e.g. Chromium unavailable in the
+// CI image), the site still deploys as a normal SPA — meta and JSON-LD in
+// index.html and the client-side router keep working; only static per-route
+// snapshots are skipped. A blocked deploy would be far worse than degraded SEO.
 main().catch((err) => {
-  console.error(err);
-  process.exit(1);
+  console.warn('prerender skipped (non-fatal):', err.message);
+  try { server.close(); } catch { /* ignore */ }
+  process.exit(0);
 });

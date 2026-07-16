@@ -12,7 +12,7 @@ type Props = {
 
 export default function ClosingCTA({
   title = "Let's make your product feel inevitable.",
-  body = "Tell us where you are, what's coming up, and what's bothering you. We'll give you an honest read on whether we're the right fit.",
+  body = "Tell us where you are, what's coming up, and what's bothering you. We'll come back with a clear starting point.",
   onNavigate,
   ctaLabel = 'Contact us',
   ctaRoute = '/contact',

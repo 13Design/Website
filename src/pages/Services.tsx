@@ -63,7 +63,7 @@ export default function Services({ onNavigate }: { onNavigate: (r: Route) => voi
 
       <ClosingCTA
         title="Not sure which fits?"
-        body="Tell us where the product is and what's coming up. We'll point you to the right engagement — or tell you if none of these are it."
+        body="Tell us where the product is and what's coming up. We'll point you to the right engagement."
         ctaLabel="Contact us"
         onNavigate={onNavigate}
       />

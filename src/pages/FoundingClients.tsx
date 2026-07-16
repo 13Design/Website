@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from 'react';
-import { ArrowUpRight, ArrowLeft, Check, Loader2, AlertCircle } from 'lucide-react';
+import { ArrowUpRight, ArrowLeft, Check, Loader2, AlertCircle, Mail } from 'lucide-react';
 import Reveal from '../components/Reveal';
 import PageHeader from '../components/PageHeader';
 import SectionMarker from '../components/SectionMarker';
@@ -145,17 +145,44 @@ export default function FoundingClients({ onNavigate }: { onNavigate: (r: Route)
       {/* Intake form */}
       <section className="relative py-16 lg:py-20 border-b border-ink-700/40">
         <div className="mx-auto max-w-edge px-5 lg:px-8">
-          <Reveal>
-            <SectionMarker n="05" label="Apply" />
-          </Reveal>
-          <Reveal delay={1} className="mt-8 max-w-2xl">
-            <p className="text-bone-300 leading-relaxed text-pretty">
-              This is where it starts. Tell us about your product, and be one of
-              the first names on our Work page — the ones we'll be proud of.
-            </p>
-          </Reveal>
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12">
+            {/* Left — context + email alternative (mirrors the Contact page) */}
+            <div className="lg:col-span-4">
+              <Reveal>
+                <SectionMarker n="05" label="Apply" />
+              </Reveal>
+              <Reveal delay={1} className="mt-8">
+                <p className="text-bone-300 leading-relaxed text-pretty">
+                  This is where it starts. Tell us about your product, and be one of
+                  the first names on our Work page — the ones we'll be proud of.
+                </p>
+              </Reveal>
+              <Reveal delay={2} className="mt-7">
+                <a
+                  href="mailto:hello@13design.org"
+                  className="group block rounded-2xl border border-ink-700/60 bg-ink-900 p-7 transition-all duration-500 hover:border-bone-300/50 hover:bg-ink-850"
+                >
+                  <div className="h-11 w-11 rounded-full bg-ink-700/60 border border-ink-600 flex items-center justify-center">
+                    <Mail size={20} className="text-bone-200" />
+                  </div>
+                  <h3 className="mt-5 font-display text-xl font-medium text-bone-50 tracking-tighter2">
+                    Prefer email?
+                  </h3>
+                  <p className="mt-2 text-sm text-bone-400 leading-relaxed">
+                    Send the same details to our inbox — it lands in the same queue,
+                    read by the same people.
+                  </p>
+                  <span className="mt-4 inline-flex items-center gap-2 text-sm text-bone-200 group-hover:gap-3 transition-all">
+                    hello@13design.org
+                    <ArrowUpRight size={15} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                  </span>
+                </a>
+              </Reveal>
+            </div>
 
-          <Reveal delay={2} className="mt-10 max-w-2xl">
+            {/* Right — the application form */}
+            <div className="lg:col-span-8">
+              <Reveal delay={1}>
             {status === 'success' ? (
               <div className="rounded-2xl border border-ember-500/30 bg-ink-900 p-10 text-center grain">
                 <div className="mx-auto h-14 w-14 rounded-full bg-ember-500/15 border border-ember-500/40 flex items-center justify-center">
@@ -166,7 +193,7 @@ export default function FoundingClients({ onNavigate }: { onNavigate: (r: Route)
                 </h2>
                 <p className="mt-4 text-bone-300 leading-relaxed max-w-md mx-auto text-pretty">
                   Thank you. We read every submission personally and reply within a
-                  few days. If we're a fit, we'll send a link to book a short call.
+                  few days with a link to book a short call.
                 </p>
                 <button
                   onClick={() => onNavigate('/')}
@@ -256,7 +283,9 @@ export default function FoundingClients({ onNavigate }: { onNavigate: (r: Route)
                 </button>
               </form>
             )}
-          </Reveal>
+              </Reveal>
+            </div>
+          </div>
         </div>
       </section>
     </main>

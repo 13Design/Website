@@ -158,7 +158,7 @@ export default function Contact({ onNavigate, tier }: { onNavigate: Navigate; ti
                     </h2>
                     <p className="mt-4 text-bone-300 leading-relaxed max-w-md mx-auto text-pretty">
                       Thank you. We read every message personally and reply within
-                      one business day. If we're a fit, we'll take it from there.
+                      one business day, and take it from there.
                     </p>
                     <button
                       onClick={() => onNavigate('/')}

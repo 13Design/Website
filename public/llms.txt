@@ -4,6 +4,8 @@
 
 13 Design Studio designs digital products — flows, screens, interaction patterns, design systems, and developer-ready specs — specifically for teams building with AI. Two kinds of clients: startups building AI-native products from day one, and established businesses adding AI to an existing product. All design work is done by humans; nothing about the flows, screens, or decisions is generated.
 
+Positioning: designed by humans, for humans and agents — interfaces people understand at first glance, structured so AI agents can navigate them without guessing.
+
 ## What we do
 
 - AI UX & product design — end-to-end design for AI-native and AI-built products

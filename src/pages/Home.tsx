@@ -17,7 +17,7 @@ const ROTATING = ['trust.', 'understand.', 'come back.', 'tell others.'];
  * already makes elsewhere; nothing here is aspirational.
  */
 const MARQUEE_ITEMS = [
-  'Designed by humans, never generated',
+  'Designed by humans',
   'Founding client spots open',
   'Month-to-month — no lock-in',
   'AI-native & AI-built products',
@@ -263,6 +263,20 @@ export default function Home({ onNavigate }: { onNavigate: (r: Route) => void })
               <Reveal delay={2} className="mt-7">
                 <p className="text-base lg:text-lg text-bone-300 leading-relaxed text-pretty max-w-xl">
                   No part of the actual work — the flows, the screens, the decisions — is generated. That's not a marketing line; it's the reason to hire us instead of a tool. If a project really is just "make me five screens" with no judgment required, a generation tool can do that faster and cheaper, and we'll tell you that instead of taking the work anyway.
+                </p>
+              </Reveal>
+
+              <Reveal delay={3} className="mt-9">
+                <p className="font-display text-lg lg:text-xl font-medium tracking-tighter2 text-bone-50">
+                  Designed by humans,{' '}
+                  <span className="text-ember-400">for humans and agents.</span>
+                </p>
+                <p className="mt-3 text-sm lg:text-base text-bone-400 leading-relaxed text-pretty max-w-xl">
+                  The next users of your product won't all be people. AI agents already read,
+                  compare, and act inside products — and they reward the same things humans do:
+                  clear hierarchy, honest labels, structure that means what it says. So we design
+                  for both — interfaces people understand at first glance, built so machines can
+                  navigate them without guessing.
                 </p>
               </Reveal>
             </div>

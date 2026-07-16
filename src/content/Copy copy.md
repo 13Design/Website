@@ -206,9 +206,6 @@ Components, spacing, tokens, and hand-off specs — so every new feature still l
 
 ## FOR EITHER
 
-**In-Team Designer**
-No hire, no recruiting cycle. Our design expertise, working inside your team's process — your tools, your standups, your sprint cycles — for a specific project or a defined stretch of time.
-
 **UX Audit Before a Raise or Launch**
 A diagnostic tied directly to money on the line. Find where users fall out before investors or the market see it, with a prioritized, evidence-based fix plan.
 

@@ -62,12 +62,6 @@ export const services: Service[] = [
   },
   // Either
   {
-    id: 'in-team-designer',
-    name: 'In-Team Designer',
-    audience: 'either',
-    body: "Extra design hands inside your team's process — your tools, your standups, your sprint cycles — for a specific project or a defined stretch of time. You set the direction; we execute. No hire, no recruiting cycle.",
-  },
-  {
     id: 'ux-audit-pre-raise',
     name: 'UX Audit Before a Raise or Launch',
     audience: 'either',
@@ -78,7 +72,7 @@ export const services: Service[] = [
     name: 'Fractional Product Partner',
     audience: 'either',
     tag: 'subscription',
-    body: "A part-time design and product lead, ongoing — we help decide what to build and in what order, and keep it coherent as your team and product grow. On the pricing page this is the Embedded tier: same thing, month-to-month.",
+    body: "A part-time design and product lead, ongoing — we help decide what to build and in what order, and keep it coherent as your team and product grow. On the pricing page this is the Product Partner tier: same thing, month-to-month.",
   },
 ];
 
@@ -107,7 +101,7 @@ export const audienceGroups: {
     label: "For either",
     blurb:
       "Some of what we do applies regardless of where you're starting from — and these are the engagements that move between both worlds.",
-    audienceServices: ['in-team-designer', 'ux-audit-pre-raise', 'fractional-product-partner'],
+    audienceServices: ['ux-audit-pre-raise', 'fractional-product-partner'],
   },
 ];
 
@@ -145,11 +139,10 @@ export type PricingRow = {
 export const pricingRows: PricingRow[] = [
   { engagement: 'UX Rescue Sprint', whatItIs: 'Fixed-scope audit + top fixes, 1–2 weeks', investment: 'Sprint' },
   { engagement: 'Product Finishing', whatItIs: 'Whole-flow coherence, 2–4 weeks', investment: 'Sprint' },
-  { engagement: 'AI UX & Product Design', whatItIs: 'Interaction design for AI-native features', investment: 'Sprint / Subscription / Embedded' },
-  { engagement: 'AI Integration UX', whatItIs: 'Designing AI into an existing product', investment: 'Sprint / Subscription / Embedded' },
+  { engagement: 'AI UX & Product Design', whatItIs: 'Interaction design for AI-native features', investment: 'Sprint / Subscription' },
+  { engagement: 'AI Integration UX', whatItIs: 'Designing AI into an existing product', investment: 'Sprint / Subscription' },
   { engagement: 'Design System & Maintenance', whatItIs: 'System + hand-off specs, ongoing upkeep', investment: 'Sprint / Subscription' },
   { engagement: 'UX Audit (pre-raise / pre-launch)', whatItIs: 'Diagnostic + prioritized fix plan', investment: 'Sprint' },
-  { engagement: 'In-Team Designer', whatItIs: 'Our expertise inside your team, no hire', investment: 'Embedded' },
   { engagement: 'Fractional Product Partner', whatItIs: 'Part-time design + product lead', investment: 'Subscription' },
 ];
 
@@ -162,7 +155,7 @@ export type SubTier = {
   daysPerMonth: string;
   includes: string[];
   featured?: boolean;
-  /** Purchasable directly via Stripe Checkout. Embedded is call-first. */
+  /** Purchasable directly via Stripe Checkout. Product Partner is call-first. */
   selfServe?: boolean;
 };
 
@@ -204,7 +197,7 @@ export const subscriptionTiers: SubTier[] = [
   },
   {
     id: 'embedded',
-    name: 'Embedded',
+    name: 'Product Partner',
     price: '$4,500',
     cadence: '/mo',
     daysPerMonth: 'Up to 20 days / month',
@@ -355,7 +348,7 @@ export const subscriptionTerms: TermsSection[] = [
     title: 'What "up to 5 / 12 / 20 days" means',
     body: [
       'A day means a working day of our attention on your product — not a timesheet entry. We do not bill by the hour, we do not track hours, and we will not send you a spreadsheet of six-minute increments.',
-      'The number is a cap on how much of the month we hold for you: up to 5 days on Lite, up to 12 on Standard, up to 20 on Embedded. Some days are a long focused stretch; some are a review, a call, and two decisions that unblock your team. Both count as a day.',
+      'The number is a cap on how much of the month we hold for you: up to 5 days on Lite, up to 12 on Standard, up to 20 on Product Partner. Some days are a long focused stretch; some are a review, a call, and two decisions that unblock your team. Both count as a day.',
       'We hold that capacity whether or not you use it. That is what reserves it.',
     ],
   },
@@ -383,7 +376,7 @@ export const subscriptionTerms: TermsSection[] = [
     body: [
       'On Lite, we reply to async requests within two business days, with one review call a month to walk through priorities.',
       'On Standard, time-sensitive requests get priority turnaround, plus a biweekly working session with your team.',
-      'On Embedded, we are in your weekly rituals — standups, sprint planning — so most things are answered in the room rather than in a queue.',
+      'On Product Partner, we are in your weekly rituals — standups, sprint planning — so most things are answered in the room rather than in a queue.',
     ],
   },
   {
@@ -414,9 +407,9 @@ export const subscriptionTerms: TermsSection[] = [
   },
   {
     n: '09',
-    title: 'Embedded is scoped on a call',
+    title: 'Product Partner is scoped on a call',
     body: [
-      'Embedded is the closest thing we offer to a fractional hire — a seat in your planning and roadmap decisions. It only works when the fit is right, so it is not available to subscribe to directly.',
+      'Product Partner is the closest thing we offer to a fractional hire — a seat in your planning and roadmap decisions. It only works when the fit is right, so it is not available to subscribe to directly.',
       'We scope it on a call first. Nothing is charged before that conversation.',
     ],
   },
@@ -440,7 +433,7 @@ export const subscriptionFaq = [
     a: "By card, through Stripe. You're charged when you subscribe and on the same date each month after that. Stripe emails you a receipt and a proper invoice every time, so your accountant gets what they need without asking us.",
   },
   {
-    q: "Why can't I subscribe to Embedded directly?",
+    q: "Why can't I subscribe to Product Partner directly?",
     a: "Because it's the closest thing we offer to a fractional hire — a seat in your planning and roadmap decisions. That only works if the fit is genuinely right, so we scope it on a call first. Nothing is charged before that conversation.",
   },
   {
@@ -449,7 +442,7 @@ export const subscriptionFaq = [
   },
   {
     q: "Which tier should I pick?",
-    a: "Lite if the product is broadly stable and just needs someone watching it. Standard if you're shipping new features on a regular cadence. Embedded if you want design in the room for planning, not just execution. If you're unsure, ask us — we'd rather put you in the right tier than the bigger one.",
+    a: "Lite if the product is broadly stable and just needs someone watching it. Standard if you're shipping new features on a regular cadence. Product Partner if you want design in the room for planning, not just execution. If you're unsure, ask us — we'd rather put you in the right tier than the bigger one.",
   },
 ];
 

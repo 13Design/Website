@@ -25,7 +25,7 @@ export const ROUTE_META: Record<Route, Meta> = {
   '/pricing': {
     title: 'Subscription pricing — design retainers from $800/mo | 13 Design Studio',
     description:
-      'Month-to-month design subscriptions: Lite $800, Standard $2,500, Embedded $4,500. Fixed monthly price, no lock-in, cancel anytime. Reserved design capacity for AI products.',
+      'Month-to-month design subscriptions: Lite $800, Standard $2,500, Product Partner $4,500. Fixed monthly price, no lock-in, cancel anytime. Reserved design capacity for AI products.',
   },
   '/about': {
     title: 'About — a design studio for the AI era | 13 Design Studio',

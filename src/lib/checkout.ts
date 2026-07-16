@@ -4,7 +4,7 @@ import { supabase } from './supabase';
  * Starts Stripe Checkout for a self-serve tier and redirects the browser to it.
  *
  * Only resolves if something went wrong — on success the browser navigates away.
- * The server decides which tiers are purchasable; Embedded is rejected there.
+ * The server decides which tiers are purchasable; Product Partner is rejected there.
  */
 /**
  * Opens Stripe's hosted Customer Portal for the subscription created by this

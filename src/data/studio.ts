@@ -62,8 +62,8 @@ export const services: Service[] = [
   },
   // Either
   {
-    id: 'embedded-designer',
-    name: 'Embedded Designer',
+    id: 'in-team-designer',
+    name: 'In-Team Designer',
     audience: 'either',
     body: "Extra design hands inside your team's process — your tools, your standups, your sprint cycles — for a specific project or a defined stretch of time. You set the direction; we execute. No hire, no recruiting cycle.",
   },
@@ -107,7 +107,7 @@ export const audienceGroups: {
     label: "For either",
     blurb:
       "Some of what we do applies regardless of where you're starting from — and these are the engagements that move between both worlds.",
-    audienceServices: ['embedded-designer', 'ux-audit-pre-raise', 'fractional-product-partner'],
+    audienceServices: ['in-team-designer', 'ux-audit-pre-raise', 'fractional-product-partner'],
   },
 ];
 
@@ -149,7 +149,7 @@ export const pricingRows: PricingRow[] = [
   { engagement: 'AI Integration UX', whatItIs: 'Designing AI into an existing product', investment: 'Sprint / Subscription / Embedded' },
   { engagement: 'Design System & Maintenance', whatItIs: 'System + hand-off specs, ongoing upkeep', investment: 'Sprint / Subscription' },
   { engagement: 'UX Audit (pre-raise / pre-launch)', whatItIs: 'Diagnostic + prioritized fix plan', investment: 'Sprint' },
-  { engagement: 'Embedded Designer', whatItIs: 'Our expertise inside your team, no hire', investment: 'Embedded' },
+  { engagement: 'In-Team Designer', whatItIs: 'Our expertise inside your team, no hire', investment: 'Embedded' },
   { engagement: 'Fractional Product Partner', whatItIs: 'Part-time design + product lead', investment: 'Subscription' },
 ];
 

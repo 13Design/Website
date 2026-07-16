@@ -74,7 +74,7 @@ export const contactLookingFor = [
   'AI Integration UX',
   'Design System & Maintenance',
   'UX Audit (pre-raise / pre-launch)',
-  'Embedded Designer',
+  'In-Team Designer',
   'Fractional Product Partner',
   'Subscription (Lite / Standard / Embedded)',
   'Not sure yet',

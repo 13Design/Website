@@ -206,7 +206,7 @@ Components, spacing, tokens, and hand-off specs — so every new feature still l
 
 ## FOR EITHER
 
-**Embedded Designer**
+**In-Team Designer**
 No hire, no recruiting cycle. Our design expertise, working inside your team's process — your tools, your standups, your sprint cycles — for a specific project or a defined stretch of time.
 
 **UX Audit Before a Raise or Launch**

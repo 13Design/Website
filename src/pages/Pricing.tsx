@@ -154,7 +154,7 @@ export default function Pricing({ onNavigate }: { onNavigate: Navigate }) {
                     className="mt-2.5 mx-auto inline-flex items-center gap-1.5 text-xs text-bone-400 hover:text-bone-100 transition-colors"
                   >
                     <FileText size={13} />
-                    <span className="link-underline">Terms &amp; what {tier.daysPerMonth.toLowerCase()} means</span>
+                    <span className="link-underline">Terms, and what &ldquo;{tier.daysPerMonth.toLowerCase().replace(' / month', '')}&rdquo; means</span>
                   </button>
 
                   {failedTier === tier.id && errorMsg && (

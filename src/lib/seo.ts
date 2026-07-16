@@ -30,7 +30,7 @@ export const ROUTE_META: Record<Route, Meta> = {
   '/about': {
     title: 'About — a design studio for the AI era | 13 Design Studio',
     description:
-      'Why we built a design studio for AI-native and AI-built products, and how we work: human judgment on the flows, screens, and decisions — never generated.',
+      'Why we built a design studio for AI-native and AI-built products, and how we work: human judgment on every flow, screen, and decision.',
   },
   '/contact': {
     title: 'Contact — talk to us about your AI product | 13 Design Studio',

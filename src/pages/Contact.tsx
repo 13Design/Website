@@ -14,7 +14,9 @@ export default function Contact({ onNavigate, tier }: { onNavigate: Navigate; ti
   const [status, setStatus] = useState<Status>('idle');
   const [errorMsg, setErrorMsg] = useState('');
 
-  const selectedTier = tier ? subscriptionTiers.find((t) => t.id === tier) : undefined;
+  // The Product Partner tier's id used to be 'embedded'; honour old links.
+  const tierId = tier === 'embedded' ? 'product-partner' : tier;
+  const selectedTier = tierId ? subscriptionTiers.find((t) => t.id === tierId) : undefined;
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();

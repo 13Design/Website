@@ -4,7 +4,7 @@
 // self-serve tier. Creates a Stripe Checkout session and returns its URL for
 // the browser to redirect to.
 //
-// Only Lite and Standard are sold self-serve. Embedded is call-first and is
+// Only Lite and Standard are sold self-serve. Product Partner is call-first and is
 // rejected here as well as hidden in the UI — never trust the client to enforce
 // which tiers are purchasable.
 //

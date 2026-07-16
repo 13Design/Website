@@ -147,7 +147,7 @@ export const pricingRows: PricingRow[] = [
 ];
 
 export type SubTier = {
-  id: 'lite' | 'standard' | 'embedded';
+  id: 'lite' | 'standard' | 'product-partner';
   name: string;
   price: string;
   cadence: string;
@@ -196,7 +196,7 @@ export const subscriptionTiers: SubTier[] = [
     featured: true,
   },
   {
-    id: 'embedded',
+    id: 'product-partner',
     name: 'Product Partner',
     price: '$4,500',
     cadence: '/mo',

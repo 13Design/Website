@@ -1,8 +1,8 @@
 import { Mail, ArrowUpRight } from 'lucide-react';
 import type { Route } from '../lib/router';
 
+// No "Home" entry: the wordmark above is the way home, same as the navbar logo.
 const NAV_LINKS: { label: string; route: Route }[] = [
-  { label: 'Home', route: '/' },
   { label: 'Services', route: '/services' },
   { label: 'Subscription', route: '/pricing' },
   { label: 'About', route: '/about' },
@@ -13,6 +13,7 @@ const NAV_LINKS: { label: string; route: Route }[] = [
 
 const DOC_LINKS: { label: string; route: Route }[] = [
   { label: 'Terms & agreement', route: '/terms' },
+  { label: 'Refunds & cancellation', route: '/refunds' },
 ];
 
 const SOCIALS = [
@@ -27,14 +28,18 @@ export default function Footer({ onNavigate }: { onNavigate: (r: Route) => void 
       <div className="mx-auto max-w-edge px-5 lg:px-8 pt-20 pb-10">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-12">
           <div className="md:col-span-5">
-            <div className="flex items-baseline gap-3">
+            <button
+              onClick={() => onNavigate('/')}
+              className="group flex items-baseline gap-3"
+              aria-label="13 Design Studio — home"
+            >
               <span className="font-display text-5xl font-semibold text-bone-50 tracking-tightest">
                 13
               </span>
-              <span className="text-[11px] uppercase tracking-[0.3em] text-bone-400">
+              <span className="text-[11px] uppercase tracking-[0.3em] text-bone-400 group-hover:text-bone-200 transition-colors">
                 Design Studio
               </span>
-            </div>
+            </button>
             <p className="mt-5 text-bone-400 max-w-sm text-pretty leading-relaxed">
               A digital product design agency for AI-native and AI-built products.
               Based in Kraków, partnering with founders everywhere.

@@ -3,6 +3,7 @@ import { ArrowUpRight, Loader2, AlertCircle, CalendarDays, Plus, Minus, FileText
 import Reveal from '../components/Reveal';
 import PageHeader from '../components/PageHeader';
 import SectionMarker from '../components/SectionMarker';
+import SubscriptionJourney from '../components/SubscriptionJourney';
 import ClosingCTA from '../components/ClosingCTA';
 import { startCheckout } from '../lib/checkout';
 import JsonLd, { faqPageSchema } from '../components/JsonLd';
@@ -28,8 +29,12 @@ export default function Pricing({ onNavigate }: { onNavigate: Navigate }) {
     setBusyTier(id);
     setFailedTier(null);
     setErrorMsg('');
-    const { error } = await startCheckout(id);
-    setFailedTier(id);
+    // Paddle opens as an overlay on this page; on completion we carry the
+    // transaction id to the success page (it unlocks the billing portal).
+    const { error } = await startCheckout(id, ({ tier, txn }) =>
+      onNavigate('/subscribe/success', { tier, txn }),
+    );
+    setFailedTier(error ? id : null);
     setErrorMsg(error);
     setBusyTier(null);
   };
@@ -174,11 +179,35 @@ export default function Pricing({ onNavigate }: { onNavigate: Navigate }) {
         </div>
       </section>
 
+      {/* The loop: what happens after you subscribe */}
+      <section className="relative py-16 lg:py-20 border-b border-ink-700/40 overflow-hidden">
+        <div className="pointer-events-none absolute top-0 -left-40 w-[40vw] h-[40vw] rounded-full bg-[radial-gradient(ellipse_at_center,rgba(232,116,76,0.05),transparent_60%)] blur-3xl" />
+        <div className="mx-auto max-w-edge px-5 lg:px-8 relative">
+          <Reveal>
+            <SectionMarker n="04" label="After you subscribe" />
+          </Reveal>
+          <Reveal delay={1} className="mt-7">
+            <h2 className="font-display font-medium text-bone-50 text-[clamp(1.7rem,4vw,2.8rem)] leading-[1.05] tracking-tightest max-w-2xl text-balance">
+              From subscribe to shipped — the whole loop.
+            </h2>
+          </Reveal>
+          <Reveal delay={2} className="mt-5">
+            <p className="text-base lg:text-lg text-bone-400 leading-relaxed text-pretty max-w-2xl">
+              No onboarding maze. The moment payment goes through, your workspace is set
+              up automatically — and every request after that runs the same simple loop.
+            </p>
+          </Reveal>
+          <Reveal delay={2} className="mt-12">
+            <SubscriptionJourney />
+          </Reveal>
+        </div>
+      </section>
+
       {/* What's included at every tier */}
       <section className="relative py-16 lg:py-20 border-b border-ink-700/40">
         <div className="mx-auto max-w-edge px-5 lg:px-8">
           <Reveal>
-            <SectionMarker n="04" label="At every tier" />
+            <SectionMarker n="05" label="At every tier" />
           </Reveal>
           <Reveal delay={1} className="mt-7">
             <h2 className="font-display font-medium text-bone-50 text-[clamp(1.7rem,4vw,2.8rem)] leading-[1.05] tracking-tightest max-w-2xl text-balance">
@@ -213,7 +242,7 @@ export default function Pricing({ onNavigate }: { onNavigate: Navigate }) {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16">
             <div className="lg:col-span-5">
               <Reveal>
-                <SectionMarker n="05" label="Why subscription" />
+                <SectionMarker n="06" label="Why subscription" />
               </Reveal>
             </div>
             <div className="lg:col-span-7">
@@ -238,7 +267,7 @@ export default function Pricing({ onNavigate }: { onNavigate: Navigate }) {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16">
             <div className="lg:col-span-4">
               <Reveal>
-                <SectionMarker n="06" label="Subscription FAQ" />
+                <SectionMarker n="07" label="Subscription FAQ" />
               </Reveal>
               <Reveal delay={1} className="mt-7">
                 <h2 className="font-display font-medium text-bone-50 text-[clamp(1.7rem,4vw,2.8rem)] leading-[1.05] tracking-tightest text-balance">

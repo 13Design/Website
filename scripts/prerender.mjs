@@ -32,6 +32,7 @@ const ROUTES = [
   '/contact',
   '/founding-clients',
   '/terms',
+  '/refunds',
 ];
 
 const MIME = {

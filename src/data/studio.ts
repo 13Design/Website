@@ -155,7 +155,7 @@ export type SubTier = {
   daysPerMonth: string;
   includes: string[];
   featured?: boolean;
-  /** Purchasable directly via Stripe Checkout. Product Partner is call-first. */
+  /** Purchasable directly via Paddle checkout. Product Partner is call-first. */
   selfServe?: boolean;
 };
 
@@ -383,8 +383,8 @@ export const subscriptionTerms: TermsSection[] = [
     n: '06',
     title: 'Billing',
     body: [
-      'Subscriptions are paid by card through Stripe. You are charged when you subscribe and on the same date each month after that.',
-      'Stripe emails you a receipt and an invoice for every payment, so your finance team gets what it needs without asking us for it.',
+      'Subscriptions are paid by card through Paddle, our merchant of record. You are charged when you subscribe and on the same date each month after that, with VAT or sales tax handled correctly for your country at checkout.',
+      'Paddle emails you a receipt and an invoice for every payment, so your finance team gets what it needs without asking us for it.',
     ],
   },
   {
@@ -415,6 +415,67 @@ export const subscriptionTerms: TermsSection[] = [
   },
 ];
 
+/**
+ * Refund & cancellation policy. Consistent with subscriptionTerms (month-to-
+ * month, cancel anytime, access to end of paid period, reserved capacity → no
+ * pro-rata refunds) and written to satisfy Paddle's merchant-of-record review.
+ * Operational, not a contract. The refund stance in §03 is a business decision
+ * — change it here and every surface that renders it updates.
+ */
+export const refundPolicy: TermsSection[] = [
+  {
+    n: '01',
+    title: 'Who you pay, and when',
+    body: [
+      'Subscriptions are sold and processed by Paddle, our payment provider and merchant of record. Paddle handles the billing, the receipts and invoices, the tax, and any refunds. Your card statement may show “Paddle” or “paddle.net”.',
+      'The plan fee is charged when you subscribe and again on the same date each month, until you cancel. Paddle emails you a receipt and a full invoice every time.',
+    ],
+  },
+  {
+    n: '02',
+    title: 'Cancel anytime',
+    body: [
+      'Every plan is month-to-month. You can cancel whenever you like — from the billing portal (the link is on your confirmation page and on every Paddle receipt), or by emailing hello@13design.org and we will do it for you.',
+      'Cancelling stops all future charges. You keep access for the rest of the month you have already paid for, and you are not charged again after that.',
+      'There is no minimum term, no annual contract, and no cancellation fee.',
+    ],
+  },
+  {
+    n: '03',
+    title: 'Our satisfaction guarantee',
+    body: [
+      'We stand behind the work. If you are not happy with what we deliver in your first month, tell us before that month ends and we will refund half your first payment — 50% back, no hoops and no hard feelings.',
+      'We would always rather fix it first: give us the chance to put right whatever missed the mark. But if we still have not earned it, half of that first month is yours back. The guarantee covers your first month on any self-serve plan.',
+    ],
+  },
+  {
+    n: '04',
+    title: 'Refunds after the first month',
+    body: [
+      'From the second month on, the monthly fee reserves a share of the studio’s capacity for your product — held and staffed for you whether or not every day is used, and unused days do not roll over. So those months are generally non-refundable once the billing month has begun; cancelling stops your next payment rather than refunding the current one.',
+      'Two things we always refund, in any month: a billing mistake — a duplicate charge, an accidental one, or a charge taken after you had already cancelled — and a month where we failed to deliver what it promised for reasons on our side.',
+      'Refunds are issued through Paddle to your original payment method and usually appear within 5–10 business days.',
+    ],
+  },
+  {
+    n: '05',
+    title: 'How to request a refund or raise a billing issue',
+    body: [
+      'Email hello@13design.org with the email on your account and the Paddle receipt or order number. We reply within one business day.',
+      'You can also contact Paddle directly, as the merchant of record, through paddle.net — Paddle Buyer Support can find your receipts and help with any payment.',
+      'None of the above limits any statutory consumer rights you may have under the mandatory law that applies to you; where such rights apply, they come first.',
+    ],
+  },
+  {
+    n: '06',
+    title: 'Switching plans',
+    body: [
+      'To move up or down a tier, tell us before your renewal date and we will switch you for the next cycle. Any mid-cycle proration is handled by Paddle where it applies.',
+      'Product Partner is scoped on a call before anything is charged, so there is nothing to refund on it before you have agreed to start.',
+    ],
+  },
+];
+
 export const subscriptionFaq = [
   {
     q: 'Is there a minimum commitment?',
@@ -430,7 +491,7 @@ export const subscriptionFaq = [
   },
   {
     q: 'How and when am I billed?',
-    a: "By card, through Stripe. You're charged when you subscribe and on the same date each month after that. Stripe emails you a receipt and a proper invoice every time, so your accountant gets what they need without asking us.",
+    a: "By card, through Paddle — our merchant of record, so VAT or sales tax is handled correctly for your country at checkout. You're charged when you subscribe and on the same date each month after that. Paddle emails you a receipt and a proper invoice every time, so your accountant gets what they need without asking us.",
   },
   {
     q: "Why can't I subscribe to Product Partner directly?",
@@ -438,7 +499,7 @@ export const subscriptionFaq = [
   },
   {
     q: 'What happens right after I subscribe?',
-    a: "We email you within one business day to introduce ourselves and book a kickoff call. Then we get access to your product, your Figma, and wherever your team works — Slack, Linear, whatever you already use. Work starts with the priorities you send us.",
+    a: "Within a few minutes you get two invites by email: a private Trello board where you file and track design requests, and our shared Slack for quick questions and day-to-day chat. Within one business day we email you personally to book a kickoff call, then work starts with whatever you put at the top of the board.",
   },
   {
     q: "Which tier should I pick?",

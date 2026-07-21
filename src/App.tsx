@@ -11,6 +11,7 @@ import FoundingClients from './pages/FoundingClients';
 import SubscribeSuccess from './pages/SubscribeSuccess';
 import SubscribeCancel from './pages/SubscribeCancel';
 import Terms from './pages/Terms';
+import Refunds from './pages/Refunds';
 import { useRoute } from './lib/router';
 import { applyRouteMeta } from './lib/seo';
 
@@ -47,13 +48,14 @@ export default function App() {
           <SubscribeSuccess
             onNavigate={navigate}
             tier={params.get('tier')}
-            sessionId={params.get('session_id')}
+            txn={params.get('txn')}
           />
         )}
         {route === '/subscribe/cancel' && (
           <SubscribeCancel onNavigate={navigate} tier={params.get('tier')} />
         )}
         {route === '/terms' && <Terms onNavigate={navigate} />}
+        {route === '/refunds' && <Refunds onNavigate={navigate} />}
       </div>
       <Footer onNavigate={navigate} />
     </div>

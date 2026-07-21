@@ -60,6 +60,11 @@ export const ROUTE_META: Record<Route, Meta> = {
     description:
       'How we work with clients and how the subscription runs: ownership, confidentiality, case studies, governing law, and what "up to N days" means.',
   },
+  '/refunds': {
+    title: 'Refund & cancellation policy — 13 Design Studio',
+    description:
+      'Month-to-month design subscriptions billed through Paddle: a first-month satisfaction guarantee (50% back), cancel anytime, keep access to the end of your paid month, and no cancellation fee.',
+  },
 };
 
 function upsertMeta(selector: string, attr: 'name' | 'property', key: string, content: string) {

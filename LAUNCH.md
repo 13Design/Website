@@ -151,6 +151,112 @@ edge function. That's a follow-up, not a launch blocker — ask and I'll wire it
 
 ---
 
+## Step 8 — Subscriptions: Paddle + automated onboarding
+
+The site sells the Lite and Standard tiers through **Paddle Billing** (overlay
+checkout on the pricing page — Paddle is merchant of record, so it computes and
+remits VAT/sales tax and emails receipts/invoices; there is no Stripe Tax-style
+dashboard setup to get wrong). When a subscription activates, the
+`paddle-webhook` function automatically:
+
+1. records the subscription in the `subscriptions` table,
+2. creates a **private Trello board** for the client (lists: 📥 Design requests
+   → 🎨 In progress → 👀 In review → ✅ Done, plus a "Start here" card) and
+   invites them by email,
+3. sends the client a **welcome email** (Resend) with the Trello + Slack links,
+4. pings your **Slack** and emails the studio.
+
+Onboarding runs exactly once per subscription (`onboarded_at` guard); if a step
+fails, the studio email lists what needs manual follow-up instead of retrying
+into duplicate boards.
+
+### 8a — Paddle account & catalog
+
+1. Create an account at <https://paddle.com> (start in **sandbox**:
+   <https://sandbox-vendors.paddle.com>). Live checkout requires Paddle's
+   website verification of `13design.org` — start that early, it can take days.
+2. **Catalog → Products**: create one product, e.g. "Design subscription", with
+   two recurring monthly prices: **$800** (Lite) and **$2,500** (Standard).
+   Copy both `pri_…` ids.
+3. **Developer tools → Authentication**: create an **API key** (server secret)
+   and a **client-side token** (`test_…`/`live_…`, public).
+4. **Developer tools → Notifications**: add a destination pointing at
+   `https://<ref>.supabase.co/functions/v1/paddle-webhook` with events
+   `subscription.created`, `subscription.activated`, `subscription.updated`,
+   `subscription.canceled`, `transaction.completed`,
+   `transaction.payment_failed`. Copy the endpoint's **secret key** —
+   ⚠️ recreating the endpoint later mints a NEW secret; update the Supabase
+   secret when you do, or every event fails signature verification.
+5. **Checkout → Website approval**: add your domain(s) — required for the
+   overlay to open outside sandbox.
+
+### 8b — Trello
+
+1. From the studio's Trello account, create (or pick) a workspace for client
+   boards, e.g. "13 Design Clients". Get its id from the workspace URL or
+   `https://api.trello.com/1/organizations/<name>?key=…&token=…`.
+2. Get an API key + token at <https://trello.com/power-ups/admin> (create a
+   Power-Up, then generate a token authorized as you). The token acts as *you*:
+   boards are created under your account and clients are invited from it.
+3. Slack integration for requests: install the **Trello app for Slack**
+   (<https://trello.com/platforms/slack>) in your workspace and link the client
+   boards to your channel — card activity then flows into Slack. (This is a
+   per-workspace, one-time manual setup; the API can't do it.)
+
+### 8c — Slack
+
+1. Studio alerts: create an **incoming webhook** at
+   <https://api.slack.com/apps> (Incoming Webhooks → pick your channel) —
+   that's `SLACK_WEBHOOK_URL`.
+2. Client invites: create a standing **invite link** (Slack → workspace name →
+   Invite people → copy invite link; set it to not expire) — that's
+   `SLACK_INVITE_URL`. It goes into the welcome email. Skip it and the email
+   simply omits the Slack step.
+
+### 8d — Wire it up
+
+```bash
+# Database (adds paddle/onboarding columns to subscriptions)
+supabase db push
+
+# Function secrets
+supabase secrets set \
+  PADDLE_API_KEY="pdl_…" \
+  PADDLE_WEBHOOK_SECRET="pdl_ntfset_…" \
+  PADDLE_ENV="sandbox" \
+  TRELLO_KEY="…" TRELLO_TOKEN="…" TRELLO_WORKSPACE_ID="…" \
+  SLACK_WEBHOOK_URL="https://hooks.slack.com/services/…" \
+  SLACK_INVITE_URL="https://join.slack.com/t/…"
+
+# Deploy both functions (Paddle signs requests; no Supabase JWT)
+supabase functions deploy paddle-webhook --no-verify-jwt
+supabase functions deploy paddle-portal-session --no-verify-jwt
+```
+
+Frontend env (Netlify → Environment variables, and `.env.local` for dev —
+all four are public client-side values):
+
+- `VITE_PADDLE_ENV` = `sandbox` (→ `production` at go-live)
+- `VITE_PADDLE_CLIENT_TOKEN` = `test_…` / `live_…`
+- `VITE_PADDLE_PRICE_LITE` = `pri_…`
+- `VITE_PADDLE_PRICE_STANDARD` = `pri_…`
+
+> ⚠️ The welcome email only reaches real customers once Resend is out of test
+> mode (Step 4). Until then it delivers only to the Resend account owner.
+
+### 8e — Test end-to-end (sandbox)
+
+1. Pricing page → Subscribe → pay with Paddle's test card `4242 4242 4242 4242`
+   (any future expiry / CVC).
+2. Confirm: overlay success → redirect to `/subscribe/success` → "Manage
+   subscription" opens the Paddle customer portal.
+3. Confirm the automation: `subscriptions` row created + `onboarded_at` set,
+   Trello board exists with the client invited, welcome email sent, Slack ping
+   received, studio email received.
+4. Cancel from the portal and confirm the row updates + "set to cancel" alert.
+
+---
+
 ## Quick reference — what lives where
 
 | Concern            | Where                                                    |
@@ -158,6 +264,9 @@ edge function. That's a follow-up, not a launch blocker — ask and I'll wire it
 | Frontend hosting   | Netlify (`netlify.toml`)                                 |
 | Form data          | Supabase tables (`supabase/migrations/`)                 |
 | Email delivery     | Resend, via `supabase/functions/notify-inquiry`          |
+| Subscriptions      | Paddle overlay checkout (`src/lib/checkout.ts`)          |
+| Post-subscribe automation | `supabase/functions/paddle-webhook` (Trello + Slack + welcome email) |
+| Billing portal     | `supabase/functions/paddle-portal-session`               |
 | Frontend env vars  | Netlify env vars + local `.env.local` (`.env.example`)   |
 | Function secrets   | `supabase secrets set ...` (not in the repo)             |
 | Spam protection    | Honeypot field in both forms (in code)                   |

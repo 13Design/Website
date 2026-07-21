@@ -20,7 +20,9 @@ export default function SubscribeCancel({
     if (!plan?.selfServe || busy) return;
     setBusy(true);
     setErrorMsg('');
-    const { error } = await startCheckout(plan.id);
+    const { error } = await startCheckout(plan.id, ({ tier: t, txn }) =>
+      onNavigate('/subscribe/success', { tier: t, txn }),
+    );
     setErrorMsg(error);
     setBusy(false);
   };

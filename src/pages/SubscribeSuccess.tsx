@@ -8,21 +8,21 @@ import type { Navigate } from '../lib/router';
 export default function SubscribeSuccess({
   onNavigate,
   tier,
-  sessionId,
+  txn,
 }: {
   onNavigate: Navigate;
   tier?: string | null;
-  sessionId?: string | null;
+  txn?: string | null;
 }) {
   const plan = tier ? subscriptionTiers.find((t) => t.id === tier) : undefined;
   const [busy, setBusy] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
 
   const manage = async () => {
-    if (!sessionId || busy) return;
+    if (!txn || busy) return;
     setBusy(true);
     setErrorMsg('');
-    const { error } = await openBillingPortal(sessionId);
+    const { error } = await openBillingPortal(txn);
     setErrorMsg(error);
     setBusy(false);
   };
@@ -50,18 +50,18 @@ export default function SubscribeSuccess({
               )}
 
               <p className="mt-5 text-bone-300 leading-relaxed text-pretty max-w-md mx-auto">
-                Payment went through and your subscription is active. Stripe has emailed
-                you a receipt and invoice — check your inbox. We'll be in touch within one
-                business day to kick things off and get you into our workflow.
+                Payment went through and your subscription is active. Paddle has emailed
+                you a receipt and invoice — check your inbox. Your workspace is being set
+                up right now.
               </p>
 
               <div className="mt-8 rounded-xl border border-ink-700/60 bg-ink-850 p-5 text-left">
                 <p className="text-sm font-medium text-bone-100">What happens next</p>
                 <ol className="mt-3 space-y-2.5">
                   {[
-                    'We email you to introduce ourselves and schedule a kickoff call.',
-                    'We get access to your product, Figma, and wherever your team works.',
-                    'Work starts — you send priorities, we begin the first pass.',
+                    'Check your inbox — an invite to your private Trello request board and a link to join our Slack arrive within a few minutes.',
+                    'We email you within one business day to introduce ourselves and book a kickoff call.',
+                    'File your first request on the board — we start with whatever you put on top.',
                   ].map((step, i) => (
                     <li key={i} className="flex items-start gap-3 text-sm text-bone-300">
                       <span className="font-mono text-xs text-ember-500 pt-0.5 shrink-0">
@@ -80,7 +80,7 @@ export default function SubscribeSuccess({
                 </div>
               )}
 
-              {sessionId && (
+              {txn && (
                 <div className="mt-8">
                   <button
                     onClick={manage}

@@ -13,6 +13,7 @@
     "postbuild": "node scripts/prerender.mjs"
   },
   "dependencies": {
+    "@paddle/paddle-js": "^1.6.4",
     "@supabase/supabase-js": "^2.57.4",
     "lucide-react": "^0.344.0",
     "react": "^18.3.1",

@@ -92,12 +92,20 @@ export default function Footer({ onNavigate }: { onNavigate: (r: Route) => void 
               <ul className="flex flex-col gap-3">
                 {DOC_LINKS.map((l) => (
                   <li key={l.route}>
-                    <button
-                      onClick={() => onNavigate(l.route)}
+                    <a
+                      href={l.route}
+                      onClick={(e) => {
+                        // Plain left-click navigates in-app; let modified clicks
+                        // (new tab / new window) follow the real href natively so
+                        // these read as genuine, crawlable links to the policies.
+                        if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
+                        e.preventDefault();
+                        onNavigate(l.route);
+                      }}
                       className="link-underline text-bone-300 hover:text-bone-50 transition-colors text-sm"
                     >
                       {l.label}
-                    </button>
+                    </a>
                   </li>
                 ))}
               </ul>

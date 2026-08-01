@@ -12,6 +12,7 @@ import SubscribeSuccess from './pages/SubscribeSuccess';
 import SubscribeCancel from './pages/SubscribeCancel';
 import Terms from './pages/Terms';
 import Refunds from './pages/Refunds';
+import Privacy from './pages/Privacy';
 import { useRoute } from './lib/router';
 import { applyRouteMeta } from './lib/seo';
 
@@ -56,6 +57,7 @@ export default function App() {
         )}
         {route === '/terms' && <Terms onNavigate={navigate} />}
         {route === '/refunds' && <Refunds onNavigate={navigate} />}
+        {route === '/privacy' && <Privacy onNavigate={navigate} />}
       </div>
       <Footer onNavigate={navigate} />
     </div>

@@ -319,6 +319,22 @@ export const workingAgreement: TermsSection[] = [
   },
   {
     n: '05',
+    title: 'What we promise, and the limits',
+    body: [
+      'We do the work with professional care and skill, and we stand behind it — the first-month satisfaction guarantee on the subscription is the plainest expression of that. What we cannot promise is a specific business outcome: design moves the numbers, but so do a dozen things outside our hands.',
+      'To the extent the law allows, we are not liable for indirect or consequential losses — lost profit, lost revenue, lost data caused by tools we do not control — and our total liability for any engagement is limited to the fees you paid us for it. None of this cuts into rights you have under mandatory consumer law, which always come first.',
+    ],
+  },
+  {
+    n: '06',
+    title: 'Changes to these terms',
+    body: [
+      'We may update these terms as the studio evolves — a new service, a clearer clause, a change the law requires. The current version always lives on this page, dated by its last change.',
+      'If a change materially affects an active engagement, we tell you directly rather than expecting you to notice. Continuing to work with us after an update means the updated terms apply.',
+    ],
+  },
+  {
+    n: '07',
     title: 'The law that governs this',
     body: [
       'This agreement is governed by the law of Poland, where the studio is based. If a dispute ever comes up that we cannot resolve directly, that is the jurisdiction it is settled in.',
@@ -472,6 +488,100 @@ export const refundPolicy: TermsSection[] = [
     body: [
       'To move up or down a tier, tell us before your renewal date and we will switch you for the next cycle. Any mid-cycle proration is handled by Paddle where it applies.',
       'Product Partner is scoped on a call before anything is charged, so there is nothing to refund on it before you have agreed to start.',
+    ],
+  },
+];
+
+/**
+ * Privacy policy. Plain-language and accurate to how the site actually handles
+ * data: two public forms → Supabase, subscription billing → Paddle (we never
+ * see card data), onboarding → Trello + Slack, transactional email → Resend,
+ * hosting → Netlify, fonts → Google Fonts. No analytics or advertising cookies.
+ * Studio is EU-based (Kraków, PL), so this is written to GDPR expectations.
+ * Required by Paddle's merchant-of-record / website review. Operational, not a
+ * contract — update it here and every surface that renders it updates.
+ */
+export const privacyPolicy: TermsSection[] = [
+  {
+    n: '01',
+    title: 'Who is responsible for your data',
+    body: [
+      'This site is run by 13 Design Studio, a product design studio based in Kraków, Poland. For anything you share with us here, we are the data controller.',
+      'If you ever want to reach a human about your data — what we hold, or to have it changed or removed — email hello@13design.org. A real person answers, usually within one business day.',
+    ],
+  },
+  {
+    n: '02',
+    title: 'What we collect, and what we do not',
+    body: [
+      'From the contact and founding-client forms: your name, email, and whatever you choose to tell us — your company, your product link, your timeline, and the message itself. Nothing on those forms is required beyond what it takes to reply to you.',
+      'If you subscribe, our payment provider Paddle collects and processes your billing details. We never see or store your full card number — we only receive back the essentials to run your subscription, such as your email, plan, and a transaction reference.',
+      'We do not buy data about you, we do not build advertising profiles, and we do not ask for anything we do not need to do the work.',
+    ],
+  },
+  {
+    n: '03',
+    title: 'The tools we use to run this',
+    body: [
+      'We keep the stack small and name it plainly. Each of these processes some data on our behalf, under its own security terms:',
+      'Netlify hosts the site. Supabase stores form submissions and subscription records. Resend sends our email (your welcome email, our reply). Paddle handles all payments, invoices, and tax as merchant of record. Trello and Slack are where subscribed clients get a private project board and a shared channel. Google Fonts serves the typefaces, which means Google receives your IP address when the page loads its fonts.',
+      'Each of these has its own privacy policy governing what it does with data it processes; Paddle in particular acts as its own controller for payment information.',
+    ],
+  },
+  {
+    n: '04',
+    title: 'Cookies and tracking',
+    body: [
+      'We do not run analytics, advertising, or third-party tracking cookies on this site — there is no ad network watching you here, and nothing follows you off the page.',
+      'The only cookies that may be set are the essential ones Paddle needs to run a secure checkout, and those appear only if you open checkout. That is why you are not greeted by a cookie-consent wall: there is nothing non-essential to consent to.',
+    ],
+  },
+  {
+    n: '05',
+    title: 'Why we are allowed to hold it',
+    body: [
+      'When you send a form, we rely on your consent and on our legitimate interest in answering you. When you subscribe, we process what we need to perform the contract — running your plan and supporting the work.',
+      'We also keep certain billing records because tax and accounting law requires it, and we may process limited data to keep the site secure and working.',
+    ],
+  },
+  {
+    n: '06',
+    title: 'How long we keep it',
+    body: [
+      'Inquiry data lives only as long as it is useful — while we are talking, and for a reasonable window after in case you come back. If a conversation goes nowhere, we clear it out.',
+      'Subscription and billing records are kept for as long as the law requires us to hold them. And you can ask us to delete your data at any time — see your rights below.',
+    ],
+  },
+  {
+    n: '07',
+    title: 'Where your data goes',
+    body: [
+      'Some of the tools above are based in, or store data in, the United States. Where your information is transferred outside the EEA, it is covered by the safeguards those providers offer — standard contractual clauses and equivalent mechanisms.',
+      'We do not transfer your data to anyone for their own independent use, and we never sell it.',
+    ],
+  },
+  {
+    n: '08',
+    title: 'Your rights over your data',
+    body: [
+      'You can ask us for a copy of what we hold, to correct it, to delete it, to limit what we do with it, or to receive it in a portable form. You can withdraw consent at any time, and object to processing we base on legitimate interest.',
+      'To exercise any of these, email hello@13design.org — no special form, just ask. If you are in the EU and think we have handled your data poorly, you also have the right to complain to your local supervisory authority; in Poland that is the President of the Personal Data Protection Office (UODO).',
+    ],
+  },
+  {
+    n: '09',
+    title: 'How we protect it',
+    body: [
+      'Data sits behind access controls with the providers named above; our database is locked down so the public forms can write to it but not read anything back. Payment data is handled entirely by Paddle and never touches our servers.',
+      'No system is perfect, but we keep the surface small on purpose — the less we collect and the fewer places it lives, the less there is to go wrong.',
+    ],
+  },
+  {
+    n: '10',
+    title: 'Changes, and how to reach us',
+    body: [
+      'If this policy changes, the current version always lives on this page. For anything about your data — a question, a request, or a concern — email hello@13design.org.',
+      'This is the plain-language version of how we handle data day to day; it is written to be read, not to hide anything in the small print.',
     ],
   },
 ];

@@ -46,6 +46,10 @@
     "/refunds": {
       "title": "Refund & cancellation policy — 13 Design Studio",
       "description": "Month-to-month design subscriptions billed through Paddle: a first-month satisfaction guarantee (50% back), cancel anytime, keep access to the end of your paid month, and no cancellation fee."
+    },
+    "/privacy": {
+      "title": "Privacy policy — 13 Design Studio",
+      "description": "How 13 Design Studio handles your data: only what it takes to reply and run a subscription, no analytics or ad tracking, no data for sale. What we collect, the tools we use, and your rights."
     }
   }
 }

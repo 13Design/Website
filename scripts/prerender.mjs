@@ -50,6 +50,7 @@ const ROUTES = [
   '/founding-clients',
   '/terms',
   '/refunds',
+  '/privacy',
 ];
 
 /**

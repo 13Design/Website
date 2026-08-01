@@ -95,17 +95,23 @@ function jsonLdScript(data) {
   return `<script type="application/ld+json">${json}</script>`;
 }
 
-/** Replace the content="…" of a <meta name|property="key"> tag. */
+/**
+ * Replace the content="…" of a <meta name|property="key"> tag.
+ *
+ * All substitutions use a *function* replacer, never a replacement string:
+ * inserted values contain "$" (e.g. "$2,500"), and in a replacement string
+ * "$2" is read as a backreference — which would silently eat the price.
+ */
 function setMeta(html, attr, key, value) {
   const re = new RegExp(
     `(<meta\\s+${attr}="${key}"\\s+content=")[^"]*(")`,
     'i',
   );
-  if (re.test(html)) return html.replace(re, `$1${esc(value)}$2`);
+  if (re.test(html)) return html.replace(re, (_m, p1, p2) => p1 + esc(value) + p2);
   // Tag absent (some routes may not ship every tag): add it before </head>.
   return html.replace(
     /<\/head>/i,
-    `  <meta ${attr}="${key}" content="${esc(value)}" />\n  </head>`,
+    (m) => `  <meta ${attr}="${key}" content="${esc(value)}" />\n  ${m}`,
   );
 }
 
@@ -180,11 +186,11 @@ function renderRoute(shell, route, studio) {
   const url = `${SITE_URL}${route === '/' ? '/' : route}`;
 
   let html = shell;
-  html = html.replace(/<title>[^<]*<\/title>/i, `<title>${esc(m.title)}</title>`);
+  html = html.replace(/<title>[^<]*<\/title>/i, () => `<title>${esc(m.title)}</title>`);
   html = setMeta(html, 'name', 'description', m.description);
   html = html.replace(
     /(<link\s+rel="canonical"\s+href=")[^"]*(")/i,
-    `$1${url}$2`,
+    (_m, p1, p2) => p1 + url + p2,
   );
   html = setMeta(html, 'property', 'og:title', m.title);
   html = setMeta(html, 'property', 'og:description', m.description);
@@ -195,7 +201,7 @@ function renderRoute(shell, route, studio) {
   // Real content for non-JS crawlers (incl. route-specific FAQ JSON-LD);
   // React replaces #root for real users.
   const body = bodyFor(route, m, studio);
-  html = html.replace(/<div id="root">\s*<\/div>/i, `<div id="root">${body}</div>`);
+  html = html.replace(/<div id="root">\s*<\/div>/i, () => `<div id="root">${body}</div>`);
 
   return html;
 }

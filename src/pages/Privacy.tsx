@@ -13,7 +13,7 @@ export default function Privacy({ onNavigate }: { onNavigate: Navigate }) {
         marker="01"
         markerLabel="Privacy"
         title={<>Your data, handled plainly.</>}
-        body="We keep the stack small and collect only what it takes to reply to you and run a subscription. No analytics, no ad tracking, no data for sale. This is the plain-language version of what we hold, why, and the rights you have over it."
+        body="We keep the stack small and collect only what it takes to reply to you and run a subscription. Cookieless analytics, no ad tracking, no data for sale. This is the plain-language version of what we hold, why, and the rights you have over it."
         actions="none"
       />
 

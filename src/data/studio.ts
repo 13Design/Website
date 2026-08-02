@@ -496,7 +496,8 @@ export const refundPolicy: TermsSection[] = [
  * Privacy policy. Plain-language and accurate to how the site actually handles
  * data: two public forms → Supabase, subscription billing → Paddle (we never
  * see card data), onboarding → Trello + Slack, transactional email → Resend,
- * hosting → Netlify, fonts → Google Fonts. No analytics or advertising cookies.
+ * hosting → Netlify, fonts self-hosted, analytics → Cloudflare (cookieless).
+ * No advertising or tracking cookies, so no consent banner is required.
  * Studio is EU-based (Kraków, PL), so this is written to GDPR expectations.
  * Required by Paddle's merchant-of-record / website review. Operational, not a
  * contract — update it here and every surface that renders it updates.
@@ -524,7 +525,7 @@ export const privacyPolicy: TermsSection[] = [
     title: 'The tools we use to run this',
     body: [
       'We keep the stack small and name it plainly. Each of these processes some data on our behalf, under its own security terms:',
-      'Netlify hosts the site. Supabase stores form submissions and subscription records. Resend sends our email (your welcome email, our reply). Paddle handles all payments, invoices, and tax as merchant of record. Trello and Slack are where subscribed clients get a private project board and a shared channel. Google Fonts serves the typefaces, which means Google receives your IP address when the page loads its fonts.',
+      'Netlify hosts the site. Supabase stores form submissions and subscription records. Resend sends our email (your welcome email, our reply). Paddle handles all payments, invoices, and tax as merchant of record. Trello and Slack are where subscribed clients get a private project board and a shared channel. Cloudflare provides privacy-first, cookieless web analytics — aggregate page counts only, no cookies and no profile of you. Our typefaces are served from this site itself, so loading the page shares nothing with a font provider.',
       'Each of these has its own privacy policy governing what it does with data it processes; Paddle in particular acts as its own controller for payment information.',
     ],
   },
@@ -532,7 +533,7 @@ export const privacyPolicy: TermsSection[] = [
     n: '04',
     title: 'Cookies and tracking',
     body: [
-      'We do not run analytics, advertising, or third-party tracking cookies on this site — there is no ad network watching you here, and nothing follows you off the page.',
+      'We run no advertising or third-party tracking cookies on this site — there is no ad network watching you here, and nothing follows you off the page. For traffic numbers we use Cloudflare Web Analytics, which is cookieless and measures pages in aggregate only; it never sets a cookie or builds a profile of you.',
       'The only cookies that may be set are the essential ones Paddle needs to run a secure checkout, and those appear only if you open checkout. That is why you are not greeted by a cookie-consent wall: there is nothing non-essential to consent to.',
     ],
   },

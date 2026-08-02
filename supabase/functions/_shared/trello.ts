@@ -140,7 +140,15 @@ export async function addBoardMember(
   memberId: string,
   type: "normal" | "admin" = "normal",
 ): Promise<void> {
-  await trello("PUT", `/boards/${boardId}/members/${memberId}`, { type });
+  try {
+    await trello("PUT", `/boards/${boardId}/members/${memberId}`, { type });
+  } catch (err) {
+    // The studio account that created the board is already its sole admin, so
+    // Trello refuses to "demote" them to a normal member. That's fine — they're
+    // already on the board with full access; nothing to do.
+    if (String(err).includes("Cannot demote sole admin")) return;
+    throw err;
+  }
 }
 
 // ---------------------------------------------------------------------------

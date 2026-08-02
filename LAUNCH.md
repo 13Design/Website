@@ -156,19 +156,37 @@ edge function. That's a follow-up, not a launch blocker — ask and I'll wire it
 The site sells the Lite and Standard tiers through **Paddle Billing** (overlay
 checkout on the pricing page — Paddle is merchant of record, so it computes and
 remits VAT/sales tax and emails receipts/invoices; there is no Stripe Tax-style
-dashboard setup to get wrong). When a subscription activates, the
-`paddle-webhook` function automatically:
+dashboard setup to get wrong).
 
-1. records the subscription in the `subscriptions` table,
-2. creates a **private Trello board** for the client (lists: 📥 Design requests
-   → 🎨 In progress → 👀 In review → ✅ Done, plus a "Start here" card) and
-   invites them by email,
-3. sends the client a **welcome email** (Resend) with the Trello + Slack links,
-4. pings your **Slack** and emails the studio.
+Three Edge Functions run the automation end-to-end:
 
-Onboarding runs exactly once per subscription (`onboarded_at` guard); if a step
-fails, the studio email lists what needs manual follow-up instead of retrying
-into duplicate boards.
+- **`paddle-webhook`** — on activation, onboards the client (once):
+  1. records the subscription in the `subscriptions` table,
+  2. creates a **private Trello board** (lists: 📥 Design requests → 🎨 In
+     progress → 👀 In review → ✅ Done, plus a "Start here" card), invites the
+     client by email, and adds the **design team**,
+  3. registers a **Trello webhook** on that board (→ `trello-webhook`),
+  4. creates a **private Slack channel** `#<client>-design`, invites the design
+     team, adds the client (Slack Connect if external) or falls back to the
+     standing invite link, and posts a welcome message,
+  5. sends the client a **welcome email** (Resend) with Trello + Slack links,
+  6. pings the studio channel + emails the studio.
+- **`slack-events`** — the client files requests with the `/design-request`
+  slash command or the "Create design request" message shortcut → a Trello card
+  is created in 📥 Design requests, assigned to the default designer, with an
+  **SLA due date** (Lite 2 business days; Standard / Product Partner next
+  business day), and a confirmation posted in the channel. Also handles the
+  **Approve** button (see completion below).
+- **`trello-webhook`** — a card moving between lists posts a status ping to the
+  client's Slack channel; moving a card to **✅ Done** posts a completion message
+  with the final files and an **Approve** button. Approving marks the request
+  approved and **archives the card**.
+
+Onboarding runs exactly once per subscription (`onboarded_at` guard); the
+ongoing webhooks are idempotent too (Slack/Trello redelivery is deduped via
+`processed_events`, completion via `design_requests.completed_notified_at`). If
+an onboarding step fails, the studio email lists what needs manual follow-up
+instead of retrying into duplicate boards/channels.
 
 ### 8a — Paddle account & catalog
 
@@ -197,26 +215,49 @@ into duplicate boards.
    `https://api.trello.com/1/organizations/<name>?key=…&token=…`.
 2. Get an API key + token at <https://trello.com/power-ups/admin> (create a
    Power-Up, then generate a token authorized as you). The token acts as *you*:
-   boards are created under your account and clients are invited from it.
-3. Slack integration for requests: install the **Trello app for Slack**
-   (<https://trello.com/platforms/slack>) in your workspace and link the client
-   boards to your channel — card activity then flows into Slack. (This is a
-   per-workspace, one-time manual setup; the API can't do it.)
+   boards are created under your account and clients are invited from it. On the
+   same page, copy the **OAuth secret** shown next to the API key — that's
+   `TRELLO_API_SECRET`, used to verify webhook signatures. (This is NOT the
+   token; without it, `trello-webhook` rejects every event.)
+3. Find each designer's **Trello member id**
+   (`https://api.trello.com/1/members/<username>?key=…&token=…` → `id`). These
+   go in `DESIGN_TEAM_TRELLO_MEMBER_IDS` (comma-separated) and are added to every
+   new client board; the first (or `DEFAULT_DESIGNER_TRELLO_ID`) is auto-assigned
+   to new request cards.
+4. No manual "Trello app for Slack" step is needed — `trello-webhook` handles
+   card→Slack sync itself, per board, registered automatically at onboarding.
 
-### 8c — Slack
+### 8c — Slack app
 
-1. Studio alerts: create an **incoming webhook** at
-   <https://api.slack.com/apps> (Incoming Webhooks → pick your channel) —
-   that's `SLACK_WEBHOOK_URL`.
-2. Client invites: create a standing **invite link** (Slack → workspace name →
-   Invite people → copy invite link; set it to not expire) — that's
-   `SLACK_INVITE_URL`. It goes into the welcome email. Skip it and the email
-   simply omits the Slack step.
+Create one Slack app at <https://api.slack.com/apps> ("From scratch"), install
+it to the workspace, and copy the **Bot User OAuth Token** (`xoxb-…` →
+`SLACK_BOT_TOKEN`) and the **Signing Secret** (→ `SLACK_SIGNING_SECRET`).
+
+1. **OAuth & Permissions → Bot Token Scopes:** `channels:manage`,
+   `groups:write`, `channels:read`, `groups:read`, `chat:write`, `users:read`,
+   `users:read.email`, `commands`. (Adding external clients to their channel
+   uses Slack Connect, which needs a paid plan; without it, onboarding falls
+   back to the standing invite link.)
+2. **Slash Commands → Create New Command:** `/design-request`, Request URL
+   `https://<ref>.supabase.co/functions/v1/slack-events`, short description
+   "File a design request".
+3. **Interactivity & Shortcuts:** turn on, Request URL = the same
+   `slack-events` URL. Add a **shortcut** of type *On messages* named
+   "Create design request" (callback id can be anything — the function keys off
+   the payload type, not the callback id).
+4. **Event Subscriptions:** optional. If you enable it, use the same
+   `slack-events` URL — the function answers the verification handshake and
+   ignores the rest.
+5. Find each designer's **Slack user id** (profile → More → Copy member ID) for
+   `DESIGN_TEAM_SLACK_USER_IDS` (comma-separated) — they're invited to every new
+   client channel. Optionally set `STUDIO_SLACK_CHANNEL_ID` (an internal ops
+   channel id) for studio alerts, and `SLACK_INVITE_URL` (a non-expiring
+   workspace invite link) for the welcome email's fallback.
 
 ### 8d — Wire it up
 
 ```bash
-# Database (adds paddle/onboarding columns to subscriptions)
+# Database (subscriptions columns + design_requests + processed_events)
 supabase db push
 
 # Function secrets
@@ -225,13 +266,30 @@ supabase secrets set \
   PADDLE_WEBHOOK_SECRET="pdl_ntfset_…" \
   PADDLE_ENV="sandbox" \
   TRELLO_KEY="…" TRELLO_TOKEN="…" TRELLO_WORKSPACE_ID="…" \
-  SLACK_WEBHOOK_URL="https://hooks.slack.com/services/…" \
+  TRELLO_API_SECRET="…" \
+  TRELLO_WEBHOOK_CALLBACK_URL="https://<ref>.supabase.co/functions/v1/trello-webhook" \
+  DESIGN_TEAM_TRELLO_MEMBER_IDS="5f…,60…" \
+  DEFAULT_DESIGNER_TRELLO_ID="5f…" \
+  SLACK_BOT_TOKEN="xoxb-…" \
+  SLACK_SIGNING_SECRET="…" \
+  DESIGN_TEAM_SLACK_USER_IDS="U01…,U02…" \
+  STUDIO_SLACK_CHANNEL_ID="C01…" \
   SLACK_INVITE_URL="https://join.slack.com/t/…"
 
-# Deploy both functions (Paddle signs requests; no Supabase JWT)
-supabase functions deploy paddle-webhook --no-verify-jwt
-supabase functions deploy paddle-portal-session --no-verify-jwt
+# Deploy all four functions (Paddle/Slack/Trello sign their own requests;
+# no Supabase JWT). --use-api avoids the Docker-based bundler (see gotchas).
+supabase functions deploy paddle-webhook --no-verify-jwt --use-api
+supabase functions deploy paddle-portal-session --no-verify-jwt --use-api
+supabase functions deploy slack-events --no-verify-jwt --use-api
+supabase functions deploy trello-webhook --no-verify-jwt --use-api
 ```
+
+> `TRELLO_WEBHOOK_CALLBACK_URL` must be byte-identical to the URL Trello has
+> stored for each board webhook — it's part of the signed payload. `paddle-webhook`
+> registers webhooks with this value and `trello-webhook` verifies against it, so
+> setting it once (shared across functions) keeps them in sync. If you change it
+> later, existing boards' webhooks keep pointing at the old URL and stop
+> verifying — re-register them.
 
 Frontend env (Netlify → Environment variables, and `.env.local` for dev —
 all four are public client-side values):
@@ -250,10 +308,24 @@ all four are public client-side values):
    (any future expiry / CVC).
 2. Confirm: overlay success → redirect to `/subscribe/success` → "Manage
    subscription" opens the Paddle customer portal.
-3. Confirm the automation: `subscriptions` row created + `onboarded_at` set,
-   Trello board exists with the client invited, welcome email sent, Slack ping
-   received, studio email received.
-4. Cancel from the portal and confirm the row updates + "set to cancel" alert.
+3. Confirm onboarding: `subscriptions` row created + `onboarded_at` set, Trello
+   board exists with the client invited **and the design team added**, a Slack
+   channel `#<client>-design` created with the team invited + welcome message,
+   welcome email sent, studio email received.
+4. Confirm the **request workflow**: in the client channel, run
+   `/design-request Test request` → a card appears in 📥 Design requests,
+   assigned + due-dated, with a confirmation in the channel. A `design_requests`
+   row exists.
+5. Confirm the **status + completion workflow**: drag the card across lists →
+   status pings post in the channel; drag it to ✅ Done → a completion message
+   with the **Approve** button posts. Click Approve → the card archives and the
+   message updates to "Approved".
+6. Cancel from the portal and confirm the row updates + "set to cancel" alert.
+
+> **Request intake:** the Slack slash command / message shortcut and adding
+> cards directly in Trello are both live. A **website request form** (posting to
+> an edge function that creates the card) is scaffolded for but not built —
+> `design_requests.source` already allows `'form'`. Ask if you want it added.
 
 ---
 
@@ -265,7 +337,10 @@ all four are public client-side values):
 | Form data          | Supabase tables (`supabase/migrations/`)                 |
 | Email delivery     | Resend, via `supabase/functions/notify-inquiry`          |
 | Subscriptions      | Paddle overlay checkout (`src/lib/checkout.ts`)          |
-| Post-subscribe automation | `supabase/functions/paddle-webhook` (Trello + Slack + welcome email) |
+| Post-subscribe onboarding | `supabase/functions/paddle-webhook` (Trello board + Slack channel + welcome email) |
+| Request intake (Slack)    | `supabase/functions/slack-events` (`/design-request`, shortcut, Approve button) |
+| Card ↔ Slack sync         | `supabase/functions/trello-webhook` (status pings + completion/approval) |
+| Shared automation code    | `supabase/functions/_shared/` (config, trello, slack, email, db) |
 | Billing portal     | `supabase/functions/paddle-portal-session`               |
 | Frontend env vars  | Netlify env vars + local `.env.local` (`.env.example`)   |
 | Function secrets   | `supabase secrets set ...` (not in the repo)             |

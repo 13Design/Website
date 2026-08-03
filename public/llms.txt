@@ -1,6 +1,6 @@
 # 13 Design Studio
 
-> A digital product design agency for AI-native and AI-built products. We turn AI features and AI-generated MVPs into products people trust and understand at first glance. Based in Kraków, Poland; working with founders everywhere.
+> A digital product design agency for AI-native and AI-built products. We turn AI features and AI-generated MVPs into products people trust and understand at first glance. Based in Vinnytsia, Ukraine; working with founders everywhere.
 
 13 Design Studio designs digital products — flows, screens, interaction patterns, design systems, and developer-ready specs — specifically for teams building with AI. Two kinds of clients: startups building AI-native products from day one, and established businesses adding AI to an existing product. All design work is done by humans — human judgment on every flow, screen, and decision.
 
@@ -37,5 +37,5 @@ Fixed monthly price, no annual contract, no lock-in, cancel anytime. A "day" mea
 ## Contact
 
 - Email: hello@13design.org
-- Location: Kraków, Poland (remote, working with founders everywhere)
+- Location: Vinnytsia, Ukraine (remote, working with founders everywhere)
 - Response time: within one business day

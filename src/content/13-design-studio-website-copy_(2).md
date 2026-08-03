@@ -109,7 +109,7 @@ We use AI tools every day to work faster and smarter. What we deliver is the irr
 
 We stay focused on our lane. When the work becomes pure screen production, AI is often the more efficient choice. We concentrate on the decisions that genuinely elevate products and businesses.
 
-You're not handed off to a junior team or an account manager relaying notes. You work directly with the person making the calls — the same person who's in the room for every decision, from the first conversation to the last handoff. Based in Kraków, partnering with founders around the world.
+You're not handed off to a junior team or an account manager relaying notes. You work directly with the person making the calls — the same person who's in the room for every decision, from the first conversation to the last handoff. Based in Vinnytsia, partnering with founders around the world.
 
 ---
 

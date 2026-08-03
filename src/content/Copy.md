@@ -440,5 +440,5 @@ We reply within one business day.
 **13 Design Studio**
 Home · About · Services · Subscription · Our Work · Founding Clients · Contact
 
-Kraków, Poland · working with founders everywhere
+Vinnytsia, Ukraine · working with founders everywhere
 @13Design_Studio · [Email us]

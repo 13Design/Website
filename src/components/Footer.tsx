@@ -43,11 +43,11 @@ export default function Footer({ onNavigate }: { onNavigate: (r: Route) => void 
             </button>
             <p className="mt-5 text-bone-400 max-w-sm text-pretty leading-relaxed">
               A digital product design agency for AI-native and AI-built products.
-              Based in Kraków, partnering with founders everywhere.
+              Based in Vinnytsia, partnering with founders everywhere.
             </p>
             <div className="mt-6 flex items-center gap-2 text-sm text-bone-400">
               <span className="h-1.5 w-1.5 rounded-full bg-ember-500" />
-              Kraków, Poland
+              Vinnytsia, Ukraine
             </div>
           </div>
 
@@ -130,7 +130,7 @@ export default function Footer({ onNavigate }: { onNavigate: (r: Route) => void 
 
         <div className="mt-16 pt-8 border-t border-ink-700/40 flex flex-col sm:flex-row justify-between gap-4 text-xs text-bone-500">
           <p>© {new Date().getFullYear()} 13 Design Studio. All rights reserved.</p>
-          <p className="font-mono tracking-tight">Kraków — for founders everywhere.</p>
+          <p className="font-mono tracking-tight">Vinnytsia — for founders everywhere.</p>
         </div>
       </div>
     </footer>

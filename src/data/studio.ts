@@ -287,8 +287,9 @@ export const directAccessLine =
 export const workingAgreement: TermsSection[] = [
   {
     n: '01',
-    title: 'Working with 13 Design Studio',
+    title: "Who you're working with",
     body: [
+      'The design services on this site are provided by Larysa Benedyk, a sole proprietor based in Vinnytsia, Ukraine, trading as 13 Design Studio (“we”, “us”). You can reach us any time at hello@13design.org.',
       "This sets out how we work with clients — what you own, how we handle confidentiality, when we show work publicly, and the law that governs it. It applies to every engagement unless we've signed something that says otherwise.",
       'It is the plain-language version of what a contract would say. Where a client needs the full document, we sign theirs or provide ours.',
     ],
@@ -337,7 +338,7 @@ export const workingAgreement: TermsSection[] = [
     n: '07',
     title: 'The law that governs this',
     body: [
-      'This agreement is governed by the law of Poland, where the studio is based. If a dispute ever comes up that we cannot resolve directly, that is the jurisdiction it is settled in.',
+      'This agreement is governed by the law of Ukraine, where the studio is based. If a dispute ever comes up that we cannot resolve directly, that is the jurisdiction it is settled in.',
       'We would always rather sort it out over a call first.',
     ],
   },
@@ -498,7 +499,8 @@ export const refundPolicy: TermsSection[] = [
  * see card data), onboarding → Trello + Slack, transactional email → Resend,
  * hosting → Netlify, fonts self-hosted, analytics → Cloudflare (cookieless).
  * No advertising or tracking cookies, so no consent banner is required.
- * Studio is EU-based (Kraków, PL), so this is written to GDPR expectations.
+ * Studio is based in Vinnytsia, Ukraine; written to GDPR expectations for its
+ * EU/UK clients.
  * Required by Paddle's merchant-of-record / website review. Operational, not a
  * contract — update it here and every surface that renders it updates.
  */
@@ -507,7 +509,7 @@ export const privacyPolicy: TermsSection[] = [
     n: '01',
     title: 'Who is responsible for your data',
     body: [
-      'This site is run by 13 Design Studio, a product design studio based in Kraków, Poland. For anything you share with us here, we are the data controller.',
+      'This site is run by 13 Design Studio, the trading name of Larysa Benedyk, a sole proprietor based in Vinnytsia, Ukraine. For anything you share with us here, we are the data controller.',
       'If you ever want to reach a human about your data — what we hold, or to have it changed or removed — email hello@13design.org. A real person answers, usually within one business day.',
     ],
   },
@@ -566,7 +568,7 @@ export const privacyPolicy: TermsSection[] = [
     title: 'Your rights over your data',
     body: [
       'You can ask us for a copy of what we hold, to correct it, to delete it, to limit what we do with it, or to receive it in a portable form. You can withdraw consent at any time, and object to processing we base on legitimate interest.',
-      'To exercise any of these, email hello@13design.org — no special form, just ask. If you are in the EU and think we have handled your data poorly, you also have the right to complain to your local supervisory authority; in Poland that is the President of the Personal Data Protection Office (UODO).',
+      'To exercise any of these, email hello@13design.org — no special form, just ask. If you are in the EU or UK and think we have handled your data poorly, you have the right to complain to your local data protection supervisory authority. If you are in Ukraine, where the studio is based, you may contact the Ukrainian Parliament Commissioner for Human Rights (the Ombudsman).',
     ],
   },
   {

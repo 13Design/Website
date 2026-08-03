@@ -22,7 +22,7 @@ const MARQUEE_ITEMS = [
   'Month-to-month — no lock-in',
   'AI-native & AI-built products',
   'Reply within one business day',
-  'Kraków — working with founders everywhere',
+  'Vinnytsia — working with founders everywhere',
 ];
 
 export default function Home({ onNavigate }: { onNavigate: (r: Route) => void }) {

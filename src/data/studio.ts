@@ -14,7 +14,7 @@ export const services: Service[] = [
     id: 'ai-ux-product-design',
     name: 'AI UX & Product Design',
     audience: 'ai-native',
-    tag: 'sprint · subscription · embedded',
+    tag: 'sprint · embedded',
     body: 'Interaction design for AI-native features — confidence and uncertainty states, human-in-the-loop controls, agent handoff, the moments a user decides whether to trust the output.',
   },
   {
@@ -36,7 +36,7 @@ export const services: Service[] = [
     id: 'ai-integration-ux',
     name: 'AI Integration UX',
     audience: 'existing',
-    tag: 'sprint · subscription · embedded',
+    tag: 'sprint · embedded',
     body: "Designing how a new AI feature sits inside a product that already has users, habits, and expectations — so it feels native to the product, not bolted on.",
   },
   {
@@ -57,7 +57,7 @@ export const services: Service[] = [
     id: 'design-system-maintenance',
     name: 'Design System & Ongoing Maintenance',
     audience: 'existing',
-    tag: 'project-based · subscription',
+    tag: 'project-based',
     body: 'Components, spacing, tokens, and hand-off specs — so every new feature still looks like the same product as you keep shipping.',
   },
   // Either
@@ -71,8 +71,8 @@ export const services: Service[] = [
     id: 'fractional-product-partner',
     name: 'Fractional Product Partner',
     audience: 'either',
-    tag: 'subscription',
-    body: "A part-time design and product lead, ongoing — we help decide what to build and in what order, and keep it coherent as your team and product grow. On the pricing page this is the Product Partner tier: same thing, month-to-month.",
+    tag: 'ongoing',
+    body: "A part-time design and product lead, ongoing — we help decide what to build and in what order, and keep it coherent as your team and product grow.",
   },
 ];
 

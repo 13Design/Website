@@ -18,7 +18,7 @@
 // Deploy: supabase functions deploy slack-events --no-verify-jwt --use-api
 
 import { serviceClient } from "../_shared/db.ts";
-import { REQUEST_LIST, defaultDesignerTrelloId, dueDateFor } from "../_shared/config.ts";
+import { REQUEST_LIST, defaultDesignerTrelloId, dueDateFor, tierLabel } from "../_shared/config.ts";
 import {
   attachUrl,
   archiveCard,
@@ -28,6 +28,8 @@ import {
   moveCard,
 } from "../_shared/trello.ts";
 import { postMessage, verifySlackSignature } from "../_shared/slack.ts";
+import { accessToken, createMonthlyRecurringInvoice, findOrCreateContact } from "../_shared/zoho.ts";
+import { onboard } from "../_shared/onboard.ts";
 import type { SupabaseClient } from "npm:@supabase/supabase-js@2";
 
 const CARD_LINK = "\n\n:point_right: You can add links, files, and priority order on the card.";
@@ -166,6 +168,21 @@ async function handleInteractivity(
     const action = (payload.actions as { action_id: string; value: string }[])?.[0];
     const responseUrl = payload.response_url as string | undefined;
     const actor = (payload.user as { id: string })?.id ?? "";
+
+    // Subscription approve / onboard buttons (posted by notify-inquiry). Ack
+    // Slack immediately (3s limit) and finish the Zoho / onboarding work in the
+    // background, updating the message via response_url when it's done.
+    if (action?.action_id === "approve_subscription" || action?.action_id === "onboard_subscription") {
+      const channelId = (payload.channel as { id?: string })?.id ??
+        (payload.container as { channel_id?: string })?.channel_id;
+      const work = handleSubscribeAction(supabase, action.action_id, action.value, responseUrl, actor, channelId);
+      const wu = (globalThis as { EdgeRuntime?: { waitUntil?: (p: Promise<unknown>) => void } })
+        .EdgeRuntime?.waitUntil;
+      if (wu) wu(work);
+      else await work;
+      return new Response(null, { status: 200 });
+    }
+
     if (!action?.value || !["approve_request", "request_changes"].includes(action.action_id)) {
       return new Response(null, { status: 200 });
     }
@@ -247,16 +264,184 @@ async function handleInteractivity(
 }
 
 /** Replaces the message the button lived on, via Slack's response_url. */
-async function replaceMessage(responseUrl: string | undefined, text: string): Promise<void> {
+async function replaceMessage(
+  responseUrl: string | undefined,
+  text: string,
+  blocks?: unknown[],
+): Promise<void> {
   if (!responseUrl) return;
   try {
     await fetch(responseUrl, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ replace_original: true, text }),
+      body: JSON.stringify({ replace_original: true, text, ...(blocks ? { blocks } : {}) }),
     });
   } catch (err) {
     console.error("response_url update failed:", err);
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Subscription approve / onboard (invoice-based subscriptions)
+// ---------------------------------------------------------------------------
+
+type SubscribeRow = {
+  id: string;
+  name: string;
+  email: string;
+  company: string | null;
+  country: string | null;
+  billing_address: string | null;
+  vat_id: string | null;
+  tier: string;
+  status: string;
+  zoho_customer_id: string | null;
+};
+
+const SUB_TIERS: Record<string, { name: string; amount: number; days: string }> = {
+  lite: { name: "Lite", amount: 800, days: "Up to 5 days / month" },
+  standard: { name: "Standard", amount: 2500, days: "Up to 12 days / month" },
+  "product-partner": { name: "Product Partner", amount: 4500, days: "Up to 20 days / month" },
+};
+
+/**
+ * Handles the two subscription buttons. `approve_subscription` finds/creates the
+ * Zoho customer and raises the monthly recurring invoice (draft), then swaps in
+ * an onboard button. `onboard_subscription` runs the Trello/Slack/email
+ * onboarding and records a `subscriptions` row. Any failure is reported back
+ * into the Slack message; the DB is only advanced after each step succeeds.
+ */
+async function handleSubscribeAction(
+  supabase: SupabaseClient,
+  actionId: string,
+  id: string,
+  responseUrl: string | undefined,
+  actor: string,
+  channelId?: string,
+): Promise<void> {
+  const { data } = await supabase.from("subscribe_requests").select("*").eq("id", id).maybeSingle();
+  const r = data as SubscribeRow | null;
+  if (!r) {
+    await replaceMessage(responseUrl, ":warning: That request wasn't found (it may have been removed).");
+    return;
+  }
+  const tier = SUB_TIERS[r.tier];
+
+  // Actionable buttons are posted as fresh messages — chat.postMessage renders
+  // buttons reliably, whereas response_url message replacement does not.
+  const buttonBlocks = (actId: string, label: string): unknown[] => [{
+    type: "actions",
+    elements: [{
+      type: "button",
+      text: { type: "plain_text", text: label, emoji: true },
+      style: "primary",
+      action_id: actId,
+      value: id,
+    }],
+  }];
+
+  try {
+    if (actionId === "approve_subscription") {
+      if (r.status === "approved") {
+        await replaceMessage(responseUrl, `:information_source: Already approved — *${r.name}*.`);
+        if (channelId) {
+          await postMessage(
+            channelId,
+            `Set up the workspace for *${r.name}* once the invoice is paid:`,
+            buttonBlocks("onboard_subscription", "Client paid — set up workspace"),
+          );
+        }
+        return;
+      }
+      if (r.status !== "pending") {
+        await replaceMessage(responseUrl, `:information_source: Already handled — status is *${r.status}*.`);
+        return;
+      }
+      if (!tier) {
+        await replaceMessage(responseUrl, `:warning: Unknown tier "${r.tier}".`);
+        return;
+      }
+      const clientLabel = r.name || r.email.split("@")[0];
+      const token = await accessToken();
+      const customerId = r.zoho_customer_id ?? await findOrCreateContact(token, {
+        name: r.name,
+        email: r.email,
+        company: r.company ?? undefined,
+        country: r.country ?? undefined,
+        address: r.billing_address ?? undefined,
+        vatId: r.vat_id ?? undefined,
+      });
+      const inv = await createMonthlyRecurringInvoice(token, {
+        customerId,
+        tierName: tier.name,
+        daysPerMonth: tier.days,
+        amount: tier.amount,
+        clientLabel,
+      });
+      await supabase.from("subscribe_requests").update({
+        status: "approved",
+        zoho_customer_id: customerId,
+        zoho_invoice_id: inv.recurringInvoiceId,
+        approved_at: new Date().toISOString(),
+      }).eq("id", id);
+
+      await replaceMessage(
+        responseUrl,
+        `:white_check_mark: *Approved* by <@${actor}> — *${r.name}* on *${tier.name}*. Zoho customer + draft recurring invoice created.`,
+      );
+      if (channelId) {
+        await postMessage(
+          channelId,
+          `Review & send the draft invoice for *${r.name}* in Zoho. When it's paid, set up the workspace:`,
+          buttonBlocks("onboard_subscription", "Client paid — set up workspace"),
+        );
+      }
+      return;
+    }
+
+    // onboard_subscription
+    if (r.status === "active") {
+      await replaceMessage(responseUrl, ":information_source: This client is already onboarded.");
+      return;
+    }
+    if (r.status !== "approved") {
+      await replaceMessage(responseUrl, ":warning: Approve & invoice this request first.");
+      return;
+    }
+
+    const result = await onboard({ email: r.email, name: r.name, tier: r.tier });
+    await supabase.from("subscriptions").insert({
+      email: r.email,
+      name: r.name,
+      tier: r.tier,
+      status: "active",
+      onboarded_at: new Date().toISOString(),
+      trello_board_id: result.boardId,
+      trello_board_url: result.boardUrl,
+      slack_channel_id: result.slackChannelId,
+      slack_channel_name: result.slackChannelName,
+    });
+    await supabase.from("subscribe_requests").update({ status: "active" }).eq("id", id);
+
+    await replaceMessage(
+      responseUrl,
+      `:tada: *Onboarded* by <@${actor}> — *${r.name}* on *${tierLabel(r.tier)}*.` +
+        (result.boardUrl ? `\nTrello: ${result.boardUrl}` : "\n:warning: Trello board FAILED") +
+        (result.slackChannelName ? `\nSlack: #${result.slackChannelName}` : "\n:warning: Slack channel FAILED") +
+        (result.failures.length ? `\n:warning: Follow up: ${result.failures.join("; ")}` : ""),
+    );
+  } catch (err) {
+    console.error("subscribe action failed:", actionId, err);
+    const isApprove = actionId === "approve_subscription";
+    await replaceMessage(responseUrl, `:x: *${isApprove ? "Approve" : "Onboard"} failed* — ${String(err)}`);
+    if (channelId) {
+      // Re-post the button so the studio can retry after fixing the cause.
+      await postMessage(
+        channelId,
+        `:x: *${isApprove ? "Approve" : "Onboard"} failed* — ${String(err)}\nFix it and tap again:`,
+        buttonBlocks(actionId, isApprove ? "Approve & create invoice" : "Client paid — set up workspace"),
+      );
+    }
   }
 }
 

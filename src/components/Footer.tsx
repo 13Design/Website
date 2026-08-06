@@ -4,7 +4,6 @@ import type { Route } from '../lib/router';
 // No "Home" entry: the wordmark above is the way home, same as the navbar logo.
 const NAV_LINKS: { label: string; route: Route }[] = [
   { label: 'Services', route: '/services' },
-  { label: 'Subscription', route: '/pricing' },
   { label: 'About', route: '/about' },
   { label: 'Work', route: '/work' },
   { label: 'Contact', route: '/contact' },

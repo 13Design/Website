@@ -5,7 +5,6 @@ import type { Route } from '../lib/router';
 // No "Home" entry: the logo on the left is the way home, as in the footer.
 const NAV: { label: string; route: Route }[] = [
   { label: 'Services', route: '/services' },
-  { label: 'Subscription', route: '/pricing' },
   { label: 'About', route: '/about' },
   { label: 'Work', route: '/work' },
   { label: 'Founding clients', route: '/founding-clients' },

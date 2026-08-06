@@ -32,6 +32,22 @@ export default function Pricing({ onNavigate }: { onNavigate: Navigate }) {
         onNavigate={onNavigate}
       />
 
+      {/* Coming-soon banner — payments are paused; we take clients on directly for now. */}
+      <section className="relative pt-8 pb-2">
+        <div className="mx-auto max-w-edge px-5 lg:px-8">
+          <div className="rounded-2xl border border-ember-500/30 bg-ember-500/[0.06] p-5 lg:p-6 flex items-start gap-4">
+            <CalendarDays size={20} className="shrink-0 mt-0.5 text-ember-400" />
+            <div>
+              <p className="text-sm font-medium text-bone-100">Subscriptions are coming soon.</p>
+              <p className="mt-1 text-sm text-bone-400 leading-relaxed text-pretty">
+                We're taking on clients directly for now — tell us about your product and we'll take it
+                from there. The plans below are a preview of how the subscription will work.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* How subscription works */}
       <section className="relative py-16 lg:py-20 border-b border-ink-700/40">
         <div className="mx-auto max-w-edge px-5 lg:px-8">
@@ -99,36 +115,20 @@ export default function Pricing({ onNavigate }: { onNavigate: Navigate }) {
                   </ul>
 
                   <button
-                    onClick={() =>
-                      tier.selfServe
-                        ? onNavigate('/subscribe', { tier: tier.id })
-                        : onNavigate('/contact', { tier: tier.id })
-                    }
+                    onClick={() => onNavigate('/contact', { tier: tier.id })}
                     className={`mt-8 w-full group/btn inline-flex items-center justify-center gap-2 rounded-full border px-5 py-3.5 text-sm font-medium transition-all duration-300 hover:gap-3 ${
                       tier.featured
                         ? 'border-transparent bg-ember-500 hover:bg-ember-400 text-ink-950'
                         : 'border-ink-600 hover:border-bone-300 text-bone-100'
                     }`}
                   >
-                    {tier.selfServe ? (
-                      <>
-                        Subscribe
-                        <ArrowUpRight size={15} className="transition-transform group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5" />
-                      </>
-                    ) : (
-                      <>
-                        <CalendarDays size={15} />
-                        Request a call
-                      </>
-                    )}
+                    Talk to us
+                    <ArrowUpRight size={15} className="transition-transform group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5" />
                   </button>
 
-                  {/* min-h reserves two lines so a wrapping note on one card
-                      doesn't push its button out of line with the others. */}
+                  {/* min-h reserves two lines so the note stays aligned across cards. */}
                   <p className="mt-3 min-h-10 text-center text-xs text-bone-500 leading-relaxed">
-                    {tier.selfServe
-                      ? 'Invoice by email · month-to-month · cancel anytime'
-                      : 'We scope this one on a call before anything is charged'}
+                    Subscriptions are coming soon — we're taking clients directly for now.
                   </p>
 
                   {/* What "up to N days" means, one click from the commit point. */}

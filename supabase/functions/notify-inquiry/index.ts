@@ -72,8 +72,8 @@ async function hmacHex(secret: string, msg: string): Promise<string> {
   return Array.from(new Uint8Array(mac)).map((b) => b.toString(16).padStart(2, "0")).join("");
 }
 
-/** Post a plain message to the studio's Slack ops channel via the bot. */
-async function slackPost(text: string): Promise<boolean> {
+/** Post a message (optionally with Block Kit blocks) to the studio Slack channel. */
+async function slackPost(text: string, blocks?: unknown[]): Promise<boolean> {
   const token = Deno.env.get("SLACK_BOT_TOKEN");
   const channel = Deno.env.get("STUDIO_SLACK_CHANNEL_ID");
   if (!token || !channel) {
@@ -83,7 +83,7 @@ async function slackPost(text: string): Promise<boolean> {
   const res = await fetch("https://slack.com/api/chat.postMessage", {
     method: "POST",
     headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json; charset=utf-8" },
-    body: JSON.stringify({ channel, text, unfurl_links: false }),
+    body: JSON.stringify({ channel, text, ...(blocks ? { blocks } : {}), unfurl_links: false }),
   });
   const data = await res.json().catch(() => ({}));
   if (!(data as { ok?: boolean }).ok) console.error("Slack post failed:", JSON.stringify(data));
@@ -109,6 +109,32 @@ function renderRows(record: Record<string, unknown>): string {
       </tr>`;
     })
     .join("");
+}
+
+/** Simple client-facing auto-reply for contact / founder inquiries. */
+function clientWelcomeHtml(firstName: string): string {
+  const hi = firstName && firstName !== "Someone" ? `Hi ${esc(firstName)},` : "Hi,";
+  return `<!doctype html>
+<html><body style="margin:0;background:#f6f6f7;padding:24px;font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;">
+  <div style="max-width:520px;margin:0 auto;background:#fff;border:1px solid #e5e7eb;border-radius:14px;overflow:hidden;">
+    <div style="padding:22px 26px;border-bottom:1px solid #eee;">
+      <div style="font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#9ca3af;">13 Design Studio</div>
+      <div style="font-size:18px;font-weight:600;color:#111827;margin-top:4px;">Thanks for reaching out</div>
+    </div>
+    <div style="padding:22px 26px;color:#374151;font-size:15px;line-height:1.6;">
+      <p style="margin:0 0 14px;">${hi}</p>
+      <p style="margin:0 0 14px;">Thanks for getting in touch — your message reached us, and a real person is reading it.</p>
+      <p style="margin:0 0 14px;">We're a product design studio for AI-native and AI-built products. We work closely and directly: no account managers, no hand-offs — you work with the people doing the design.</p>
+      <p style="margin:0 0 6px;font-weight:600;color:#111827;">What happens next</p>
+      <p style="margin:0 0 14px;">We'll reply within one business day to set up a short call — where we're honest about whether we're the right fit and what it would take to move your product forward.</p>
+      <p style="margin:0 0 14px;">If anything else comes to mind in the meantime, just reply to this email.</p>
+      <p style="margin:18px 0 0;">Talk soon,<br>13 Design Studio</p>
+    </div>
+    <div style="padding:14px 26px;border-top:1px solid #eee;font-size:12px;color:#9ca3af;">
+      13 Design Studio · Vinnytsia, Ukraine · hello@13design.org
+    </div>
+  </div>
+</body></html>`;
 }
 
 Deno.serve(async (req) => {
@@ -145,15 +171,7 @@ Deno.serve(async (req) => {
   // Subscription requests notify the studio via Slack (with a signed one-click
   // "Review & approve" link), not email — nothing here depends on Resend.
   if (isSubscribe) {
-    const base = Deno.env.get("SUPABASE_URL");
-    const secret = Deno.env.get("APPROVE_SECRET");
     const rid = String(record.id ?? "");
-    let link = "";
-    if (base && secret && rid) {
-      link = `${base}/functions/v1/subscribe-approve?id=${encodeURIComponent(rid)}&token=${await hmacHex(secret, rid)}`;
-    } else {
-      console.error("subscribe notify: missing SUPABASE_URL / APPROVE_SECRET / id");
-    }
     const TIER_LABEL: Record<string, string> = {
       lite: "Lite — $800/mo",
       standard: "Standard — $2,500/mo",
@@ -169,9 +187,25 @@ Deno.serve(async (req) => {
       val("billing_address") ? `*Billing:* ${val("billing_address")}` : "",
       val("vat_id") ? `*VAT/Tax ID:* ${val("vat_id")}` : "",
       val("note") ? `*Note:* ${val("note")}` : "",
-      link ? `<${link}|:white_check_mark: Review & approve →>` : ":warning: approve link unavailable (missing APPROVE_SECRET / SUPABASE_URL)",
     ].filter(Boolean);
-    const posted = await slackPost(lines.join("\n"));
+    const summary = lines.join("\n");
+    // A real Slack button (handled by slack-events) — clicking it runs the Zoho
+    // approve. No web page: Supabase serves function HTML as text/plain, and
+    // Slack's request signature authenticates the click.
+    const blocks: unknown[] = [{ type: "section", text: { type: "mrkdwn", text: summary } }];
+    if (rid) {
+      blocks.push({
+        type: "actions",
+        elements: [{
+          type: "button",
+          text: { type: "plain_text", text: "Approve & create invoice", emoji: true },
+          style: "primary",
+          action_id: "approve_subscription",
+          value: rid,
+        }],
+      });
+    }
+    const posted = await slackPost(summary, blocks);
     return new Response(JSON.stringify({ ok: posted, via: "slack" }), {
       status: posted ? 200 : 502,
       headers: { "Content-Type": "application/json" },
@@ -217,6 +251,26 @@ Deno.serve(async (req) => {
       status: 502,
       headers: { "Content-Type": "application/json" },
     });
+  }
+
+  // Auto-reply a simple welcome to the person who reached out (non-fatal —
+  // the studio notification above already went through).
+  const clientEmail = typeof record.email === "string" ? record.email.trim() : "";
+  if (clientEmail) {
+    const welcome = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
+      body: JSON.stringify({
+        from,
+        to: [clientEmail],
+        subject: "Thanks for reaching out — 13 Design Studio",
+        html: clientWelcomeHtml(who.split(" ")[0] ?? ""),
+        reply_to: "hello@13design.org",
+      }),
+    });
+    if (!welcome.ok) {
+      console.error("Client welcome email failed:", welcome.status, await welcome.text());
+    }
   }
 
   return new Response(JSON.stringify({ ok: true }), {

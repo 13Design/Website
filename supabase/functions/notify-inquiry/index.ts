@@ -123,11 +123,11 @@ function clientWelcomeHtml(firstName: string): string {
     </div>
     <div style="padding:22px 26px;color:#374151;font-size:15px;line-height:1.6;">
       <p style="margin:0 0 14px;">${hi}</p>
-      <p style="margin:0 0 14px;">Thanks for getting in touch — your message reached us, and a real person is reading it.</p>
-      <p style="margin:0 0 14px;">We're a product design studio for AI-native and AI-built products. We work closely and directly: no account managers, no hand-offs — you work with the people doing the design.</p>
+      <p style="margin:0 0 14px;">Thank you for reaching out — we're really glad you did.</p>
+      <p style="margin:0 0 14px;">We're a small product design studio for AI-native and AI-built products. We work closely and directly: no account managers, no hand-offs — you work with the people actually doing the design.</p>
       <p style="margin:0 0 6px;font-weight:600;color:#111827;">What happens next</p>
-      <p style="margin:0 0 14px;">We'll reply within one business day to set up a short call — where we're honest about whether we're the right fit and what it would take to move your product forward.</p>
-      <p style="margin:0 0 14px;">If anything else comes to mind in the meantime, just reply to this email.</p>
+      <p style="margin:0 0 14px;">We'll get back to you within one business day to set up a short call — a relaxed conversation to get to know you and your product, where you want to take it, and how we might work together.</p>
+      <p style="margin:0 0 14px;">Until then, feel free to reply with anything else on your mind — we'd genuinely love to hear more about what you're building.</p>
       <p style="margin:18px 0 0;">Talk soon,<br>13 Design Studio</p>
     </div>
     <div style="padding:14px 26px;border-top:1px solid #eee;font-size:12px;color:#9ca3af;">

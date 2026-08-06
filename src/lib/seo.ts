@@ -52,7 +52,7 @@ export function applyRouteMeta(route: Route, search = '') {
   upsertMeta('meta[name="twitter:description"]', 'name', 'twitter:description', meta.description);
 
   // Pages behind a checkout/return flow should not be indexed.
-  const noindex = search.includes('session_id') || route.startsWith('/subscribe/');
+  const noindex = search.includes('session_id') || route.startsWith('/subscribe');
   upsertMeta('meta[name="robots"]', 'name', 'robots',
     noindex ? 'noindex, nofollow' : 'index, follow, max-image-preview:large, max-snippet:-1');
 }

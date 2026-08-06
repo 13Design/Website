@@ -1,31 +1,16 @@
-import { useState } from 'react';
-import { Check, ArrowLeft, Mail, ArrowUpRight, Loader2, AlertCircle, Settings } from 'lucide-react';
+import { Check, ArrowLeft, Mail, ArrowUpRight } from 'lucide-react';
 import Reveal from '../components/Reveal';
 import { subscriptionTiers } from '../data/studio';
-import { openBillingPortal } from '../lib/checkout';
 import type { Navigate } from '../lib/router';
 
 export default function SubscribeSuccess({
   onNavigate,
   tier,
-  txn,
 }: {
   onNavigate: Navigate;
   tier?: string | null;
-  txn?: string | null;
 }) {
   const plan = tier ? subscriptionTiers.find((t) => t.id === tier) : undefined;
-  const [busy, setBusy] = useState(false);
-  const [errorMsg, setErrorMsg] = useState('');
-
-  const manage = async () => {
-    if (!txn || busy) return;
-    setBusy(true);
-    setErrorMsg('');
-    const { error } = await openBillingPortal(txn);
-    setErrorMsg(error);
-    setBusy(false);
-  };
 
   return (
     <main>
@@ -39,7 +24,7 @@ export default function SubscribeSuccess({
               </div>
 
               <h1 className="mt-7 font-display font-medium text-bone-50 text-[clamp(1.8rem,4vw,2.6rem)] leading-[1.05] tracking-tightest text-balance">
-                You're subscribed.
+                Request received.
               </h1>
 
               {plan && (
@@ -50,18 +35,18 @@ export default function SubscribeSuccess({
               )}
 
               <p className="mt-5 text-bone-300 leading-relaxed text-pretty max-w-md mx-auto">
-                Payment went through and your subscription is active. Paddle has emailed
-                you a receipt and invoice — check your inbox. Your workspace is being set
-                up right now.
+                Thanks — we've got your details. We confirm capacity and fit, then email
+                your first invoice, usually within one business day. Nothing is charged
+                until then.
               </p>
 
               <div className="mt-8 rounded-xl border border-ink-700/60 bg-ink-850 p-5 text-left">
                 <p className="text-sm font-medium text-bone-100">What happens next</p>
                 <ol className="mt-3 space-y-2.5">
                   {[
-                    'Check your inbox — an invite to your private Trello request board and a link to join our Slack arrive within a few minutes.',
-                    'We email you within one business day to introduce ourselves and book a kickoff call.',
-                    'File your first request on the board — we start with whatever you put on top.',
+                    'We confirm capacity and fit, then email your first invoice — usually within one business day.',
+                    'You pay it by bank transfer (or a card link, if you asked for one).',
+                    "Once it's paid, you get invites to your private Trello request board and our shared Slack, and we book a kickoff call.",
                   ].map((step, i) => (
                     <li key={i} className="flex items-start gap-3 text-sm text-bone-300">
                       <span className="font-mono text-xs text-ember-500 pt-0.5 shrink-0">
@@ -72,39 +57,6 @@ export default function SubscribeSuccess({
                   ))}
                 </ol>
               </div>
-
-              {errorMsg && (
-                <div className="mt-6 flex items-start gap-3 rounded-xl border border-red-500/30 bg-red-500/10 p-4 text-sm text-red-300 text-left">
-                  <AlertCircle size={18} className="shrink-0 mt-0.5" />
-                  <span>{errorMsg}</span>
-                </div>
-              )}
-
-              {txn && (
-                <div className="mt-8">
-                  <button
-                    onClick={manage}
-                    disabled={busy}
-                    className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-full border border-ink-600 hover:border-bone-300 text-bone-100 px-7 py-3.5 text-sm font-medium transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
-                  >
-                    {busy ? (
-                      <>
-                        <Loader2 size={16} className="animate-spin" />
-                        Opening billing portal…
-                      </>
-                    ) : (
-                      <>
-                        <Settings size={16} />
-                        Manage subscription
-                      </>
-                    )}
-                  </button>
-                  <p className="mt-3 text-xs text-bone-500 leading-relaxed">
-                    Update your card, download invoices, or cancel — anytime. Bookmark this
-                    page, or we'll send you the link.
-                  </p>
-                </div>
-              )}
 
               <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
                 <button

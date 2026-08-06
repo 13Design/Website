@@ -1,8 +1,6 @@
-import { useState } from 'react';
-import { ArrowLeft, ArrowUpRight, Loader2, AlertCircle, Mail, RotateCcw } from 'lucide-react';
+import { ArrowLeft, ArrowUpRight, Mail, RotateCcw } from 'lucide-react';
 import Reveal from '../components/Reveal';
 import { subscriptionTiers } from '../data/studio';
-import { startCheckout } from '../lib/checkout';
 import type { Navigate } from '../lib/router';
 
 export default function SubscribeCancel({
@@ -13,19 +11,6 @@ export default function SubscribeCancel({
   tier?: string | null;
 }) {
   const plan = tier ? subscriptionTiers.find((t) => t.id === tier) : undefined;
-  const [busy, setBusy] = useState(false);
-  const [errorMsg, setErrorMsg] = useState('');
-
-  const retry = async () => {
-    if (!plan?.selfServe || busy) return;
-    setBusy(true);
-    setErrorMsg('');
-    const { error } = await startCheckout(plan.id, ({ tier: t, txn }) =>
-      onNavigate('/subscribe/success', { tier: t, txn }),
-    );
-    setErrorMsg(error);
-    setBusy(false);
-  };
 
   return (
     <main>
@@ -38,41 +23,23 @@ export default function SubscribeCancel({
               </div>
 
               <h1 className="mt-7 font-display font-medium text-bone-50 text-[clamp(1.8rem,4vw,2.6rem)] leading-[1.05] tracking-tightest text-balance">
-                Checkout cancelled.
+                No rush.
               </h1>
 
               <p className="mt-5 text-bone-300 leading-relaxed text-pretty max-w-md mx-auto">
-                No payment was taken and nothing has been set up
+                Nothing has been set up and nothing is charged
                 {plan ? <> — the {plan.name} plan is still there whenever you're ready.</> : '.'}{' '}
-                If something got in the way or you'd rather talk it through first, we're happy
-                to do that instead.
+                Pick the form back up when it suits, or talk it through with us first.
               </p>
-
-              {errorMsg && (
-                <div className="mt-6 flex items-start gap-3 rounded-xl border border-red-500/30 bg-red-500/10 p-4 text-sm text-red-300 text-left">
-                  <AlertCircle size={18} className="shrink-0 mt-0.5" />
-                  <span>{errorMsg}</span>
-                </div>
-              )}
 
               <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
                 {plan?.selfServe && (
                   <button
-                    onClick={retry}
-                    disabled={busy}
-                    className="w-full sm:w-auto group inline-flex items-center justify-center gap-2.5 bg-ember-500 hover:bg-ember-400 disabled:opacity-60 disabled:cursor-not-allowed text-ink-950 font-medium px-7 py-3.5 rounded-full transition-all duration-300 hover:gap-3.5"
+                    onClick={() => onNavigate('/subscribe', { tier: plan.id })}
+                    className="w-full sm:w-auto group inline-flex items-center justify-center gap-2.5 bg-ember-500 hover:bg-ember-400 text-ink-950 font-medium px-7 py-3.5 rounded-full transition-all duration-300 hover:gap-3.5"
                   >
-                    {busy ? (
-                      <>
-                        <Loader2 size={17} className="animate-spin" />
-                        Opening checkout…
-                      </>
-                    ) : (
-                      <>
-                        Try again
-                        <ArrowUpRight size={17} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-                      </>
-                    )}
+                    Back to the form
+                    <ArrowUpRight size={17} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                   </button>
                 )}
                 <button

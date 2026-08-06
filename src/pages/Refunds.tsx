@@ -13,7 +13,7 @@ export default function Refunds({ onNavigate }: { onNavigate: Navigate }) {
         marker="01"
         markerLabel="Refunds & cancellation"
         title={<>Cancel anytime. Backed by a guarantee.</>}
-        body="Subscriptions are month-to-month and processed by Paddle, our merchant of record — and your first month is covered by a satisfaction guarantee. This is the plain-language version of how cancelling and refunds work, written to be read before you subscribe."
+        body="Subscriptions are month-to-month, invoiced directly by us — and your first month is covered by a satisfaction guarantee. This is the plain-language version of how cancelling and refunds work, written to be read before you subscribe."
         actions="none"
       />
 
@@ -48,8 +48,8 @@ export default function Refunds({ onNavigate }: { onNavigate: Navigate }) {
               Question about a charge?
             </h2>
             <p className="mt-4 text-bone-300 leading-relaxed text-pretty max-w-xl">
-              Email us with your account email and the Paddle receipt number and we'll sort it out
-              within one business day — a duplicate charge, a cancellation, or anything that doesn't
+              Email us with your account email and the invoice number and we'll sort it out
+              within one business day — a duplicate invoice, a cancellation, or anything that doesn't
               look right.
             </p>
             <div className="mt-7 flex flex-col sm:flex-row gap-3">

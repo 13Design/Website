@@ -8,6 +8,7 @@ export type Route =
   | '/contact'
   | '/work'
   | '/founding-clients'
+  | '/subscribe'
   | '/subscribe/success'
   | '/subscribe/cancel'
   | '/terms'
@@ -25,6 +26,7 @@ const ROUTES: Route[] = [
   '/contact',
   '/work',
   '/founding-clients',
+  '/subscribe',
   '/subscribe/success',
   '/subscribe/cancel',
   '/terms',

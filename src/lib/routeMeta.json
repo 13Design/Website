@@ -31,13 +31,17 @@
       "title": "Founding clients — build the first case studies with us | 13 Design Studio",
       "description": "We are taking on a small number of founding clients on terms that reflect it. Help build our first case studies and be among the first names on our Work page."
     },
+    "/subscribe": {
+      "title": "Start your subscription — 13 Design Studio",
+      "description": "Share the billing details we need to raise your first invoice. We confirm capacity and fit before anything is charged."
+    },
     "/subscribe/success": {
-      "title": "You're subscribed — 13 Design Studio",
-      "description": "Your design subscription is active. Here is what happens next."
+      "title": "Request received — 13 Design Studio",
+      "description": "Thanks for your subscription request. We'll confirm the fit and email your first invoice — here's what happens next."
     },
     "/subscribe/cancel": {
-      "title": "Checkout cancelled — 13 Design Studio",
-      "description": "No payment was taken. Your plan is still there whenever you are ready."
+      "title": "No rush — 13 Design Studio",
+      "description": "Nothing was set up and nothing is charged. Your plan is still there whenever you are ready."
     },
     "/terms": {
       "title": "Terms & agreement — 13 Design Studio",
@@ -45,7 +49,7 @@
     },
     "/refunds": {
       "title": "Refund & cancellation policy — 13 Design Studio",
-      "description": "Month-to-month design subscriptions billed through Paddle: a first-month satisfaction guarantee (50% back), cancel anytime, keep access to the end of your paid month, and no cancellation fee."
+      "description": "Month-to-month design subscriptions, invoiced directly: a first-month satisfaction guarantee (50% back), cancel anytime, keep access to the end of your paid month, and no cancellation fee."
     },
     "/privacy": {
       "title": "Privacy policy — 13 Design Studio",

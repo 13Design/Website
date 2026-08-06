@@ -1,11 +1,10 @@
 import { useState } from 'react';
-import { ArrowUpRight, Loader2, AlertCircle, CalendarDays, Plus, Minus, FileText } from 'lucide-react';
+import { ArrowUpRight, CalendarDays, Plus, Minus, FileText } from 'lucide-react';
 import Reveal from '../components/Reveal';
 import PageHeader from '../components/PageHeader';
 import SectionMarker from '../components/SectionMarker';
 import SubscriptionJourney from '../components/SubscriptionJourney';
 import ClosingCTA from '../components/ClosingCTA';
-import { startCheckout } from '../lib/checkout';
 import JsonLd, { faqPageSchema } from '../components/JsonLd';
 import {
   subscriptionFaq,
@@ -19,25 +18,7 @@ import {
 import type { Navigate } from '../lib/router';
 
 export default function Pricing({ onNavigate }: { onNavigate: Navigate }) {
-  const [busyTier, setBusyTier] = useState<string | null>(null);
   const [openFaq, setOpenFaq] = useState<number | null>(0);
-  const [failedTier, setFailedTier] = useState<string | null>(null);
-  const [errorMsg, setErrorMsg] = useState('');
-
-  const handleSubscribe = async (id: string) => {
-    if (busyTier) return;
-    setBusyTier(id);
-    setFailedTier(null);
-    setErrorMsg('');
-    // Paddle opens as an overlay on this page; on completion we carry the
-    // transaction id to the success page (it unlocks the billing portal).
-    const { error } = await startCheckout(id, ({ tier, txn }) =>
-      onNavigate('/subscribe/success', { tier, txn }),
-    );
-    setFailedTier(error ? id : null);
-    setErrorMsg(error);
-    setBusyTier(null);
-  };
 
   return (
     <main>
@@ -120,22 +101,16 @@ export default function Pricing({ onNavigate }: { onNavigate: Navigate }) {
                   <button
                     onClick={() =>
                       tier.selfServe
-                        ? handleSubscribe(tier.id)
+                        ? onNavigate('/subscribe', { tier: tier.id })
                         : onNavigate('/contact', { tier: tier.id })
                     }
-                    disabled={busyTier === tier.id}
-                    className={`mt-8 w-full group/btn inline-flex items-center justify-center gap-2 rounded-full border px-5 py-3.5 text-sm font-medium transition-all duration-300 hover:gap-3 disabled:opacity-60 disabled:cursor-not-allowed ${
+                    className={`mt-8 w-full group/btn inline-flex items-center justify-center gap-2 rounded-full border px-5 py-3.5 text-sm font-medium transition-all duration-300 hover:gap-3 ${
                       tier.featured
                         ? 'border-transparent bg-ember-500 hover:bg-ember-400 text-ink-950'
                         : 'border-ink-600 hover:border-bone-300 text-bone-100'
                     }`}
                   >
-                    {busyTier === tier.id ? (
-                      <>
-                        <Loader2 size={15} className="animate-spin" />
-                        Opening checkout…
-                      </>
-                    ) : tier.selfServe ? (
+                    {tier.selfServe ? (
                       <>
                         Subscribe
                         <ArrowUpRight size={15} className="transition-transform group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5" />
@@ -152,7 +127,7 @@ export default function Pricing({ onNavigate }: { onNavigate: Navigate }) {
                       doesn't push its button out of line with the others. */}
                   <p className="mt-3 min-h-10 text-center text-xs text-bone-500 leading-relaxed">
                     {tier.selfServe
-                      ? 'Card payment · month-to-month · cancel anytime'
+                      ? 'Invoice by email · month-to-month · cancel anytime'
                       : 'We scope this one on a call before anything is charged'}
                   </p>
 
@@ -165,13 +140,6 @@ export default function Pricing({ onNavigate }: { onNavigate: Navigate }) {
                     <FileText size={13} />
                     <span className="link-underline">Terms, and what &ldquo;{tier.daysPerMonth.toLowerCase().replace(' / month', '')}&rdquo; means</span>
                   </button>
-
-                  {failedTier === tier.id && errorMsg && (
-                    <div className="mt-3 flex items-start gap-2.5 rounded-xl border border-red-500/30 bg-red-500/10 p-3 text-xs text-red-300 text-left">
-                      <AlertCircle size={15} className="shrink-0 mt-0.5" />
-                      <span>{errorMsg}</span>
-                    </div>
-                  )}
                 </div>
               </Reveal>
             ))}

@@ -8,6 +8,7 @@ import About from './pages/About';
 import Contact from './pages/Contact';
 import Work from './pages/Work';
 import FoundingClients from './pages/FoundingClients';
+import Subscribe from './pages/Subscribe';
 import SubscribeSuccess from './pages/SubscribeSuccess';
 import SubscribeCancel from './pages/SubscribeCancel';
 import Terms from './pages/Terms';
@@ -45,12 +46,9 @@ export default function App() {
         {route === '/contact' && <Contact onNavigate={navigate} tier={params.get('tier')} />}
         {route === '/work' && <Work onNavigate={navigate} />}
         {route === '/founding-clients' && <FoundingClients onNavigate={navigate} />}
+        {route === '/subscribe' && <Subscribe onNavigate={navigate} tier={params.get('tier')} />}
         {route === '/subscribe/success' && (
-          <SubscribeSuccess
-            onNavigate={navigate}
-            tier={params.get('tier')}
-            txn={params.get('txn')}
-          />
+          <SubscribeSuccess onNavigate={navigate} tier={params.get('tier')} />
         )}
         {route === '/subscribe/cancel' && (
           <SubscribeCancel onNavigate={navigate} tier={params.get('tier')} />

@@ -155,7 +155,7 @@ export type SubTier = {
   daysPerMonth: string;
   includes: string[];
   featured?: boolean;
-  /** Purchasable directly via Paddle checkout. Product Partner is call-first. */
+  /** Self-serve tiers route to the /subscribe billing form. Product Partner is call-first. */
   selfServe?: boolean;
 };
 
@@ -400,8 +400,8 @@ export const subscriptionTerms: TermsSection[] = [
     n: '06',
     title: 'Billing',
     body: [
-      'Subscriptions are paid by card through Paddle, our merchant of record. You are charged when you subscribe and on the same date each month after that, with VAT or sales tax handled correctly for your country at checkout.',
-      'Paddle emails you a receipt and an invoice for every payment, so your finance team gets what it needs without asking us for it.',
+      'We invoice you directly — there is no third-party checkout to go through. Once we have confirmed capacity and fit, we email your first invoice; it is payable by bank transfer (or by a card link on request), and any applicable tax is shown on the invoice itself.',
+      'We invoice you the same way on the same date each month after that, and email you a receipt and a full invoice every time, so your finance team gets what it needs without asking us for it.',
     ],
   },
   {
@@ -409,7 +409,7 @@ export const subscriptionTerms: TermsSection[] = [
     title: 'Changing or cancelling',
     body: [
       'Everything is month-to-month. There is no annual contract and no early-termination fee.',
-      'You can cancel yourself from the billing portal — the link is on your confirmation page and on every invoice. You keep access until the end of the month you have already paid for, and you are not charged again.',
+      'To cancel, just tell us — email hello@13design.org, or let us know before your renewal date. You keep access until the end of the month you have already paid for, and you are not invoiced again.',
       'To move between tiers, tell us before your renewal date and we will switch you for the next cycle.',
     ],
   },
@@ -435,7 +435,8 @@ export const subscriptionTerms: TermsSection[] = [
 /**
  * Refund & cancellation policy. Consistent with subscriptionTerms (month-to-
  * month, cancel anytime, access to end of paid period, reserved capacity → no
- * pro-rata refunds) and written to satisfy Paddle's merchant-of-record review.
+ * pro-rata refunds). Billing is invoiced directly by the studio — no third-party
+ * merchant of record — so there is no external buyer-support channel.
  * Operational, not a contract. The refund stance in §03 is a business decision
  * — change it here and every surface that renders it updates.
  */
@@ -444,16 +445,16 @@ export const refundPolicy: TermsSection[] = [
     n: '01',
     title: 'Who you pay, and when',
     body: [
-      'Subscriptions are sold and processed by Paddle, our payment provider and merchant of record. Paddle handles the billing, the receipts and invoices, the tax, and any refunds. Your card statement may show “Paddle” or “paddle.net”.',
-      'The plan fee is charged when you subscribe and again on the same date each month, until you cancel. Paddle emails you a receipt and a full invoice every time.',
+      'Your subscription is billed by 13 Design Studio directly — there is no third-party payment processor or merchant of record between us. We email you the invoice, and you pay it by bank transfer (or by a card link, if you ask us for one).',
+      'The plan fee is invoiced once we have confirmed the fit, and again on the same date each month after that, until you cancel. We email you a receipt and a full invoice every time.',
     ],
   },
   {
     n: '02',
     title: 'Cancel anytime',
     body: [
-      'Every plan is month-to-month. You can cancel whenever you like — from the billing portal (the link is on your confirmation page and on every Paddle receipt), or by emailing hello@13design.org and we will do it for you.',
-      'Cancelling stops all future charges. You keep access for the rest of the month you have already paid for, and you are not charged again after that.',
+      'Every plan is month-to-month. To cancel, just email hello@13design.org, or tell us before your renewal date — we take care of it for you.',
+      'Cancelling stops all future invoices. You keep access for the rest of the month you have already paid for, and you are not invoiced again after that.',
       'There is no minimum term, no annual contract, and no cancellation fee.',
     ],
   },
@@ -470,16 +471,15 @@ export const refundPolicy: TermsSection[] = [
     title: 'Refunds after the first month',
     body: [
       'From the second month on, the monthly fee reserves a share of the studio’s capacity for your product — held and staffed for you whether or not every day is used, and unused days do not roll over. So those months are generally non-refundable once the billing month has begun; cancelling stops your next payment rather than refunding the current one.',
-      'Two things we always refund, in any month: a billing mistake — a duplicate charge, an accidental one, or a charge taken after you had already cancelled — and a month where we failed to deliver what it promised for reasons on our side.',
-      'Refunds are issued through Paddle to your original payment method and usually appear within 5–10 business days.',
+      'Two things we always refund, in any month: a billing mistake — a duplicate invoice, one raised in error, or one paid after you had already cancelled — and a month where we failed to deliver what it promised for reasons on our side.',
+      'Refunds are returned to your original payment method — a transfer back to the account you paid from — and usually appear within a few business days.',
     ],
   },
   {
     n: '05',
     title: 'How to request a refund or raise a billing issue',
     body: [
-      'Email hello@13design.org with the email on your account and the Paddle receipt or order number. We reply within one business day.',
-      'You can also contact Paddle directly, as the merchant of record, through paddle.net — Paddle Buyer Support can find your receipts and help with any payment.',
+      'Email hello@13design.org with the email on your account and the invoice number. We reply within one business day, and because we handle billing ourselves there is no third-party support queue to go through.',
       'None of the above limits any statutory consumer rights you may have under the mandatory law that applies to you; where such rights apply, they come first.',
     ],
   },
@@ -487,7 +487,7 @@ export const refundPolicy: TermsSection[] = [
     n: '06',
     title: 'Switching plans',
     body: [
-      'To move up or down a tier, tell us before your renewal date and we will switch you for the next cycle. Any mid-cycle proration is handled by Paddle where it applies.',
+      'To move up or down a tier, tell us before your renewal date and we will switch you for the next cycle, invoicing the new rate from then. We change tiers at the cycle boundary, so there is no mid-cycle proration to untangle.',
       'Product Partner is scoped on a call before anything is charged, so there is nothing to refund on it before you have agreed to start.',
     ],
   },
@@ -495,14 +495,14 @@ export const refundPolicy: TermsSection[] = [
 
 /**
  * Privacy policy. Plain-language and accurate to how the site actually handles
- * data: two public forms → Supabase, subscription billing → Paddle (we never
- * see card data), onboarding → Trello + Slack, transactional email → Resend,
- * hosting → Netlify, fonts self-hosted, analytics → Cloudflare (cookieless).
- * No advertising or tracking cookies, so no consent banner is required.
- * Studio is based in Vinnytsia, Ukraine; written to GDPR expectations for its
- * EU/UK clients.
- * Required by Paddle's merchant-of-record / website review. Operational, not a
- * contract — update it here and every surface that renders it updates.
+ * data: two public forms + a subscribe billing form → Supabase, invoices raised
+ * by our invoicing provider (we never handle card data), onboarding → Trello +
+ * Slack, transactional email → Resend, hosting → Netlify, fonts self-hosted,
+ * analytics → Cloudflare (cookieless). No on-site checkout and no advertising or
+ * tracking cookies, so no consent banner is required. Studio is based in
+ * Vinnytsia, Ukraine; written to GDPR expectations for its EU/UK clients.
+ * Operational, not a contract — update it here and every surface that renders it
+ * updates.
  */
 export const privacyPolicy: TermsSection[] = [
   {
@@ -518,7 +518,7 @@ export const privacyPolicy: TermsSection[] = [
     title: 'What we collect, and what we do not',
     body: [
       'From the contact and founding-client forms: your name, email, and whatever you choose to tell us — your company, your product link, your timeline, and the message itself. Nothing on those forms is required beyond what it takes to reply to you.',
-      'If you subscribe, our payment provider Paddle collects and processes your billing details. We never see or store your full card number — we only receive back the essentials to run your subscription, such as your email, plan, and a transaction reference.',
+      'If you subscribe, the billing form asks for the details we need to raise an invoice: your name, email, company, billing address, and any tax ID. Payment itself happens by bank transfer, or a card link if you ask for one, so we never see or store your full card number.',
       'We do not buy data about you, we do not build advertising profiles, and we do not ask for anything we do not need to do the work.',
     ],
   },
@@ -527,8 +527,8 @@ export const privacyPolicy: TermsSection[] = [
     title: 'The tools we use to run this',
     body: [
       'We keep the stack small and name it plainly. Each of these processes some data on our behalf, under its own security terms:',
-      'Netlify hosts the site. Supabase stores form submissions and subscription records. Resend sends our email (your welcome email, our reply). Paddle handles all payments, invoices, and tax as merchant of record. Trello and Slack are where subscribed clients get a private project board and a shared channel. Cloudflare provides privacy-first, cookieless web analytics — aggregate page counts only, no cookies and no profile of you. Our typefaces are served from this site itself, so loading the page shares nothing with a font provider.',
-      'Each of these has its own privacy policy governing what it does with data it processes; Paddle in particular acts as its own controller for payment information.',
+      'Netlify hosts the site. Supabase stores form submissions and subscription records. Resend sends our email (your welcome email, our reply). Our invoicing provider generates and emails your invoices and records payment. Trello and Slack are where subscribed clients get a private project board and a shared channel. Cloudflare provides privacy-first, cookieless web analytics — aggregate page counts only, no cookies and no profile of you. Our typefaces are served from this site itself, so loading the page shares nothing with a font provider.',
+      'Each of these has its own privacy policy governing what it does with data it processes.',
     ],
   },
   {
@@ -536,7 +536,7 @@ export const privacyPolicy: TermsSection[] = [
     title: 'Cookies and tracking',
     body: [
       'We run no advertising or third-party tracking cookies on this site — there is no ad network watching you here, and nothing follows you off the page. For traffic numbers we use Cloudflare Web Analytics, which is cookieless and measures pages in aggregate only; it never sets a cookie or builds a profile of you.',
-      'The only cookies that may be set are the essential ones Paddle needs to run a secure checkout, and those appear only if you open checkout. That is why you are not greeted by a cookie-consent wall: there is nothing non-essential to consent to.',
+      'We run no checkout or payment widget on this site — billing happens over email and bank transfer — so no payment cookies are set here either. That is why you are not greeted by a cookie-consent wall: there is nothing non-essential to consent to.',
     ],
   },
   {
@@ -575,7 +575,7 @@ export const privacyPolicy: TermsSection[] = [
     n: '09',
     title: 'How we protect it',
     body: [
-      'Data sits behind access controls with the providers named above; our database is locked down so the public forms can write to it but not read anything back. Payment data is handled entirely by Paddle and never touches our servers.',
+      'Data sits behind access controls with the providers named above; our database is locked down so the public forms can write to it but not read anything back. We never handle your full card number — payment happens by bank transfer, or a card link, outside our systems.',
       'No system is perfect, but we keep the surface small on purpose — the less we collect and the fewer places it lives, the less there is to go wrong.',
     ],
   },
@@ -596,7 +596,7 @@ export const subscriptionFaq = [
   },
   {
     q: 'How do I cancel?',
-    a: "Yourself, from the billing portal — the link is on your confirmation page and every invoice. You can cancel, update your card, or download past invoices there without emailing us. You keep access until the end of the month you've already paid for.",
+    a: "Just tell us — email hello@13design.org, or let us know before your renewal date, and we cancel it for you. There's no portal to hunt through. You keep access until the end of the month you've already paid for, and you're not invoiced again.",
   },
   {
     q: 'Can I switch tiers later?',
@@ -604,7 +604,7 @@ export const subscriptionFaq = [
   },
   {
     q: 'How and when am I billed?',
-    a: "By card, through Paddle — our merchant of record, so VAT or sales tax is handled correctly for your country at checkout. You're charged when you subscribe and on the same date each month after that. Paddle emails you a receipt and a proper invoice every time, so your accountant gets what they need without asking us.",
+    a: "We invoice you directly — there's no third-party checkout. Once we've confirmed the fit, we email your first invoice, payable by bank transfer (or a card link if you ask), and again on the same date each month after that. We email a receipt and a proper invoice every time, so your accountant gets what they need, and any applicable tax is shown on the invoice.",
   },
   {
     q: "Why can't I subscribe to Product Partner directly?",
@@ -612,7 +612,7 @@ export const subscriptionFaq = [
   },
   {
     q: 'What happens right after I subscribe?',
-    a: "Within a few minutes you get two invites by email: a private Trello board where you file and track design requests, and our shared Slack for quick questions and day-to-day chat. Within one business day we email you personally to book a kickoff call, then work starts with whatever you put at the top of the board.",
+    a: "You send the billing form, we confirm capacity and fit, and email your first invoice — usually within one business day. Once it's paid, you get two invites by email: a private Trello board where you file and track design requests, and our shared Slack for quick questions and day-to-day chat. We email you personally to book a kickoff call, then work starts with whatever you put at the top of the board.",
   },
   {
     q: "Which tier should I pick?",

@@ -328,12 +328,12 @@ function SceneRepeat() {
 const STEPS: { title: string; blurb: string; scene: () => ReactNode }[] = [
   {
     title: 'Subscribe',
-    blurb: 'Pick a tier and pay by card. Paddle sends the receipt and handles the tax — done in two minutes.',
+    blurb: 'Pick a tier and share your billing details. We confirm the fit, then email your first invoice — pay by bank transfer.',
     scene: SceneSubscribe,
   },
   {
     title: 'Join Trello & Slack',
-    blurb: 'Two invites land in your inbox within minutes: your private request board, and our shared Slack.',
+    blurb: 'Once your first invoice is paid, two invites land in your inbox: your private request board, and our shared Slack.',
     scene: SceneInvites,
   },
   {

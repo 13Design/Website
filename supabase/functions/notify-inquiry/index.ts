@@ -37,17 +37,44 @@ const LABELS: Record<string, string> = {
   message: "Message",
   anything_else: "Anything else",
   ok_to_share: "OK to share",
+  country: "Country",
+  billing_address: "Billing address",
+  vat_id: "VAT / Tax ID",
+  note: "Note",
 };
 
 const ORDER = Object.keys(LABELS);
+
+// Internal / lifecycle columns never shown in the notification email.
+const HIDDEN = new Set([
+  "id",
+  "created_at",
+  "status",
+  "zoho_customer_id",
+  "zoho_invoice_id",
+  "approved_at",
+]);
 
 function esc(s: string): string {
   return s.replace(/[&<>]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c]!));
 }
 
+/** Hex HMAC-SHA256 — must match subscribe-approve's token scheme. */
+async function hmacHex(secret: string, msg: string): Promise<string> {
+  const key = await crypto.subtle.importKey(
+    "raw",
+    new TextEncoder().encode(secret),
+    { name: "HMAC", hash: "SHA-256" },
+    false,
+    ["sign"],
+  );
+  const mac = await crypto.subtle.sign("HMAC", key, new TextEncoder().encode(msg));
+  return Array.from(new Uint8Array(mac)).map((b) => b.toString(16).padStart(2, "0")).join("");
+}
+
 function renderRows(record: Record<string, unknown>): string {
   const keys = Object.keys(record)
-    .filter((k) => k !== "id" && k !== "created_at" && record[k] != null && String(record[k]).trim() !== "")
+    .filter((k) => !HIDDEN.has(k) && record[k] != null && String(record[k]).trim() !== "")
     .sort((a, b) => {
       const ia = ORDER.indexOf(a);
       const ib = ORDER.indexOf(b);
@@ -97,11 +124,33 @@ Deno.serve(async (req) => {
 
   const record = payload.record ?? {};
   const isFounder = payload.table === "founder_inquiries";
-  const kind = isFounder ? "Founding-client application" : "Contact message";
+  const isSubscribe = payload.table === "subscribe_requests";
+  const kind = isSubscribe
+    ? "Subscription request"
+    : isFounder
+    ? "Founding-client application"
+    : "Contact message";
   const who = String(record.name ?? "Someone");
   const subject = `New ${kind.toLowerCase()} — ${who}`;
 
   const replyTo = typeof record.email === "string" ? record.email : undefined;
+
+  // For subscription requests, add a signed one-click "Review & approve" link
+  // to the studio's control panel (subscribe-approve). GET-safe: it only opens
+  // a confirm page, never mutates, so email link-scanners can't act on it.
+  let approveButton = "";
+  if (isSubscribe) {
+    const base = Deno.env.get("SUPABASE_URL");
+    const secret = Deno.env.get("APPROVE_SECRET");
+    const rid = String(record.id ?? "");
+    if (base && secret && rid) {
+      const sig = await hmacHex(secret, rid);
+      const link = `${base}/functions/v1/subscribe-approve?id=${encodeURIComponent(rid)}&token=${sig}`;
+      approveButton = `<div style="padding:0 24px 22px;"><a href="${esc(link)}" style="display:inline-block;background:#e8744c;color:#0b0b0d;text-decoration:none;font-size:14px;font-weight:600;padding:11px 20px;border-radius:9999px;">Review &amp; approve</a></div>`;
+    } else {
+      console.error("subscribe_requests notify: missing SUPABASE_URL / APPROVE_SECRET / id");
+    }
+  }
 
   const html = `<!doctype html>
 <html><body style="margin:0;background:#f6f6f7;padding:24px;font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;">
@@ -113,6 +162,7 @@ Deno.serve(async (req) => {
     <div style="padding:20px 24px;">
       <table style="border-collapse:collapse;width:100%;">${renderRows(record)}</table>
     </div>
+    ${approveButton}
     ${replyTo ? `<div style="padding:0 24px 22px;"><a href="mailto:${esc(replyTo)}" style="display:inline-block;background:#111827;color:#fff;text-decoration:none;font-size:14px;padding:10px 18px;border-radius:9999px;">Reply to ${esc(who)}</a></div>` : ""}
   </div>
 </body></html>`;

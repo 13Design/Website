@@ -446,6 +446,49 @@ async function handleSubscribeAction(
 }
 
 // ---------------------------------------------------------------------------
+// Onboard a client directly (Slack slash command — no payment/tier)
+// ---------------------------------------------------------------------------
+
+/**
+ * Provisions a client's private Trello board + Slack channel + welcome email
+ * (reusing the shared onboarding), records a `subscriptions` row so their board
+ * activity syncs to their channel, and reports back into the ops channel the
+ * command was run from. Runs in the background — the slash command acks first.
+ */
+async function onboardClient(
+  supabase: SupabaseClient,
+  channelId: string,
+  email: string,
+  name: string,
+): Promise<void> {
+  try {
+    const result = await onboard({ email, name, tier: "", planLabel: "" });
+    await supabase.from("subscriptions").insert({
+      email,
+      name: name || null,
+      status: "active",
+      onboarded_at: new Date().toISOString(),
+      trello_board_id: result.boardId,
+      trello_board_url: result.boardUrl,
+      slack_channel_id: result.slackChannelId,
+      slack_channel_name: result.slackChannelName,
+    });
+    await postMessage(
+      channelId,
+      `:tada: *Onboarded ${name || email}* — ${email}` +
+        (result.boardUrl ? `\nTrello: ${result.boardUrl}` : "\n:warning: Trello board FAILED") +
+        (result.slackChannelName ? `\nSlack: #${result.slackChannelName}` : "\n:warning: Slack channel FAILED") +
+        (result.failures.length
+          ? `\n:warning: Follow up: ${result.failures.join("; ")}`
+          : "\n:email: Welcome email with invites sent."),
+    );
+  } catch (err) {
+    console.error("onboard-client failed:", err);
+    await postMessage(channelId, `:x: *Onboarding ${email} failed* — ${String(err)}`);
+  }
+}
+
+// ---------------------------------------------------------------------------
 // Handler
 // ---------------------------------------------------------------------------
 
@@ -496,6 +539,25 @@ Deno.serve(async (req) => {
     const channelId = form.get("channel_id") ?? "";
     const requesterId = form.get("user_id") ?? "";
     const text = form.get("text") ?? "";
+
+    // Onboard a client directly: /onboard-client client@email.com Client Name
+    if (["/onboard-client", "/onboard", "/new-client"].includes(command)) {
+      const parts = text.trim().split(/\s+/);
+      const email = parts[0] ?? "";
+      const name = parts.slice(1).join(" ");
+      if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
+        return ephemeral("Usage: `/onboard-client client@email.com Client Name`");
+      }
+      const work = onboardClient(supabase, channelId, email, name);
+      const wu = (globalThis as { EdgeRuntime?: { waitUntil?: (p: Promise<unknown>) => void } })
+        .EdgeRuntime?.waitUntil;
+      if (wu) wu(work);
+      else work.catch((e) => console.error(e));
+      return ephemeral(
+        `:hourglass_flowing_sand: Setting up *${email}*… I'll post here when the board, channel, and welcome email are ready.`,
+      );
+    }
+
     if (!text.trim()) {
       return ephemeral("Add a short description, e.g. `/design-request New onboarding empty state`.");
     }

@@ -114,7 +114,7 @@ export function welcomeHtml(opts: {
       <div style="padding:22px 24px;border-bottom:1px solid #eee;">
         <div style="font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#9ca3af;">13 Design Studio</div>
         <div style="font-size:20px;font-weight:600;color:#111827;margin-top:4px;">Welcome${opts.firstName ? `, ${opts.firstName}` : ""} — you're in.</div>
-        <div style="font-size:13px;color:#6b7280;margin-top:4px;">${opts.tierLabel}</div>
+        ${opts.tierLabel ? `<div style="font-size:13px;color:#6b7280;margin-top:4px;">${opts.tierLabel}</div>` : ""}
       </div>
       <div style="padding:18px 24px;">
         <table style="border-collapse:collapse;width:100%;">${steps}</table>

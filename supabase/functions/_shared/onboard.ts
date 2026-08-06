@@ -52,6 +52,8 @@ export async function onboard(opts: {
   email: string;
   name: string;
   tier: string;
+  /** Overrides the welcome-email subtitle; pass "" for direct (non-tier) clients. */
+  planLabel?: string;
 }): Promise<OnboardResult> {
   const failures: string[] = [];
   const clientLabel = opts.name || opts.email.split("@")[0];
@@ -133,7 +135,7 @@ export async function onboard(opts: {
     subject: "Welcome to 13 Design Studio — your workspace is ready",
     html: welcomeHtml({
       firstName,
-      tierLabel: tierLabel(opts.tier),
+      tierLabel: opts.planLabel !== undefined ? opts.planLabel : tierLabel(opts.tier),
       boardUrl,
       slackUrl,
     }),

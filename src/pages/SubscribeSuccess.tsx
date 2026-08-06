@@ -29,8 +29,7 @@ export default function SubscribeSuccess({
 
               {plan && (
                 <p className="mt-4 text-ember-300 text-sm uppercase tracking-[0.18em]">
-                  {plan.name} — {plan.price}
-                  {plan.cadence} · {plan.daysPerMonth}
+                  {plan.name} · {plan.daysPerMonth}
                 </p>
               )}
 

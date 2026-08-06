@@ -132,7 +132,7 @@ function plansSection(tiers) {
   const items = tiers
     .map(
       (t) =>
-        `<li><h3>${esc(t.name)} — ${esc(t.price)}${esc(t.cadence)}</h3>` +
+        `<li><h3>${esc(t.name)} — pricing coming soon</h3>` +
         `<p>${esc(t.daysPerMonth)}. ${esc(t.description)}</p></li>`,
     )
     .join('');

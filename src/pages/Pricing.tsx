@@ -99,8 +99,7 @@ export default function Pricing({ onNavigate }: { onNavigate: Navigate }) {
                     <h3 className="font-display text-2xl font-medium text-bone-50 tracking-tighter2">{tier.name}</h3>
                   </div>
                   <div className="mt-5 flex items-baseline gap-1.5">
-                    <span className="font-display text-3xl lg:text-4xl font-medium text-bone-50 tracking-tighter2">{tier.price}</span>
-                    <span className="text-sm text-bone-400">{tier.cadence}</span>
+                    <span className="font-display text-2xl lg:text-3xl font-medium text-bone-300 tracking-tighter2">Pricing coming soon</span>
                   </div>
                   <p className="mt-3 text-xs text-ember-300 uppercase tracking-[0.18em]">{tier.daysPerMonth}</p>
                   <p className="mt-4 text-sm text-bone-400 leading-relaxed text-pretty">{tier.description}</p>

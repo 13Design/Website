@@ -30,8 +30,8 @@ function SceneSubscribe() {
       <div className="j-rise w-52 rounded-2xl border border-ink-600/70 bg-ink-850 p-5 shadow-2xl shadow-black/50">
         <div className="flex items-baseline justify-between">
           <span className="text-[10px] uppercase tracking-[0.16em] text-bone-400">Standard</span>
-          <span className="font-display text-lg font-medium text-bone-50">
-            $2,500<span className="text-[10px] font-normal text-bone-400">/mo</span>
+          <span className="font-display text-sm font-medium text-bone-300">
+            Coming soon
           </span>
         </div>
         <div className="mt-3.5 space-y-2">

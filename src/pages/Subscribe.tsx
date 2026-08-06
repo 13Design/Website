@@ -25,8 +25,7 @@ export default function Subscribe({ onNavigate, tier }: { onNavigate: Navigate; 
 
               {selectedTier && (
                 <p className="mt-4 text-ember-300 text-sm uppercase tracking-[0.18em]">
-                  {selectedTier.name} — {selectedTier.price}
-                  {selectedTier.cadence}
+                  {selectedTier.name}
                 </p>
               )}
 

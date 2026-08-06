@@ -17,11 +17,9 @@ Positioning: designed by humans, for humans and agents — interfaces people und
 
 ## Pricing (month-to-month design subscriptions)
 
-- Lite — $800/month — up to 5 days of design capacity. Self-serve.
-- Standard — $2,500/month — up to 12 days of design capacity. Self-serve.
-- Product Partner — $4,500/month — up to 20 days of design capacity; scoped on a call first.
+Pricing is coming soon. Three month-to-month tiers — Lite (up to 5 days of design capacity), Standard (up to 12 days), and Product Partner (up to 20 days; scoped on a call first). For now we take on clients directly — get in touch.
 
-Fixed monthly price, no annual contract, no lock-in, cancel anytime. A "day" means a day of reserved studio capacity, not tracked hours. Unused days do not roll over.
+A "day" means a day of reserved studio capacity, not tracked hours. Unused days do not roll over.
 
 ## Key pages
 

@@ -124,7 +124,7 @@ function clientWelcomeHtml(firstName: string): string {
     <div style="padding:22px 26px;color:#374151;font-size:15px;line-height:1.6;">
       <p style="margin:0 0 14px;">${hi}</p>
       <p style="margin:0 0 14px;">Thanks — your message came through, and we'll be in touch within a day.</p>
-      <p style="margin:0 0 14px;">We're a design studio working on AI products. When we write back, we'll suggest a time to talk, so we can hear about what you're building and figure out how we can help.</p>
+      <p style="margin:0 0 14px;">We're a product design studio focused on AI products — both AI-native products and teams adding AI to what they've already built. When we write back, we'll suggest a time to talk, so we can hear about what you're building and figure out how we can help.</p>
       <p style="margin:0 0 14px;">If there's anything useful for us to see first — a link, a doc, whatever you have — send it along.</p>
       <p style="margin:18px 0 0;">Speak soon,<br>13 Design Studio</p>
     </div>

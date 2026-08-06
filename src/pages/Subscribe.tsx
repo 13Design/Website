@@ -27,7 +27,7 @@ export default function Subscribe({ onNavigate, tier }: { onNavigate: Navigate; 
     const data = new FormData(form);
 
     // Honeypot — real users never fill this hidden field; bots do.
-    if (String(data.get('company_website') || '').trim() !== '') {
+    if (String(data.get('hp_field') || '').trim() !== '') {
       setStatus('success');
       form.reset();
       return;
@@ -186,10 +186,12 @@ export default function Subscribe({ onNavigate, tier }: { onNavigate: Navigate; 
                       </div>
                     )}
 
-                    {/* Honeypot — hidden from humans, catches naive bots */}
+                    {/* Honeypot — neutral name/label so password managers don't
+                        autofill it (a filled value silently drops the submission).
+                        Off-screen rather than display:none so naive bots still fill it. */}
                     <div aria-hidden="true" style={{ position: 'absolute', left: '-9999px', width: '1px', height: '1px', overflow: 'hidden' }}>
-                      <label htmlFor="sb-company-website">Company website</label>
-                      <input type="text" id="sb-company-website" name="company_website" tabIndex={-1} autoComplete="off" />
+                      <label htmlFor="sb-hp">Leave this field blank</label>
+                      <input type="text" id="sb-hp" name="hp_field" tabIndex={-1} autoComplete="off" />
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">

@@ -72,6 +72,24 @@ async function hmacHex(secret: string, msg: string): Promise<string> {
   return Array.from(new Uint8Array(mac)).map((b) => b.toString(16).padStart(2, "0")).join("");
 }
 
+/** Post a plain message to the studio's Slack ops channel via the bot. */
+async function slackPost(text: string): Promise<boolean> {
+  const token = Deno.env.get("SLACK_BOT_TOKEN");
+  const channel = Deno.env.get("STUDIO_SLACK_CHANNEL_ID");
+  if (!token || !channel) {
+    console.error("Slack notify: missing SLACK_BOT_TOKEN / STUDIO_SLACK_CHANNEL_ID");
+    return false;
+  }
+  const res = await fetch("https://slack.com/api/chat.postMessage", {
+    method: "POST",
+    headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json; charset=utf-8" },
+    body: JSON.stringify({ channel, text, unfurl_links: false }),
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!(data as { ok?: boolean }).ok) console.error("Slack post failed:", JSON.stringify(data));
+  return !!(data as { ok?: boolean }).ok;
+}
+
 function renderRows(record: Record<string, unknown>): string {
   const keys = Object.keys(record)
     .filter((k) => !HIDDEN.has(k) && record[k] != null && String(record[k]).trim() !== "")
@@ -107,14 +125,6 @@ Deno.serve(async (req) => {
     }
   }
 
-  const apiKey = Deno.env.get("RESEND_API_KEY");
-  const to = Deno.env.get("NOTIFY_TO");
-  const from = Deno.env.get("NOTIFY_FROM");
-  if (!apiKey || !to || !from) {
-    console.error("Missing RESEND_API_KEY / NOTIFY_TO / NOTIFY_FROM");
-    return new Response("Server not configured", { status: 500 });
-  }
-
   let payload: WebhookPayload;
   try {
     payload = await req.json();
@@ -131,26 +141,54 @@ Deno.serve(async (req) => {
     ? "Founding-client application"
     : "Contact message";
   const who = String(record.name ?? "Someone");
-  const subject = `New ${kind.toLowerCase()} — ${who}`;
 
-  const replyTo = typeof record.email === "string" ? record.email : undefined;
-
-  // For subscription requests, add a signed one-click "Review & approve" link
-  // to the studio's control panel (subscribe-approve). GET-safe: it only opens
-  // a confirm page, never mutates, so email link-scanners can't act on it.
-  let approveButton = "";
+  // Subscription requests notify the studio via Slack (with a signed one-click
+  // "Review & approve" link), not email — nothing here depends on Resend.
   if (isSubscribe) {
     const base = Deno.env.get("SUPABASE_URL");
     const secret = Deno.env.get("APPROVE_SECRET");
     const rid = String(record.id ?? "");
+    let link = "";
     if (base && secret && rid) {
-      const sig = await hmacHex(secret, rid);
-      const link = `${base}/functions/v1/subscribe-approve?id=${encodeURIComponent(rid)}&token=${sig}`;
-      approveButton = `<div style="padding:0 24px 22px;"><a href="${esc(link)}" style="display:inline-block;background:#e8744c;color:#0b0b0d;text-decoration:none;font-size:14px;font-weight:600;padding:11px 20px;border-radius:9999px;">Review &amp; approve</a></div>`;
+      link = `${base}/functions/v1/subscribe-approve?id=${encodeURIComponent(rid)}&token=${await hmacHex(secret, rid)}`;
     } else {
-      console.error("subscribe_requests notify: missing SUPABASE_URL / APPROVE_SECRET / id");
+      console.error("subscribe notify: missing SUPABASE_URL / APPROVE_SECRET / id");
     }
+    const TIER_LABEL: Record<string, string> = {
+      lite: "Lite — $800/mo",
+      standard: "Standard — $2,500/mo",
+      "product-partner": "Product Partner — $4,500/mo",
+    };
+    const val = (k: string) => {
+      const v = record[k];
+      return v == null || String(v).trim() === "" ? "" : String(v);
+    };
+    const lines = [
+      `:inbox_tray: *New subscription request* — ${val("name") || "(no name)"}${val("email") ? ` <${val("email")}>` : ""}`,
+      `*Plan:* ${TIER_LABEL[val("tier")] ?? (val("tier") || "—")}    *Company:* ${val("company") || "—"}    *Country:* ${val("country") || "—"}`,
+      val("billing_address") ? `*Billing:* ${val("billing_address")}` : "",
+      val("vat_id") ? `*VAT/Tax ID:* ${val("vat_id")}` : "",
+      val("note") ? `*Note:* ${val("note")}` : "",
+      link ? `<${link}|:white_check_mark: Review & approve →>` : ":warning: approve link unavailable (missing APPROVE_SECRET / SUPABASE_URL)",
+    ].filter(Boolean);
+    const posted = await slackPost(lines.join("\n"));
+    return new Response(JSON.stringify({ ok: posted, via: "slack" }), {
+      status: posted ? 200 : 502,
+      headers: { "Content-Type": "application/json" },
+    });
   }
+
+  // Contact / founder inquiries → studio email via Resend.
+  const apiKey = Deno.env.get("RESEND_API_KEY");
+  const to = Deno.env.get("NOTIFY_TO");
+  const from = Deno.env.get("NOTIFY_FROM");
+  if (!apiKey || !to || !from) {
+    console.error("Missing RESEND_API_KEY / NOTIFY_TO / NOTIFY_FROM");
+    return new Response("Server not configured", { status: 500 });
+  }
+
+  const subject = `New ${kind.toLowerCase()} — ${who}`;
+  const replyTo = typeof record.email === "string" ? record.email : undefined;
 
   const html = `<!doctype html>
 <html><body style="margin:0;background:#f6f6f7;padding:24px;font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;">
@@ -162,7 +200,6 @@ Deno.serve(async (req) => {
     <div style="padding:20px 24px;">
       <table style="border-collapse:collapse;width:100%;">${renderRows(record)}</table>
     </div>
-    ${approveButton}
     ${replyTo ? `<div style="padding:0 24px 22px;"><a href="mailto:${esc(replyTo)}" style="display:inline-block;background:#111827;color:#fff;text-decoration:none;font-size:14px;padding:10px 18px;border-radius:9999px;">Reply to ${esc(who)}</a></div>` : ""}
   </div>
 </body></html>`;

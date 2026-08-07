@@ -93,11 +93,9 @@ export function welcomeHtml(opts: {
     step(
       2,
       "Your Slack channel",
-      opts.slackUrl
-        ? `We've opened a private channel just for you — the quickest way to reach the people doing the work, and where we'll keep you posted day to day: <a href="${opts.slackUrl}" style="color:#c95c36;">join the channel</a>.`
-        : opts.slackInvited
+      opts.slackInvited
         ? "We've opened a private channel just for you — the quickest way to reach the people doing the work day to day. A Slack invite is in your inbox; accept it to join."
-        : "We've opened a private Slack channel just for you — the quickest way to reach the people doing the work day to day. We'll send you an invite to join it shortly.",
+        : "We've opened a private channel just for you — the quickest way to reach the people doing the work day to day. We'll send you an invite to join it shortly.",
     ),
     step(
       3,

@@ -130,7 +130,15 @@ export async function moveCard(cardId: string, listId: string): Promise<void> {
 
 /** Invites the client to the board by email — Trello emails them the join link. */
 export async function inviteMemberByEmail(boardId: string, email: string): Promise<void> {
-  await trello("PUT", `/boards/${boardId}/members`, { email, type: "normal" });
+  try {
+    await trello("PUT", `/boards/${boardId}/members`, { email, type: "normal" });
+  } catch (err) {
+    // Re-inviting someone already on the board (or already invited) is a no-op,
+    // not a failure — Trello 403s with "already invited" / "already a member".
+    const msg = String(err).toLowerCase();
+    if (msg.includes("already invited") || msg.includes("already a member")) return;
+    throw err;
+  }
 }
 
 /** Adds an existing Trello member (a designer) to the board. */

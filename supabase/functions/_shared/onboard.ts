@@ -109,9 +109,11 @@ export async function onboard(opts: {
       await inviteUsers(channel.id, designTeamSlackIds());
 
       const invited = await inviteClient(channel.id, opts.email);
-      if (!invited.added) {
+      // Only a real problem if we couldn't add them AND there's no invite link
+      // for the welcome email to carry — otherwise the link is the intended path.
+      if (!invited.added && !inviteLink()) {
         failures.push(
-          `Slack client invite (${invited.error ?? "unavailable"}) — sent standing invite link instead`,
+          `Slack client invite failed (${invited.error ?? "unavailable"}) and no SLACK_INVITE_URL is set — add the client to their channel manually.`,
         );
       }
 

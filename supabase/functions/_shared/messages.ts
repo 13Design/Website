@@ -10,7 +10,7 @@ export function channelWelcomeBlocks(firstName: string, boardUrl: string | null)
       type: "section",
       text: {
         type: "mrkdwn",
-        text: `${hi} This is your private channel with 13 Design Studio — your direct line to the designer on your project. Here's how we work together.`,
+        text: `${hi} This is your private channel with 13 Design Studio — your direct line to the team on your project. Here's how we work together.`,
       },
     },
     {
@@ -18,12 +18,9 @@ export function channelWelcomeBlocks(firstName: string, boardUrl: string | null)
       text: {
         type: "mrkdwn",
         text:
-          "*📨 How to request design*\n" +
-          "• Type `/design-request <what you need>` right here, or add a card to *📥 Design requests* on " +
-          boardLink +
-          ".\n" +
-          "• One card per request. Include the goal, plus any links (Figma, staging, Loom) and assets.\n" +
-          "• Order the list by priority — *we always start from the top.*",
+          "*🔁 How the work flows*\n" +
+          "We track everything on " + boardLink +
+          ": *📋 To do → 🎨 In progress → 👀 In review → ✅ Done*. As we work, cards move across the board and we post updates right here.",
       },
     },
     {
@@ -31,8 +28,8 @@ export function channelWelcomeBlocks(firstName: string, boardUrl: string | null)
       text: {
         type: "mrkdwn",
         text:
-          "*🔁 How work flows*\n" +
-          "📥 Design requests → 🎨 In progress → 👀 In review → ✅ Done. We move your cards across the board and post updates here as they progress.",
+          "*✅ Reviewing the work*\n" +
+          "When something's ready, we post it here with the files and links, plus *Approve* and *Request changes* buttons — approve when you're happy, or ask for tweaks and we'll reopen it.",
       },
     },
     {
@@ -41,17 +38,8 @@ export function channelWelcomeBlocks(firstName: string, boardUrl: string | null)
         type: "mrkdwn",
         text:
           "*💬 Feedback & questions*\n" +
-          "• Design feedback → *comment on the card* (keeps it with the work).\n" +
-          "• Quick questions & chat → *right here in Slack*.",
-      },
-    },
-    {
-      type: "section",
-      text: {
-        type: "mrkdwn",
-        text:
-          "*📦 When a request is done*\n" +
-          "We post it here with the files and links, plus *Approve* and *Request changes* buttons — approve when you're happy, or ask for tweaks and we'll reopen it.",
+          "• On a specific piece → *comment on its card* (keeps it with the work).\n" +
+          "• Anything else → *right here in Slack*, anytime.",
       },
     },
     {
@@ -59,7 +47,7 @@ export function channelWelcomeBlocks(firstName: string, boardUrl: string | null)
       elements: [
         {
           type: "mrkdwn",
-          text: "We'll email you within one business day to book a kickoff call — but don't wait, send your first request whenever you're ready.",
+          text: "Nothing to set up on your end — just follow along here and on the board, and we'll keep it moving.",
         },
       ],
     },

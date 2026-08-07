@@ -12,7 +12,7 @@ const NAV_LINKS: { label: string; route: Route }[] = [
 
 const DOC_LINKS: { label: string; route: Route }[] = [
   { label: 'Terms & agreement', route: '/terms' },
-  { label: 'Refunds & cancellation', route: '/refunds' },
+  { label: 'How we work', route: '/refunds' },
   { label: 'Privacy', route: '/privacy' },
 ];
 

@@ -11,16 +11,42 @@ export default function Refunds({ onNavigate }: { onNavigate: Navigate }) {
     <main>
       <PageHeader
         marker="01"
-        markerLabel="Refunds & cancellation"
-        title={<>Cancel anytime. Backed by a guarantee.</>}
-        body="Subscriptions are month-to-month, invoiced directly by us — and your first month is covered by a satisfaction guarantee. This is the plain-language version of how cancelling and refunds work, written to be read before you subscribe."
+        markerLabel="How we work"
+        title={<>How we work — the plain version.</>}
+        body="Most work today runs as a direct engagement, agreed with you on a call. Subscriptions are coming soon — month-to-month, with a first-month satisfaction guarantee. Here's the plain-language version of both."
         actions="none"
       />
+
+      {/* How direct engagements work */}
+      <section className="relative py-14 lg:py-16 border-b border-ink-700/40">
+        <div className="mx-auto max-w-edge px-5 lg:px-8">
+          <Reveal>
+            <SectionMarker n="02" label="How engagements work" />
+          </Reveal>
+          <Reveal delay={1} className="mt-7">
+            <ul className="space-y-4 max-w-2xl">
+              {[
+                'We start with a call to understand your product and agree the scope and price — no obligation until we both say yes.',
+                'You get a private board to follow the work, and a private Slack channel to reach us directly.',
+                'Work moves through To do → In progress → In review → Done. When something is ready, you approve it or request changes in Slack.',
+                'We invoice for the agreed work, and everything we design becomes yours once it is paid for.',
+              ].map((t, i) => (
+                <li key={i} className="flex items-start gap-4">
+                  <span className="font-mono text-xs text-ember-500 pt-1.5 shrink-0">
+                    {String(i + 1).padStart(2, '0')}
+                  </span>
+                  <span className="text-bone-200 leading-relaxed text-pretty">{t}</span>
+                </li>
+              ))}
+            </ul>
+          </Reveal>
+        </div>
+      </section>
 
       <section className="relative py-16 lg:py-20 border-b border-ink-700/40">
         <div className="mx-auto max-w-edge px-5 lg:px-8">
           <Reveal>
-            <SectionMarker n="02" label="The policy" />
+            <SectionMarker n="03" label="Subscription refunds (coming soon)" />
           </Reveal>
           <Reveal delay={1} className="mt-7">
             <h2 className="font-display font-medium text-bone-50 text-[clamp(1.7rem,4vw,2.8rem)] leading-[1.05] tracking-tightest text-balance max-w-2xl">

@@ -39,7 +39,7 @@ export const workNoCases = {
 };
 
 export const workClose = {
-  title: 'Want work like this on your product?',
+  title: 'Want to be one of our first case studies?',
 };
 
 export const contactInstructions =

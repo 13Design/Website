@@ -36,18 +36,18 @@ export default function Work({ onNavigate }: { onNavigate: (r: Route) => void })
             <Reveal delay={2} className="lg:col-span-5">
               <div className="rounded-2xl border border-ink-700/60 bg-ink-900/60 p-7 lg:p-8">
                 <p className="text-[11px] uppercase tracking-[0.28em] text-ember-400 mb-4">
-                  In the meantime
+                  Be one of the first
                 </p>
                 <p className="text-bone-300 leading-relaxed text-pretty">
-                  We're happy to walk you through examples and our process
-                  directly — get in touch and we'll show you the work most
-                  relevant to your situation.
+                  We're taking on a small number of founding clients on terms
+                  that reflect it — the first case studies here will be their
+                  work. Want your product to be one of them?
                 </p>
                 <button
-                  onClick={() => onNavigate('/contact')}
+                  onClick={() => onNavigate('/founding-clients')}
                   className="mt-6 group inline-flex items-center gap-2 text-sm text-bone-200 hover:text-ember-400 transition-colors"
                 >
-                  <span className="link-underline">Contact us</span>
+                  <span className="link-underline">Become a founding client</span>
                   <ArrowUpRight size={16} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                 </button>
               </div>

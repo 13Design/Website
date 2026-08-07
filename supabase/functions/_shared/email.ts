@@ -74,6 +74,8 @@ export function welcomeHtml(opts: {
   tierLabel: string;
   boardUrl: string | null;
   slackUrl: string | null;
+  /** True when a Slack invite was successfully sent to the client's email. */
+  slackInvited?: boolean;
 }): string {
   const step = (n: number, title: string, body: string) =>
     `<tr><td style="padding:10px 14px 10px 0;vertical-align:top;font-family:ui-monospace,Menlo,monospace;font-size:12px;color:#e8744c;">0${n}</td>
@@ -93,6 +95,8 @@ export function welcomeHtml(opts: {
       "Your Slack channel",
       opts.slackUrl
         ? `We've opened a private channel just for you — the quickest way to reach the people doing the work, and where we'll keep you posted day to day: <a href="${opts.slackUrl}" style="color:#c95c36;">join the channel</a>.`
+        : opts.slackInvited
+        ? "We've opened a private channel just for you — the quickest way to reach the people doing the work day to day. A Slack invite is in your inbox; accept it to join."
         : "We've opened a private Slack channel just for you — the quickest way to reach the people doing the work day to day. We'll send you an invite to join it shortly.",
     ),
     step(

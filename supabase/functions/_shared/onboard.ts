@@ -100,6 +100,7 @@ export async function onboard(opts: {
   // --- Slack: dedicated channel + team + client + welcome message ---
   let slackChannelId: string | null = null;
   let slackChannelName: string | null = null;
+  let slackInvited = false;
   try {
     const channel = await createChannel(channelNameFor(clientLabel));
     if (channel) {
@@ -109,6 +110,7 @@ export async function onboard(opts: {
       await inviteUsers(channel.id, designTeamSlackIds());
 
       const invited = await inviteClient(channel.id, opts.email);
+      slackInvited = invited.added;
       // Only a real problem if we couldn't add them AND there's no invite link
       // for the welcome email to carry — otherwise the link is the intended path.
       if (!invited.added && !inviteLink()) {
@@ -140,6 +142,7 @@ export async function onboard(opts: {
       tierLabel: opts.planLabel !== undefined ? opts.planLabel : tierLabel(opts.tier),
       boardUrl,
       slackUrl,
+      slackInvited,
     }),
     replyTo: STUDIO_EMAIL,
   });

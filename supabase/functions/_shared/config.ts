@@ -19,7 +19,7 @@ export function tierLabel(tier: string | null | undefined): string {
 
 // The four workflow lists, in board order. Index 0 is where new requests land;
 // the last is the completed/approve-from state.
-export const REQUEST_LIST = "📥 Design requests";
+export const REQUEST_LIST = "📋 To do";
 export const IN_PROGRESS_LIST = "🎨 In progress";
 export const IN_REVIEW_LIST = "👀 In review";
 export const DONE_LIST = "✅ Done";

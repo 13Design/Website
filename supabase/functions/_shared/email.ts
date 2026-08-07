@@ -83,29 +83,24 @@ export function welcomeHtml(opts: {
   const steps = [
     step(
       1,
-      "Join your request board",
+      "Your project board",
       opts.boardUrl
-        ? `We've set up a private Trello board just for you — it's where design requests live. A Trello invite is in your inbox, or go straight to <a href="${opts.boardUrl}" style="color:#c95c36;">your board</a>.`
-        : "We're setting up your private Trello request board now — the invite lands in your inbox shortly.",
+        ? `We've set up a private Trello board where you can follow the work as it moves — from in progress to ready for your review. A Trello invite is in your inbox, or go straight to <a href="${opts.boardUrl}" style="color:#c95c36;">your board</a>.`
+        : "We're setting up your private Trello board now — the invite lands in your inbox shortly.",
     ),
     ...(opts.slackUrl
       ? [
           step(
             2,
-            "Join your Slack channel",
-            `We've opened a private channel just for your project — quick questions, day-to-day chat, and a direct line to the person doing the work: <a href="${opts.slackUrl}" style="color:#c95c36;">join the channel</a>. You can also file a request there with <code>/design-request</code>.`,
+            "Your Slack channel",
+            `We've opened a private channel just for you — the quickest way to reach the people doing the work, and where we'll keep you posted day to day: <a href="${opts.slackUrl}" style="color:#c95c36;">join the channel</a>.`,
           ),
         ]
       : []),
     step(
       opts.slackUrl ? 3 : 2,
-      "File your first request",
-      "Add a card to <em>📥 Design requests</em> with the goal and any links or assets — or type <code>/design-request</code> in Slack. We always start from the top of the list, no waiting for the kickoff call.",
-    ),
-    step(
-      opts.slackUrl ? 4 : 3,
-      "Kickoff call",
-      "Within one business day we'll email you personally to introduce ourselves and book a kickoff call.",
+      "Reviewing the work",
+      "When something's ready, we'll move it to review on the board and post it in your Slack channel — you approve it or request changes right there. That's the whole loop.",
     ),
   ].join("");
 
@@ -119,9 +114,8 @@ export function welcomeHtml(opts: {
       <div style="padding:18px 24px;">
         <table style="border-collapse:collapse;width:100%;">${steps}</table>
         <p style="font-size:13px;color:#6b7280;line-height:1.6;margin:14px 0 0;">
-          Paddle has emailed your receipt and invoice separately. Manage or cancel your
-          subscription anytime from the link on your confirmation page or in any receipt.
-          Questions? Just reply to this email.
+          That's everything to get started — we'll take it from here and keep you posted on the
+          board and in Slack. Questions? Just reply to this email.
         </p>
       </div>
     </div></body></html>`;

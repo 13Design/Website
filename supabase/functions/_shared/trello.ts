@@ -38,18 +38,17 @@ export async function trello(
 // Board provisioning
 // ---------------------------------------------------------------------------
 
-const WELCOME_CARD_TITLE = "👋 Start here — how to request design";
-const WELCOME_CARD_DESC = `**Welcome to your 13 Design Studio board!**
+const WELCOME_CARD_TITLE = "👋 Start here — how this board works";
+const WELCOME_CARD_DESC = `**Welcome to your 13 Design project board!**
 
-This board is where all your design requests live. Here's how it works:
+This is where you follow the work as we do it. The flow:
 
-1. **Add a card** to *${REQUEST_LIST}* — one card per request. (Or type \`/design-request\` in your Slack channel.)
-2. In the card, tell us the **goal**, and drop in any **links** (Figma, staging, Loom) and **assets** we'll need.
-3. Order the list by priority — **we always start from the top.**
-4. We move cards across the board as we work: *In progress* → *In review* → *Done*.
-5. Feedback happens in **card comments**, quick questions in **Slack**.
+1. Cards move across the board as we work: *${REQUEST_LIST}* → *In progress* → *In review* → *Done*.
+2. When something's ready for you, it lands in *In review* — and we post it in your Slack channel.
+3. From there you **approve it** or **request changes**, right in Slack.
+4. Anything to add or flag? Drop a comment on the card, or message us in Slack.
 
-You'll meet us properly on the kickoff call — but you don't have to wait for it. Add your first request now and we'll get moving.`;
+No forms to fill in and nothing to chase — just follow along here and in Slack, and we'll keep it moving.`;
 
 export type ProvisionedBoard = {
   boardId: string;
@@ -65,7 +64,7 @@ export async function provisionBoard(clientLabel: string): Promise<ProvisionedBo
     name: `${clientLabel} · 13 Design`,
     defaultLists: "false",
     prefs_permissionLevel: workspace ? "org" : "private",
-    desc: "Design requests for your 13 Design Studio subscription. Add a card per request; we start from the top.",
+    desc: "Your 13 Design project board — follow the work here as it moves from To do to In progress, In review, and Done.",
     ...(workspace ? { idOrganization: workspace } : {}),
   });
   const boardId = String(board.id);

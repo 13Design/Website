@@ -88,17 +88,15 @@ export function welcomeHtml(opts: {
         ? `We've set up a private Trello board where you can follow the work as it moves — from in progress to ready for your review. A Trello invite is in your inbox, or go straight to <a href="${opts.boardUrl}" style="color:#c95c36;">your board</a>.`
         : "We're setting up your private Trello board now — the invite lands in your inbox shortly.",
     ),
-    ...(opts.slackUrl
-      ? [
-          step(
-            2,
-            "Your Slack channel",
-            `We've opened a private channel just for you — the quickest way to reach the people doing the work, and where we'll keep you posted day to day: <a href="${opts.slackUrl}" style="color:#c95c36;">join the channel</a>.`,
-          ),
-        ]
-      : []),
     step(
-      opts.slackUrl ? 3 : 2,
+      2,
+      "Your Slack channel",
+      opts.slackUrl
+        ? `We've opened a private channel just for you — the quickest way to reach the people doing the work, and where we'll keep you posted day to day: <a href="${opts.slackUrl}" style="color:#c95c36;">join the channel</a>.`
+        : "We've opened a private Slack channel just for you — the quickest way to reach the people doing the work day to day. We'll send you an invite to join it shortly.",
+    ),
+    step(
+      3,
       "Reviewing the work",
       "When something's ready, we'll move it to review on the board and post it in your Slack channel — you approve it or request changes right there. That's the whole loop.",
     ),

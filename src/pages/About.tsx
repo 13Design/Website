@@ -2,7 +2,6 @@ import Reveal from '../components/Reveal';
 import PageHeader from '../components/PageHeader';
 import SectionMarker from '../components/SectionMarker';
 import ClosingCTA from '../components/ClosingCTA';
-import HowWeWork from '../components/HowWeWork';
 import {
   aboutPositioning,
   aboutStudio,
@@ -10,6 +9,7 @@ import {
   beliefs,
   honestPart,
   directAccessLine,
+  processSteps,
 } from '../data/studio';
 import { aboutStudioExtended } from '../data/pages';
 import type { Route } from '../lib/router';
@@ -123,16 +123,21 @@ export default function About({ onNavigate }: { onNavigate: (r: Route) => void }
           <Reveal>
             <SectionMarker n="05" label="How we work" />
           </Reveal>
-          <Reveal delay={1} className="mt-8 max-w-2xl">
-            <h2 className="font-display font-medium text-bone-50 text-[clamp(1.8rem,4.5vw,3rem)] leading-[1.05] tracking-tightest text-balance">
-              What to expect, start to finish.
+          <Reveal delay={1} className="mt-8">
+            <h2 className="font-display font-medium text-bone-50 text-[clamp(1.8rem,4.5vw,3rem)] leading-[1.05] tracking-tightest max-w-2xl text-balance">
+              Four steps, repeated.
             </h2>
-            <p className="mt-5 text-lg text-bone-300 leading-relaxed text-pretty">
-              From the first call to ongoing work — the shape of a project with us, one step at a time.
-            </p>
           </Reveal>
-          <div className="mt-12">
-            <HowWeWork />
+          <div className="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-px bg-ink-700/40 border border-ink-700/40 rounded-2xl overflow-hidden">
+            {processSteps.map((step, i) => (
+              <Reveal key={step.n} delay={((i % 4) + 1) as 1 | 2 | 3 | 4} className="bg-ink-900 p-7">
+                <span className="font-mono text-xs text-ember-500">{step.n}</span>
+                <h3 className="mt-4 font-display text-lg font-medium text-bone-50 tracking-tighter2 leading-tight">
+                  {step.title}
+                </h3>
+                <p className="mt-3 text-sm text-bone-400 leading-relaxed text-pretty">{step.body}</p>
+              </Reveal>
+            ))}
           </div>
         </div>
       </section>

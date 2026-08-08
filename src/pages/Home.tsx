@@ -5,8 +5,9 @@ import Marquee from '../components/Marquee';
 import SectionMarker from '../components/SectionMarker';
 import ClosingCTA from '../components/ClosingCTA';
 import CoherenceDiagram from '../components/CoherenceDiagram';
+import HowWeWork from '../components/HowWeWork';
 import JsonLd, { faqPageSchema } from '../components/JsonLd';
-import { audienceGroups, services, processSteps, beliefs, homeFaq } from '../data/studio';
+import { audienceGroups, services, beliefs, homeFaq } from '../data/studio';
 import type { Route } from '../lib/router';
 
 const ROTATING = ['trust.', 'understand.', 'come back.', 'tell others.'];
@@ -226,22 +227,17 @@ export default function Home({ onNavigate }: { onNavigate: (r: Route) => void })
           <Reveal>
             <SectionMarker n="04" label="How we work" />
           </Reveal>
-          <Reveal delay={1} className="mt-8">
-            <h2 className="font-display font-medium text-bone-50 text-[clamp(1.9rem,5vw,3.6rem)] leading-[1.02] tracking-tightest max-w-3xl text-balance">
-              Four steps, until it feels inevitable.
+          <Reveal delay={1} className="mt-8 max-w-3xl">
+            <h2 className="font-display font-medium text-bone-50 text-[clamp(1.9rem,5vw,3.6rem)] leading-[1.02] tracking-tightest text-balance">
+              What to expect, start to finish.
             </h2>
+            <p className="mt-5 text-lg text-bone-300 leading-relaxed text-pretty">
+              From the first call to ongoing work — the shape of a project with us, one step at a time.
+            </p>
           </Reveal>
 
-          <div className="mt-14 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-px bg-ink-700/40 border border-ink-700/40 rounded-2xl overflow-hidden">
-            {processSteps.map((step, i) => (
-              <Reveal key={step.n} delay={((i % 4) + 1) as 1 | 2 | 3 | 4} className="bg-ink-900 p-7 lg:p-8">
-                <span className="font-mono text-xs text-ember-500">{step.n}</span>
-                <h3 className="mt-4 font-display text-lg lg:text-xl font-medium text-bone-50 tracking-tighter2 leading-tight">
-                  {step.title}
-                </h3>
-                <p className="mt-3 text-sm text-bone-400 leading-relaxed text-pretty">{step.body}</p>
-              </Reveal>
-            ))}
+          <div className="mt-14">
+            <HowWeWork />
           </div>
         </div>
       </section>

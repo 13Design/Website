@@ -154,6 +154,19 @@ body {
   animation: j-draw 1.4s cubic-bezier(0.45, 0, 0.25, 1) both;
   animation-delay: var(--jd, 0s);
 }
+/* Options fade back once one is chosen (--jdim = when the choice lands). */
+.j-scene.is-active .j-dim {
+  animation: j-rise 0.7s cubic-bezier(0.22, 1, 0.36, 1) both,
+    j-dim 0.5s ease var(--jdim, 1.5s) both;
+  animation-delay: var(--jd, 0s), var(--jdim, 1.5s);
+}
+/* Bars growing from the baseline to their own --jh height. */
+.j-scene.is-active .j-grow {
+  height: var(--jh, 50%);
+  transform-origin: bottom;
+  animation: j-grow 0.65s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: var(--jd, 0s);
+}
 
 @keyframes j-rise {
   from { opacity: 0; transform: translateY(16px); }
@@ -188,6 +201,14 @@ body {
   from { opacity: 1; stroke-dashoffset: 100; }
   to { opacity: 1; stroke-dashoffset: 0; }
 }
+@keyframes j-dim {
+  from { opacity: 1; }
+  to { opacity: 0.4; }
+}
+@keyframes j-grow {
+  from { opacity: 0; transform: scaleY(0); }
+  to { opacity: 1; transform: scaleY(1); }
+}
 
 /* Per-step auto-advance progress bar. Duration comes from --jt inline. */
 .j-progress-fill {
@@ -204,11 +225,13 @@ body {
 
 @media (prefers-reduced-motion: reduce) {
   .j-scene { transition: opacity 0.3s ease; transform: none; }
-  .j-rise, .j-pop, .j-slide, .j-cursor, .j-draw, .j-fade {
+  .j-rise, .j-pop, .j-slide, .j-cursor, .j-draw, .j-fade, .j-dim, .j-grow {
     opacity: 1;
     animation: none !important;
     transform: none !important;
   }
+  .j-grow { height: var(--jh, 50%); }
+  .j-dim { opacity: 0.4; }
   .j-scene.is-active .j-ping { animation: none; opacity: 0; }
   .j-progress-fill { animation: none; transform: scaleX(0); }
 }

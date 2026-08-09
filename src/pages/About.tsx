@@ -11,7 +11,14 @@ import {
   honestPart,
 } from "../data/content";
 
+import { useHead } from "../lib/head";
+
 export default function About() {
+  useHead({
+    title: "About",
+    description:
+      "A studio built for the moment AI products grow up. Human judgment on every screen — we design for people and agents alike.",
+  });
   return (
     <main>
       <PageHero

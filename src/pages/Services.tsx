@@ -4,7 +4,14 @@ import { GhostWord, HeroRing, PageHero } from "../sections/pagekit";
 import Cta from "../sections/Cta";
 import { audienceGroups, services } from "../data/content";
 
+import { useHead } from "../lib/head";
+
 export default function Services() {
+  useHead({
+    title: "Services",
+    description:
+      "Interaction design for AI-native features, UX rescue sprints, product finishing, and a fractional product partner — for AI-native and AI-built products.",
+  });
   return (
     <main>
       <PageHero

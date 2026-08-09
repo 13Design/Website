@@ -4,6 +4,7 @@ import { ArrowUpRight, KGrain, Magnetic, Reveal, SectionTag } from "../sections/
 import { Field, HeroRing, Honeypot, PageHero, SentPanel, SubmitNote, fieldCls, mailtoFromForm } from "../sections/pagekit";
 import { contactInstructions, contactLookingFor, contactStages } from "../data/content";
 import { supabase } from "../lib/supabase";
+import { useHead } from "../lib/head";
 
 const SHARE_POINTS = [
   "Your company or product name",
@@ -15,6 +16,11 @@ const SHARE_POINTS = [
 ];
 
 export default function Contact() {
+  useHead({
+    title: "Contact",
+    description:
+      "Tell us where your product is today and what's coming up. A direct, honest conversation — we reply within one business day.",
+  });
   const [sent, setSent] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");

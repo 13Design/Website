@@ -2,8 +2,14 @@ import { Link } from "react-router";
 import { ArrowUpRight, Reveal, SectionTag } from "../sections/shared";
 import { HeroRing, LegalSections, PageHero } from "../sections/pagekit";
 import { privacyPolicy } from "../data/legal";
+import { useHead } from "../lib/head";
 
 export default function Privacy() {
+  useHead({
+    title: "Privacy",
+    description:
+      "Your data, handled plainly. We collect only what it takes to reply, use cookieless analytics, and never sell data — what we hold, why, and your rights.",
+  });
   return (
     <main>
       <PageHero

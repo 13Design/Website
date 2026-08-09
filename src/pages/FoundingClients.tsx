@@ -9,8 +9,14 @@ import {
   foundingYouGet,
 } from "../data/content";
 import { supabase } from "../lib/supabase";
+import { useHead } from "../lib/head";
 
 export default function FoundingClients() {
+  useHead({
+    title: "Founding clients",
+    description:
+      "We're taking on a small number of founding clients at a founder rate, in exchange for the first case studies. See if your product is a fit.",
+  });
   const [sent, setSent] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");

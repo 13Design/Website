@@ -22,7 +22,14 @@ function EmptyFrame({ i }: { i: number }) {
   );
 }
 
+import { useHead } from "../lib/head";
+
 export default function Work() {
+  useHead({
+    title: "Work",
+    description:
+      "Case studies are on the way. We're taking on our first founding clients now — full write-ups land here as that work ships.",
+  });
   return (
     <main>
       <PageHero

@@ -2,8 +2,14 @@ import { Link } from "react-router";
 import { ArrowUpRight, Reveal, SectionTag } from "../sections/shared";
 import { HeroRing, LegalSections, PageHero } from "../sections/pagekit";
 import { workingAgreement } from "../data/legal";
+import { useHead } from "../lib/head";
 
 export default function Terms() {
+  useHead({
+    title: "Terms & agreement",
+    description:
+      "How we work with clients — what you own, confidentiality, showing work, and the law that governs it. The plain-language working agreement.",
+  });
   return (
     <main>
       <PageHero

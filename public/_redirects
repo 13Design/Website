@@ -1,12 +1,12 @@
-# Serve each prerendered route at its clean (no trailing slash) URL with 200,
-# matching the canonical tags + sitemap. Unknown paths fall through to the 404
-# page with a real 404 status (no soft-404). Processed before netlify.toml.
-/                  /index.html                     200
-/services          /services/index.html            200
-/about             /about/index.html               200
-/work              /work/index.html                200
-/founding-clients  /founding-clients/index.html    200
-/contact           /contact/index.html             200
-/terms             /terms/index.html               200
-/privacy           /privacy/index.html             200
-/*                 /404.html                       404
+# Serve each prerendered route at its clean (no trailing slash) URL with 200 from
+# a flat .html file — flat files avoid Netlify's directory trailing-slash 301, so
+# URLs match the canonical tags + sitemap. Unknown paths -> 404 page (404 status).
+/                  /index.html                200
+/services          /services.html             200
+/about             /about.html                200
+/work              /work.html                 200
+/founding-clients  /founding-clients.html     200
+/contact           /contact.html              200
+/terms             /terms.html                200
+/privacy           /privacy.html              200
+/*                 /404.html                  404

@@ -103,9 +103,10 @@ if (!template.includes(HOME_TITLE)) {
 let count = 0;
 for (const route of ROUTES) {
   const html = render(template, route);
-  const outDir = join(DIST, route.path);
-  await mkdir(outDir, { recursive: true });
-  await writeFile(join(outDir, "index.html"), html, "utf8");
+  // Flat file (e.g. dist/contact.html) rather than dist/contact/index.html —
+  // directory-index files trigger Netlify's trailing-slash 301; flat ones don't.
+  const slug = route.path.replace(/^\//, "");
+  await writeFile(join(DIST, `${slug}.html`), html, "utf8");
   count++;
 }
 

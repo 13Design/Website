@@ -2,236 +2,285 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ————————————————————————————————
+   13 DESIGN STUDIO — strict monochrome
+   whitish-grey neutral. no hue, no tint.
+———————————————————————————————— */
+
 :root {
-  color-scheme: dark;
+  --black: #000000;
+  --ink: #0c0c0c;
+  --white: #ffffff;
+  --paper: #f1f1f1;
+  --mist: #e9e9e9;
+  --line: rgba(0, 0, 0, 0.1);
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 html {
   scroll-behavior: smooth;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-rendering: optimizeLegibility;
+}
+
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
 }
 
 body {
-  background-color: #08080a;
-  color: #ddd9cf;
-  font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
-  font-weight: 300;
-  line-height: 1.6;
+  background: var(--paper);
+  color: var(--black);
+  font-family: "Inter Tight", "Helvetica Neue", Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
   overflow-x: hidden;
 }
 
 ::selection {
-  background: #e8744c;
-  color: #08080a;
+  background: var(--black);
+  color: var(--white);
 }
 
-::-webkit-scrollbar { width: 10px; }
-::-webkit-scrollbar-track { background: #0c0c0e; }
-::-webkit-scrollbar-thumb { background: #2e2e34; border-radius: 6px; }
-::-webkit-scrollbar-thumb:hover { background: #3c3c44; }
-
-@layer utilities {
-  .font-display {
-    font-family: 'Space Grotesk', ui-sans-serif, system-ui, sans-serif;
-  }
-  .text-balance { text-wrap: balance; }
-  .text-pretty { text-wrap: pretty; }
-
-  /* SVG parts animate around their own centre, not the viewBox origin. */
-  .svg-part {
-    transform-box: fill-box;
-    transform-origin: center;
-  }
-
-  /* Respect the OS setting — a motion-heavy diagram shouldn't be forced on
-     anyone who has asked for less of it. It settles on the resolved state. */
-  @media (prefers-reduced-motion: reduce) {
-    .animate-snap,
-    .animate-marquee,
-    .animate-fade-up,
-    .animate-fade-in,
-    .animate-page-in {
-      animation: none !important;
-      transform: none !important;
-      opacity: 1 !important;
-    }
-  }
-
-  .grain { position: relative; }
-  .grain::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    opacity: 0.04;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  }
-  .reveal {
-    opacity: 0;
-    transform: translateY(26px);
-    transition: opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1),
-      transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
-  }
-  .reveal.is-visible {
-    opacity: 1;
-    transform: translateY(0);
-  }
-  .reveal-delay-1 { transition-delay: 0.07s; }
-  .reveal-delay-2 { transition-delay: 0.14s; }
-  .reveal-delay-3 { transition-delay: 0.21s; }
-  .reveal-delay-4 { transition-delay: 0.28s; }
-  .reveal-delay-5 { transition-delay: 0.35s; }
-
-  .link-underline {
-    background-image: linear-gradient(currentColor, currentColor);
-    background-size: 0% 1px;
-    background-position: 0 100%;
-    background-repeat: no-repeat;
-    transition: background-size 0.4s cubic-bezier(0.22, 1, 0.36, 1);
-  }
-  .link-underline:hover { background-size: 100% 1px; }
-
-  .hairline {
-    background-image: linear-gradient(to right, transparent, #242428 15%, #242428 85%, transparent);
-    height: 1px;
-  }
+.font-display {
+  font-family: "Inter Tight", "Helvetica Neue", Arial, sans-serif;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .reveal { opacity: 1; transform: none; transition: none; }
-  html { scroll-behavior: auto; }
+.font-mono2 {
+  font-family: "IBM Plex Mono", "SFMono-Regular", Menlo, monospace;
 }
 
-/* ---------------------------------------------------------------------------
-   Subscription journey (components/SubscriptionJourney.tsx)
+/* ——— focus ——— */
+:focus-visible {
+  outline: 2px solid var(--black);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+.on-ink :focus-visible,
+.on-ink:focus-visible {
+  outline-color: var(--white);
+}
 
-   Scenes crossfade via .is-active; their inner elements carry a j-* class and
-   an optional --jd (delay). Animations are declared only under .is-active, so
-   toggling the class replays every scene from the top — that's what makes the
-   loop feel alive on every visit, not just the first.
---------------------------------------------------------------------------- */
+/* ————————————————————————
+   kinetic grain — heavy film noise
+———————————————————————— */
+@keyframes grain-jitter {
+  0%, 100% { transform: translate(0, 0); }
+  10% { transform: translate(-5%, -8%); }
+  20% { transform: translate(-10%, 5%); }
+  30% { transform: translate(7%, -10%); }
+  40% { transform: translate(-4%, 10%); }
+  50% { transform: translate(-10%, -4%); }
+  60% { transform: translate(9%, 3%); }
+  70% { transform: translate(3%, 8%); }
+  80% { transform: translate(-8%, 1%); }
+  90% { transform: translate(6%, 6%); }
+}
 
-.j-scene {
+.kgrain {
   position: absolute;
-  inset: 0;
-  opacity: 0;
-  transform: scale(0.98) translateY(8px);
-  transition: opacity 0.55s cubic-bezier(0.22, 1, 0.36, 1),
-    transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+  inset: -100%;
+  z-index: 3;
   pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation: grain-jitter 0.7s steps(10) infinite;
+  will-change: transform;
 }
-.j-scene.is-active { opacity: 1; transform: none; }
-
-.j-rise, .j-pop, .j-slide, .j-cursor, .j-draw, .j-fade { opacity: 0; }
-
-.j-scene.is-active .j-rise {
-  animation: j-rise 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
-  animation-delay: var(--jd, 0s);
+.kgrain.on-light {
+  opacity: 0.16;
 }
-.j-scene.is-active .j-fade {
-  animation: j-fade 0.6s ease both;
-  animation-delay: var(--jd, 0s);
-}
-.j-scene.is-active .j-pop {
-  animation: j-pop 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) both;
-  animation-delay: var(--jd, 0s);
-}
-.j-scene.is-active .j-slide {
-  animation: j-slide 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
-  animation-delay: var(--jd, 0s);
-}
-.j-scene.is-active .j-cursor {
-  animation: j-cursor 1.6s cubic-bezier(0.4, 0, 0.2, 1) both;
-  animation-delay: var(--jd, 0s);
-}
-.j-scene.is-active .j-ping {
-  animation: j-ping 0.9s cubic-bezier(0, 0, 0.2, 1) both;
-  animation-delay: var(--jd, 0s);
-}
-.j-scene.is-active .j-draw {
-  animation: j-draw 1.4s cubic-bezier(0.45, 0, 0.25, 1) both;
-  animation-delay: var(--jd, 0s);
-}
-/* Options fade back once one is chosen (--jdim = when the choice lands). */
-.j-scene.is-active .j-dim {
-  animation: j-rise 0.7s cubic-bezier(0.22, 1, 0.36, 1) both,
-    j-dim 0.5s ease var(--jdim, 1.5s) both;
-  animation-delay: var(--jd, 0s), var(--jdim, 1.5s);
-}
-/* Bars growing from the baseline to their own --jh height. */
-.j-scene.is-active .j-grow {
-  height: var(--jh, 50%);
-  transform-origin: bottom;
-  animation: j-grow 0.65s cubic-bezier(0.22, 1, 0.36, 1) both;
-  animation-delay: var(--jd, 0s);
+.kgrain.on-dark {
+  opacity: 0.24;
+  mix-blend-mode: screen;
 }
 
-@keyframes j-rise {
-  from { opacity: 0; transform: translateY(16px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-@keyframes j-fade {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-@keyframes j-pop {
-  0% { opacity: 0; transform: scale(0.4); }
-  70% { opacity: 1; transform: scale(1.08); }
-  100% { opacity: 1; transform: scale(1); }
-}
-@keyframes j-slide {
-  from { opacity: 0; transform: translateX(-14px); }
-  to { opacity: 1; transform: translateX(0); }
-}
-@keyframes j-cursor {
-  0% { opacity: 0; transform: translate(84px, 64px); }
-  25% { opacity: 1; }
-  62% { transform: translate(0, 0) scale(1); }
-  72% { transform: translate(0, 0) scale(0.82); }
-  84% { transform: translate(0, 0) scale(1); }
-  100% { opacity: 1; transform: translate(0, 0) scale(1); }
-}
-@keyframes j-ping {
-  0% { opacity: 0.9; transform: scale(0.6); }
-  100% { opacity: 0; transform: scale(2.1); }
-}
-@keyframes j-draw {
-  from { opacity: 1; stroke-dashoffset: 100; }
-  to { opacity: 1; stroke-dashoffset: 0; }
-}
-@keyframes j-dim {
-  from { opacity: 1; }
-  to { opacity: 0.4; }
-}
-@keyframes j-grow {
-  from { opacity: 0; transform: scaleY(0); }
-  to { opacity: 1; transform: scaleY(1); }
+/* subtle fixed grain over the whole page */
+.grain {
+  position: fixed;
+  inset: -60%;
+  z-index: 95;
+  pointer-events: none;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation: grain-jitter 0.9s steps(10) infinite;
 }
 
-/* Per-step auto-advance progress bar. Duration comes from --jt inline. */
-.j-progress-fill {
+/* heavier grain for specific panels */
+.grain-panel {
+  position: relative;
+  overflow: hidden;
+}
+.grain-panel::before {
+  content: "";
+  position: absolute;
+  inset: -60%;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0.13;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation: grain-jitter 0.8s steps(8) infinite;
+}
+.grain-panel > * {
+  position: relative;
+  z-index: 2;
+}
+
+/* ————————————————————————
+   marquee
+———————————————————————— */
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+.marquee-track {
+  animation: marquee 38s linear infinite;
+  will-change: transform;
+}
+.marquee-track.slow {
+  animation-duration: 70s;
+}
+.marquee:hover .marquee-track {
+  animation-play-state: paused;
+}
+
+@keyframes spin-slow {
+  to { transform: rotate(360deg); }
+}
+.spin-slow {
+  animation: spin-slow 24s linear infinite;
+}
+
+@keyframes spin-rev {
+  to { transform: rotate(-360deg); }
+}
+.spin-rev {
+  animation: spin-rev 36s linear infinite;
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.25; }
+}
+.pulse-dot {
+  animation: pulse-dot 2.2s ease-in-out infinite;
+}
+
+@keyframes blob-drift {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(6%, -8%) scale(1.12); }
+  66% { transform: translate(-7%, 6%) scale(0.94); }
+}
+.blob-drift {
+  animation: blob-drift 14s ease-in-out infinite;
+}
+.blob-drift.d2 {
+  animation-duration: 19s;
+  animation-delay: -6s;
+}
+
+/* ——— outlined display text ——— */
+.text-outline {
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(0, 0, 0, 0.15);
+}
+.text-outline-w {
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.16);
+}
+
+/* ——— underline link ——— */
+.link-line {
+  position: relative;
+}
+.link-line::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -3px;
+  height: 1px;
   width: 100%;
+  background: currentColor;
   transform: scaleX(0);
-  transform-origin: left;
-  animation: j-progress var(--jt, 5s) linear both;
+  transform-origin: right;
+  transition: transform 0.5s var(--ease);
 }
-.j-progress-fill.is-paused { animation-play-state: paused; }
-@keyframes j-progress {
-  from { transform: scaleX(0); }
-  to { transform: scaleX(1); }
+.link-line:hover::after,
+.link-line:focus-visible::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+/* ——— hairline grid ——— */
+.v-grid {
+  background-image: linear-gradient(to right, rgba(0,0,0,0.05) 1px, transparent 1px);
+  background-size: calc(100% / 4) 100%;
+}
+.v-grid-w {
+  background-image: linear-gradient(to right, rgba(255,255,255,0.06) 1px, transparent 1px);
+  background-size: calc(100% / 4) 100%;
+}
+
+/* ——— custom cursor ——— */
+.cursor-dot {
+  display: none;
+}
+@media (pointer: fine) {
+  .cursor-dot {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 120;
+    pointer-events: none;
+    width: 14px;
+    height: 14px;
+    border-radius: 9999px;
+    background: #ffffff;
+    mix-blend-mode: difference;
+  }
+  .has-cursor,
+  .has-cursor a,
+  .has-cursor button,
+  .has-cursor [data-cursor] {
+    cursor: none;
+  }
+}
+
+/* ——— page transition curtain ——— */
+.curtain {
+  position: fixed;
+  inset: 0;
+  z-index: 110;
+  pointer-events: none;
+  display: flex;
+}
+.curtain > div {
+  flex: 1;
+  background: var(--ink);
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .j-scene { transition: opacity 0.3s ease; transform: none; }
-  .j-rise, .j-pop, .j-slide, .j-cursor, .j-draw, .j-fade, .j-dim, .j-grow {
-    opacity: 1;
-    animation: none !important;
-    transform: none !important;
+  .kgrain,
+  .grain,
+  .grain-panel::before,
+  .marquee-track,
+  .spin-slow,
+  .spin-rev,
+  .pulse-dot,
+  .blob-drift {
+    animation: none;
   }
-  .j-grow { height: var(--jh, 50%); }
-  .j-dim { opacity: 0.4; }
-  .j-scene.is-active .j-ping { animation: none; opacity: 0; }
-  .j-progress-fill { animation: none; transform: scaleX(0); }
 }

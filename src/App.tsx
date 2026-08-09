@@ -1,63 +1,69 @@
-import { useEffect, useState } from 'react';
-import Navbar from './components/Navbar';
-import Footer from './components/Footer';
-import Home from './pages/Home';
-import Services from './pages/Services';
-import Pricing from './pages/Pricing';
-import About from './pages/About';
-import Contact from './pages/Contact';
-import Work from './pages/Work';
-import FoundingClients from './pages/FoundingClients';
-import Subscribe from './pages/Subscribe';
-import SubscribeSuccess from './pages/SubscribeSuccess';
-import SubscribeCancel from './pages/SubscribeCancel';
-import Terms from './pages/Terms';
-import Refunds from './pages/Refunds';
-import Privacy from './pages/Privacy';
-import { useRoute } from './lib/router';
-import { applyRouteMeta } from './lib/seo';
+import { Route, Routes, useLocation } from "react-router";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { Cursor, EASE, ScrollTop, useLenis } from "./sections/shared";
+import Nav from "./sections/Nav";
+import Footer from "./sections/Footer";
+import Home from "./pages/Home";
+import Services from "./pages/Services";
+import About from "./pages/About";
+import Work from "./pages/Work";
+import FoundingClients from "./pages/FoundingClients";
+import Contact from "./pages/Contact";
+
+/* curtain wipe on every route change */
+function Curtain() {
+  const { pathname } = useLocation();
+  const reduce = useReducedMotion();
+  if (reduce) return null;
+  return (
+    <AnimatePresence>
+      <motion.div key={pathname} className="curtain" aria-hidden="true">
+        {[0, 1, 2, 3, 4].map((i) => (
+          <motion.div
+            key={i}
+            initial={{ scaleY: 1 }}
+            animate={{ scaleY: 0 }}
+            transition={{ duration: 0.7, delay: 0.05 * i, ease: EASE }}
+            style={{ transformOrigin: "top" }}
+          />
+        ))}
+      </motion.div>
+    </AnimatePresence>
+  );
+}
 
 export default function App() {
-  const [route, navigate, params] = useRoute();
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    const t = setTimeout(() => setMounted(true), 40);
-    return () => clearTimeout(t);
-  }, []);
-
-  const search = params.toString();
-  useEffect(() => {
-    applyRouteMeta(route, search);
-  }, [route, search]);
+  useLenis();
 
   return (
-    <div
-      className={`min-h-screen bg-ink-950 transition-opacity duration-700 ${
-        mounted ? 'opacity-100' : 'opacity-0'
-      }`}
-    >
-      <Navbar route={route} onNavigate={navigate} />
-      <div key={`${route}${params.toString()}`} className="animate-page-in">
-        {route === '/' && <Home onNavigate={navigate} />}
-        {route === '/services' && <Services onNavigate={navigate} />}
-        {route === '/pricing' && <Pricing onNavigate={navigate} />}
-        {route === '/about' && <About onNavigate={navigate} />}
-        {route === '/contact' && <Contact onNavigate={navigate} tier={params.get('tier')} />}
-        {route === '/work' && <Work onNavigate={navigate} />}
-        {route === '/founding-clients' && <FoundingClients onNavigate={navigate} />}
-        {route === '/subscribe' && <Subscribe onNavigate={navigate} tier={params.get('tier')} />}
-        {route === '/subscribe/success' && (
-          <SubscribeSuccess onNavigate={navigate} tier={params.get('tier')} />
-        )}
-        {route === '/subscribe/cancel' && (
-          <SubscribeCancel onNavigate={navigate} tier={params.get('tier')} />
-        )}
-        {route === '/terms' && <Terms onNavigate={navigate} />}
-        {route === '/refunds' && <Refunds onNavigate={navigate} />}
-        {route === '/privacy' && <Privacy onNavigate={navigate} />}
+    <>
+      <a
+        href="#main"
+        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[130] focus:rounded-full focus:bg-white focus:px-5 focus:py-2.5 focus:text-[13px] focus:font-medium focus:text-black"
+      >
+        Skip to content
+      </a>
+
+      <ScrollTop />
+      <Cursor />
+      <Curtain />
+      <div className="grain" aria-hidden="true" />
+
+      <Nav />
+
+      <div id="main">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/services" element={<Services />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/work" element={<Work />} />
+          <Route path="/founding-clients" element={<FoundingClients />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="*" element={<Home />} />
+        </Routes>
       </div>
-      <Footer onNavigate={navigate} />
-    </div>
+
+      <Footer />
+    </>
   );
 }

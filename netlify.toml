@@ -2,9 +2,13 @@
   command = "npm run build"
   publish = "dist"
 
+[build.environment]
+  # Vite 7 / React 19 require a modern Node.
+  NODE_VERSION = "22"
+
 # SPA fallback: serve index.html for every route so deep links
-# (e.g. /contact, /pricing) and refreshes don't 404. The React
-# router takes over on the client.
+# (/about, /services, /work, /founding-clients, /contact) and refreshes
+# don't 404. react-router takes over on the client.
 [[redirects]]
   from = "/*"
   to = "/index.html"

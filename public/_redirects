@@ -1,3 +1,12 @@
-# Known routes are prerendered to /<route>/index.html and served directly (200).
-# Unknown paths fall through to the 404 page with a real 404 status.
-/*    /404.html   404
+# Serve each prerendered route at its clean (no trailing slash) URL with 200,
+# matching the canonical tags + sitemap. Unknown paths fall through to the 404
+# page with a real 404 status (no soft-404). Processed before netlify.toml.
+/                  /index.html                     200
+/services          /services/index.html            200
+/about             /about/index.html               200
+/work              /work/index.html                200
+/founding-clients  /founding-clients/index.html    200
+/contact           /contact/index.html             200
+/terms             /terms/index.html               200
+/privacy           /privacy/index.html             200
+/*                 /404.html                       404

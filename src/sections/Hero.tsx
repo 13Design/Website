@@ -40,20 +40,43 @@ function RotatingWord() {
   );
 }
 
-function RotatingBadge() {
+/**
+ * The morphing "13" — a looping render of black metallic grains reshaping in a
+ * light void — set in a circular orb, encircled by the slowly rotating studio
+ * label. Desktop only; muted/loop/autoplay, and it respects reduced motion
+ * (poster still frame, no spin).
+ */
+function HeroVideo() {
+  const reduce = useReducedMotion();
   return (
-    <div aria-hidden="true" className="relative hidden h-36 w-36 lg:block">
-      <svg viewBox="0 0 120 120" className="spin-slow h-full w-full">
+    <div aria-hidden="true" className="relative hidden aspect-square w-[clamp(240px,25vw,360px)] lg:block">
+      {/* orb */}
+      <div className="absolute inset-[12%] overflow-hidden rounded-full border border-black/10 bg-[#e6e6e6] shadow-[0_40px_90px_-45px_rgba(0,0,0,0.6)]">
+        <video
+          className="h-full w-full object-cover"
+          src="/hero-13.mp4"
+          poster="/hero-13-poster.jpg"
+          autoPlay={!reduce}
+          muted
+          loop
+          playsInline
+          preload="metadata"
+        />
+        {/* subtle inner vignette to seat the orb on the paper */}
+        <div className="pointer-events-none absolute inset-0 rounded-full shadow-[inset_0_0_40px_rgba(0,0,0,0.18)]" />
+      </div>
+      {/* rotating label ring */}
+      <svg viewBox="0 0 120 120" className={`absolute inset-0 h-full w-full text-black/55 ${reduce ? "" : "spin-slow"}`}>
         <defs>
-          <path id="badge-circle" d="M 60,60 m -46,0 a 46,46 0 1,1 92,0 a 46,46 0 1,1 -92,0" />
+          <path id="hero-vid-ring" d="M 60,60 m -55,0 a 55,55 0 1,1 110,0 a 55,55 0 1,1 -110,0" />
         </defs>
-        <text className="font-mono2 fill-black/55 text-[9.5px] uppercase tracking-[0.24em]">
-          <textPath href="#badge-circle">
+        <text className="font-mono2 fill-current text-[6px] uppercase tracking-[0.26em]">
+          <textPath href="#hero-vid-ring">
             Designed by humans · 13 Design Studio · Est. for the AI era ·
           </textPath>
         </text>
       </svg>
-      <Asterisk className="spin-rev absolute inset-0 m-auto h-8 w-8" />
+      <Asterisk className="spin-rev absolute -right-1 top-2 h-7 w-7 text-black" />
     </div>
   );
 }
@@ -98,7 +121,7 @@ export default function Hero() {
           <span>13 Design Studio</span>
         </motion.div>
 
-        <div className="flex items-end justify-between gap-10">
+        <div className="flex items-end justify-between gap-10 lg:items-center">
           <h1
             id="hero-heading"
             className="font-display max-w-[13ch] text-[clamp(3rem,9.4vw,8.5rem)] font-medium leading-[0.95] tracking-[-0.045em]"
@@ -116,9 +139,9 @@ export default function Hero() {
             initial={{ opacity: 0, scale: 0.85 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 1, delay: 0.9, ease: EASE }}
-            className="mb-4 shrink-0"
+            className="shrink-0"
           >
-            <RotatingBadge />
+            <HeroVideo />
           </motion.div>
         </div>
 

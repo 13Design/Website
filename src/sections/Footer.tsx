@@ -116,9 +116,20 @@ export default function Footer() {
           <p className="font-mono2 text-[11px] tracking-[0.14em] text-white/40">
             © 2026 13 Design Studio. All rights reserved.
           </p>
-          <p className="font-mono2 text-[11px] uppercase tracking-[0.2em] text-white/40">
-            Vinnytsia — for founders everywhere.
-          </p>
+          <nav aria-label="Legal" className="flex flex-wrap items-center gap-x-6 gap-y-2">
+            <Link
+              to="/terms"
+              className="link-line font-mono2 text-[11px] uppercase tracking-[0.2em] text-white/40 transition-colors hover:text-white"
+            >
+              Terms &amp; agreement
+            </Link>
+            <Link
+              to="/privacy"
+              className="link-line font-mono2 text-[11px] uppercase tracking-[0.2em] text-white/40 transition-colors hover:text-white"
+            >
+              Privacy
+            </Link>
+          </nav>
         </div>
       </div>
     </footer>

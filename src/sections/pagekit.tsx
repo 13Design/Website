@@ -2,6 +2,41 @@ import type { ReactNode } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { Asterisk, BlurBlob, ClipLines, EASE, KGrain, Reveal } from "./shared";
 
+/* Numbered legal sections (Terms / Privacy) — title + paragraphs per row. */
+export function LegalSections({
+  sections,
+}: {
+  sections: { n: string; title: string; body: string[] }[];
+}) {
+  return (
+    <div>
+      {sections.map((s, i) => (
+        <Reveal key={s.n} delay={0.04 * i}>
+          <div className="grid gap-3 border-t border-black/10 py-8 sm:grid-cols-12 sm:gap-8 lg:py-10">
+            <div className="flex items-baseline gap-4 sm:col-span-4">
+              <span className="font-mono2 shrink-0 text-[12px] tracking-[0.2em] text-black/40">{s.n}</span>
+              <h3 className="font-display text-[clamp(1.2rem,2.1vw,1.7rem)] font-medium leading-[1.15] tracking-[-0.02em]">
+                {s.title}
+              </h3>
+            </div>
+            <div className="sm:col-span-8">
+              {s.body.map((p, j) => (
+                <p
+                  key={j}
+                  className={`max-w-[64ch] text-[15px] leading-[1.75] text-black/60 ${j > 0 ? "mt-4" : ""}`}
+                >
+                  {p}
+                </p>
+              ))}
+            </div>
+          </div>
+        </Reveal>
+      ))}
+      <div className="border-t border-black/10" />
+    </div>
+  );
+}
+
 /* Sub-page hero: kinetic grain, kicker, giant clip-reveal title, lede. */
 export function PageHero({
   kicker,

@@ -9,6 +9,8 @@ import About from "./pages/About";
 import Work from "./pages/Work";
 import FoundingClients from "./pages/FoundingClients";
 import Contact from "./pages/Contact";
+import Terms from "./pages/Terms";
+import Privacy from "./pages/Privacy";
 
 /* curtain wipe on every route change */
 function Curtain() {
@@ -59,6 +61,8 @@ export default function App() {
           <Route path="/work" element={<Work />} />
           <Route path="/founding-clients" element={<FoundingClients />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/terms" element={<Terms />} />
+          <Route path="/privacy" element={<Privacy />} />
           <Route path="*" element={<Home />} />
         </Routes>
       </div>

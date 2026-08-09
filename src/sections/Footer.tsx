@@ -21,7 +21,10 @@ const COLS = [
   },
 ];
 
-const SOCIALS = ["X", "LinkedIn", "Dribbble"];
+const SOCIALS = [
+  { label: "X", href: "https://x.com/13design_studio" },
+  { label: "LinkedIn", href: "https://www.linkedin.com/company/a13design-studio" },
+];
 
 export default function Footer() {
   return (
@@ -95,13 +98,15 @@ export default function Footer() {
               <h3 className="font-mono2 text-[10px] uppercase tracking-[0.28em] text-white/40">Social</h3>
               <ul className="mt-5 space-y-3">
                 {SOCIALS.map((s) => (
-                  <li key={s}>
+                  <li key={s.label}>
                     <a
-                      href="/"
+                      href={s.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
                       className="group inline-flex items-center gap-1.5 text-[14px] text-white/65 transition-colors hover:text-white"
-                      aria-label={`${s} (opens in a new tab)`}
+                      aria-label={`${s.label} (opens in a new tab)`}
                     >
-                      <span className="link-line">{s}</span>
+                      <span className="link-line">{s.label}</span>
                       <ArrowUpRight className="h-3.5 w-3.5 opacity-40 transition-all duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:opacity-100" />
                     </a>
                   </li>

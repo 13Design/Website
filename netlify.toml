@@ -6,13 +6,13 @@
   # Vite 7 / React 19 require a modern Node.
   NODE_VERSION = "22"
 
-# SPA fallback: serve index.html for every route so deep links
-# (/about, /services, /work, /founding-clients, /contact) and refreshes
-# don't 404. react-router takes over on the client.
+# Known routes are prerendered to dist/<route>/index.html and served directly
+# (200) by Netlify's pretty-URL handling; the SPA boots from there. Genuinely
+# unknown paths fall through to the 404 page with a real 404 status (no soft-404).
 [[redirects]]
   from = "/*"
-  to = "/index.html"
-  status = 200
+  to = "/404.html"
+  status = 404
 
 # Baseline security headers (HSTS is already applied by Netlify).
 [[headers]]

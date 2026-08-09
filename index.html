@@ -43,6 +43,38 @@
     />
     <meta name="twitter:image" content="https://13design.org/og.png" />
 
+    <!-- Structured data -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "Organization",
+            "@id": "https://13design.org/#org",
+            "name": "13 Design Studio",
+            "url": "https://13design.org/",
+            "email": "hello@13design.org",
+            "description": "A digital product design agency for AI-native and AI-built products. We turn AI features and AI-generated MVPs into products people trust and understand at first glance.",
+            "logo": "https://13design.org/og.png",
+            "image": "https://13design.org/og.png",
+            "address": {
+              "@type": "PostalAddress",
+              "addressLocality": "Vinnytsia",
+              "addressCountry": "UA"
+            },
+            "areaServed": "Worldwide"
+          },
+          {
+            "@type": "WebSite",
+            "@id": "https://13design.org/#website",
+            "url": "https://13design.org/",
+            "name": "13 Design Studio",
+            "publisher": { "@id": "https://13design.org/#org" }
+          }
+        ]
+      }
+    </script>
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link

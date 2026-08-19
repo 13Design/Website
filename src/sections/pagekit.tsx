@@ -243,13 +243,29 @@ export function SubmitNote() {
 }
 
 /* Honeypot — an off-screen field that bots auto-fill and humans never see.
-   A non-empty value marks the submission as spam. */
+   A non-empty value marks the submission as spam.
+
+   The field name and label are deliberately neutral (`contact_ref`, not
+   `company_website`): a name/label that maps to a known autofill token —
+   company, website, url, email — gets populated by browsers and password
+   managers (1Password, LastPass, …), which ignore `autoComplete="off"`. When
+   that happened, a real visitor's submission was silently dropped as spam.
+   `data-lpignore` / `data-1p-ignore` / `data-form-type="other"` tell the common
+   password managers to leave it alone. */
 export function Honeypot() {
   return (
     <div aria-hidden="true" className="pointer-events-none absolute -left-[9999px] top-0 h-0 w-0 overflow-hidden opacity-0">
       <label>
-        Company website
-        <input type="text" name="company_website" tabIndex={-1} autoComplete="off" />
+        Leave this field empty
+        <input
+          type="text"
+          name="contact_ref"
+          tabIndex={-1}
+          autoComplete="off"
+          data-lpignore="true"
+          data-1p-ignore="true"
+          data-form-type="other"
+        />
       </label>
     </div>
   );

@@ -31,7 +31,7 @@ export default function Contact() {
     const data = new FormData(e.currentTarget);
 
     // Honeypot — bots fill this hidden field; humans never do. Feign success.
-    if (String(data.get("company_website") || "").trim() !== "") {
+    if (String(data.get("contact_ref") || "").trim() !== "") {
       setSent(true);
       return;
     }

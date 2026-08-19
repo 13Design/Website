@@ -93,6 +93,27 @@ How it's wired (for reference — already done):
   - Triggers `notify_contact_insert` and `notify_founder_insert` (AFTER INSERT)
     on the two tables.
 
+  This wiring now lives in a migration —
+  `supabase/migrations/20260806125900_wire_inquiry_notifications.sql` — so it is
+  reproducible and can't silently disappear on a project reset. The function
+  reads its target URL and shared secret from database settings (no secret in
+  the repo); set them once per project:
+
+  ```sql
+  alter database postgres
+    set app.settings.notify_inquiry_url =
+      'https://<PROJECT_REF>.supabase.co/functions/v1/notify-inquiry';
+  alter database postgres
+    set app.settings.notify_inquiry_secret = '<same value as WEBHOOK_SECRET>';
+  ```
+
+  Verify the triggers exist any time email stops arriving:
+
+  ```sql
+  select tgname, tgrelid::regclass from pg_trigger
+  where tgname in ('notify_contact_insert', 'notify_founder_insert');
+  ```
+
 ### Going from test mode to production email
 
 Right now `NOTIFY_FROM=onboarding@resend.dev` and `NOTIFY_TO` is the Resend

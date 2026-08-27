@@ -1,14 +1,64 @@
+import { useState } from "react";
 import { Link } from "react-router";
 import { ArrowUpRight, Reveal, SectionTag } from "../sections/shared";
 import { HeroRing, LegalSections, PageHero } from "../sections/pagekit";
 import { privacyPolicy } from "../data/legal";
 import { useHead } from "../lib/head";
+import { getConsent, grantConsent, denyConsent, type ConsentValue } from "../lib/consent";
+
+/** Let visitors see and change their ad-measurement choice at any time. */
+function AdMeasurementControl() {
+  const [choice, setChoice] = useState<ConsentValue | null>(() => getConsent());
+
+  const turnOn = () => {
+    grantConsent(); // loads the pixel immediately — no reload needed
+    setChoice("granted");
+  };
+  const turnOff = () => {
+    denyConsent();
+    setChoice("denied");
+    // A pixel already loaded this page only stops after a reload.
+    window.location.reload();
+  };
+
+  const on = choice === "granted";
+  const label = on ? "on" : "off";
+
+  return (
+    <div className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-3">
+      <span className="font-mono2 inline-flex items-center gap-2 text-[12px] uppercase tracking-[0.2em] text-black/55">
+        <span
+          className={`inline-block h-1.5 w-1.5 rounded-full ${on ? "bg-black" : "bg-black/25"}`}
+          aria-hidden="true"
+        />
+        Ad measurement is {label}
+      </span>
+      {on ? (
+        <button
+          type="button"
+          onClick={turnOff}
+          className="inline-flex items-center rounded-full border border-black/15 px-5 py-2.5 text-[13px] font-medium text-black/70 transition-colors duration-300 hover:border-black/40 hover:text-black"
+        >
+          Turn off
+        </button>
+      ) : (
+        <button
+          type="button"
+          onClick={turnOn}
+          className="inline-flex items-center rounded-full border border-black bg-black px-5 py-2.5 text-[13px] font-medium text-white transition-colors duration-300 hover:bg-transparent hover:text-black"
+        >
+          Turn on
+        </button>
+      )}
+    </div>
+  );
+}
 
 export default function Privacy() {
   useHead({
     title: "Privacy",
     description:
-      "Your data, handled plainly. We collect only what it takes to reply, use cookieless analytics, and never sell data — what we hold, why, and your rights.",
+      "Your data, handled plainly. We collect only what it takes to reply, use cookieless analytics with ad measurement strictly opt-in, and never sell data — what we hold, why, and your rights.",
   });
   return (
     <main>
@@ -18,7 +68,7 @@ export default function Privacy() {
           "Your data,",
           <em key="i" className="font-light italic text-black/50">handled plainly.</em>,
         ]}
-        lede="We keep the stack small and collect only what it takes to reply to you. Cookieless analytics, no ad tracking, no data for sale — the plain-language version of what we hold, why, and the rights you have over it."
+        lede="We keep the stack small and collect only what it takes to reply to you. Cookieless analytics, ad measurement strictly opt-in, no data for sale — the plain-language version of what we hold, why, and the rights you have over it."
         aside={<HeroRing />}
       />
 
@@ -72,6 +122,17 @@ export default function Privacy() {
               >
                 Read the terms →
               </Link>
+            </div>
+
+            <div className="mt-10 border-t border-black/10 pt-7">
+              <h3 className="font-mono2 text-[11px] uppercase tracking-[0.2em] text-black/40">
+                Ad measurement
+              </h3>
+              <p className="mt-3 max-w-[52ch] text-[15px] leading-[1.7] text-black/55">
+                The only non-essential thing on this site is X's conversion pixel, and it stays off
+                until you turn it on. Change your choice here any time — it takes effect immediately.
+              </p>
+              <AdMeasurementControl />
             </div>
           </div>
         </div>

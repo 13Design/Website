@@ -76,7 +76,7 @@ export const privacyPolicy: LegalSection[] = [
     title: "What we collect, and what we do not",
     body: [
       "From the contact and founding-client forms: your name, email, and whatever you choose to tell us — your company, your product link, your timeline, and the message itself. Nothing on those forms is required beyond what it takes to reply to you.",
-      "We do not buy data about you, we do not build advertising profiles, and we do not ask for anything we do not need to do the work.",
+      "We do not buy data about you, we run no advertising profiling of our own, and we do not ask for anything we do not need to do the work. There is one optional exception, and it is off unless you turn it on: if you accept ad measurement, X (Twitter) is told when you complete our contact form — the details are under “Cookies and tracking” below.",
     ],
   },
   {
@@ -85,6 +85,7 @@ export const privacyPolicy: LegalSection[] = [
     body: [
       "We keep the stack small and name it plainly. Each of these processes some data on our behalf, under its own security terms:",
       "Netlify hosts the site. Supabase stores form submissions. Resend sends our email (our reply to you). Cloudflare provides privacy-first, cookieless web analytics — aggregate page counts only, no cookies and no profile of you. Our typefaces are served from the page, so loading it shares nothing beyond that with a font provider.",
+      "One more only enters the picture if you opt in: X (Twitter) provides ad-conversion measurement. Nothing from X loads, and X learns nothing about you, unless you accept ad measurement — see the next section.",
       "Each of these has its own privacy policy governing what it does with data it processes.",
     ],
   },
@@ -92,8 +93,9 @@ export const privacyPolicy: LegalSection[] = [
     n: "04",
     title: "Cookies and tracking",
     body: [
-      "We run no advertising or third-party tracking cookies on this site — there is no ad network watching you here, and nothing follows you off the page. For traffic numbers we use Cloudflare Web Analytics, which is cookieless and measures pages in aggregate only; it never sets a cookie or builds a profile of you.",
-      "That is why you are not greeted by a cookie-consent wall: there is nothing non-essential to consent to.",
+      "Our default is quiet. For traffic numbers we use Cloudflare Web Analytics, which is cookieless and measures pages in aggregate only — it never sets a cookie or builds a profile of you, and it runs whether or not you accept anything below.",
+      "The one thing that can set a cookie is optional and stays off until you choose it: X's (Twitter's) conversion pixel. If you accept ad measurement, it loads, sets a cookie, and reports to X when you complete our contact form, so we can see which campaigns bring founders here. We do not send your email address or any of your form answers to X. If you decline — or simply never choose — it never loads, no cookie is set, and the site works exactly the same.",
+      "That optional pixel is why you see a short banner on your first visit. You can change your choice any time from the “Ad measurement” control at the bottom of our Privacy page, or by emailing hello@13design.org. Apart from that one opt-in, there is nothing non-essential to consent to.",
     ],
   },
   {

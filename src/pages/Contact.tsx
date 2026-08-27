@@ -5,6 +5,7 @@ import { Field, HeroRing, Honeypot, PageHero, SentPanel, SubmitNote, fieldCls, m
 import { contactInstructions, contactLookingFor, contactStages } from "../data/content";
 import { supabase } from "../lib/supabase";
 import { useHead } from "../lib/head";
+import { trackConversion } from "../lib/consent";
 
 const SHARE_POINTS = [
   "Your company or product name",
@@ -67,6 +68,7 @@ export default function Contact() {
         ["What's next", payload.whats_next],
         ["Message", payload.message],
       ]);
+      trackConversion();
       setSent(true);
       return;
     }
@@ -79,6 +81,7 @@ export default function Contact() {
       setError("Something went wrong sending your message. Please try again, or email hello@13design.org.");
       return;
     }
+    trackConversion();
     setSent(true);
   };
 

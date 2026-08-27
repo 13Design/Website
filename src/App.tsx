@@ -3,6 +3,7 @@ import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { Cursor, EASE, ScrollTop, useLenis } from "./sections/shared";
 import Nav from "./sections/Nav";
 import Footer from "./sections/Footer";
+import ConsentBanner from "./sections/ConsentBanner";
 import Home from "./pages/Home";
 import Services from "./pages/Services";
 import About from "./pages/About";
@@ -69,6 +70,8 @@ export default function App() {
       </div>
 
       <Footer />
+
+      <ConsentBanner />
     </>
   );
 }
